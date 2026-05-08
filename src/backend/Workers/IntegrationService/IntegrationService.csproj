@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Folder Include="Application\EventRelay\"/>
+        <Folder Include="GlobalUsing\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Marten" Version="8.32.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.6"/>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite" Version="10.0.1"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.6"/>
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="10.0.6"/>
+        <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="9.0.0"/>
+        <PackageReference Include="AspNetCore.HealthChecks.ApplicationStatus" Version="9.0.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\shared\BuildingBlocks.Logging\BuildingBlocks.Logging.csproj"/>
+        <ProjectReference Include="..\..\shared\BuildingBlocks.Messaging\BuildingBlocks.Messaging.csproj"/>
+        <ProjectReference Include="..\..\shared\BuildingBlocks\BuildingBlocks.csproj"/>
+    </ItemGroup>
+</Project>
