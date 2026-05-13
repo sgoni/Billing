@@ -1,0 +1,329 @@
+﻿services:
+
+  # ---------------------
+  # --- Secrets ---
+  # ---------------------
+  vault:
+    image: hashicorp/vault:1.13
+    container_name: vault
+    cap_add:
+      - IPC_LOCK
+    command: [ "vault", "server", "-dev", "-dev-listen-address=0.0.0.0:8200" ]
+    environment:
+      # in production scenarios the token mechanisim for loggin will be forbidden,
+      # it cannot be in source control.
+      VAULT_DEV_ROOT_TOKEN_ID: ${VAULT_DEV_TOKEN}
+      VAULT_TOKEN: ${VAULT_DEV_TOKEN}
+      #VAULT_DISABLE_MLOCK: "true"
+    ports:
+      - "${VAULT_PORT}:8200"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "${VAULT_URL}" ]
+      interval: "10s"
+      timeout: "5s"
+      retries: 5
+    networks:
+      - billing-net
+
+  # ---------------------
+  # --- Discovery ---
+  # ---------------------
+  consul:
+    image: hashicorp/consul # Imagen oficial de Consul
+    container_name: consul
+    command: "agent -dev -client=0.0.0.0"
+    ports:
+      - "${CONSUL_PORT}:8500"   # Puerto para la interfaz web y API HTTP
+      - "8600:8600/udp"         # Puerto para consultas DNS
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "${CONSUL_URL}" ]
+      interval: "10s"
+      timeout: "5s"
+      retries: 5
+    networks:
+      - observability
+      - billing-net
+
+  # ---------------------
+  # --- RabbitMQ ---
+  # ---------------------
+  messagebroker:
+    image: rabbitmq:3-management
+    container_name: messagebroker
+    hostname: billing-mq
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    ports:
+      - "${RABBITMQ_PORT}:5672"
+      - "15672:15672"
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "check_running" ]
+      interval: "10s"
+      timeout: "5s"
+      retries: 5
+      start_period: 20s
+    networks:
+      - billing-net
+
+  # ---------------------
+  # --- Cache ---
+  # ---------------------
+
+  distributedcache:
+    image: redis:latest
+    container_name: distributedcache
+    restart: always
+    ports:
+      - "${REDIS_PORT}:6379"
+    networks:
+      - billing-net
+
+  # ---------------------
+  # --- Observability ---
+  # ---------------------
+  # Tempo runs as user 10001, and docker compose creates the volume as root.
+  # As such, we need to chown the volume in order for Tempo to start correctly.
+  init:
+    image: alpine:3.19
+    container_name: init
+    user: root
+    entrypoint: [ "sh", "-c", "chown -R 10001:10001 /var/tempo" ]
+    volumes:
+      - tempo-data:/var/tempo
+
+  tempo:
+    image: grafana/tempo:2.4.1
+    container_name: tempo
+    restart: unless-stopped
+    ports:
+      - "3200:3200"
+      - "4317:4317"
+    volumes:
+      - ../tools/tempo/tempo.yaml:/etc/tempo.yaml
+      - tempo-data:/var/tempo
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    depends_on:
+      - init
+    networks:
+      - observability
+      - billing-net
+
+  loki:
+    image: grafana/loki:2.9.1
+    container_name: loki
+    command: -config.file=/etc/loki/loki-config.yaml
+    volumes:
+      - ../tools/loki/loki-config.yaml:/etc/loki/loki-config.yaml
+      - loki-data:/loki
+    ports:
+      - "${LOKI_PORT}:3100"
+    networks:
+      - observability
+
+  alloy:
+    image: grafana/alloy:v1.3.1
+    container_name: alloy
+    volumes:
+      - ../tools/alloy/config.alloy:/etc/alloy/config.alloy
+      - /var/run/docker.sock:/var/run/docker.sock:ro  # <--- ¡Asegura el acceso al socket!
+    command:
+      - run
+      - /etc/alloy/config.alloy
+      - --storage.path=/var/lib/alloy/data
+      - --server.http.listen-addr=0.0.0.0:12345
+    ports:
+      - "12345:12345"
+      - "4318:4318"
+    depends_on:
+      - tempo
+    networks:
+      - observability
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    ports:
+      - "${PROMETHEUS_PORT}:9090"
+    volumes:
+      - ../tools/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - --web.enable-remote-write-receiver
+      - --enable-feature=exemplar-storage
+      - --enable-feature=native-histograms
+    depends_on:
+      - loki
+    networks:
+      - observability
+      - billing-net
+
+  grafana:
+    image: grafana/grafana:12.0.0
+    container_name: grafana
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GF_SECURITY_ADMIN_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD}
+    ports:
+      - "${GRAFANA_PORT}:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ../tools/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+    depends_on:
+      - prometheus
+      - loki
+      - tempo
+    networks:
+      - observability
+      - billing-net
+
+  # ---------------------
+  # --- Database      ---
+  # ---------------------
+  billing:
+    image: postgres:latest
+    container_name: ${BILLING_POSTGRES_DB}
+    ports:
+      - "${BILLING_POSTGRES_PORT}:5432"
+    environment:
+      POSTGRES_USER: ${BILLING_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${BILLING_POSTGRES_PASSWORD}
+      POSTGRES_DB: ${BILLING_POSTGRES_DB}
+      RUNNING_IN_DOCKER: false
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${BILLING_POSTGRES_USER}" ]
+      interval: "10s"
+      timeout: "5s"
+      retries: 5
+    networks:
+      - billing-net
+
+  eventlogrelay:
+    image: postgres:latest
+    container_name: eventlogrelaydb
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_USER: ${EVT_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${EVT_POSTGRES_PASSWORD}
+      POSTGRES_DB: eventrelaylogDb
+      RUNNING_IN_DOCKER: true
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${EVT_POSTGRES_USER}" ]
+      interval: "10s"
+      timeout: "5s"
+      retries: 5
+    networks:
+      - billing-net
+
+  # ---------------------
+  # --- Services      ---
+  # ---------------------
+
+  billing.api:
+    build:
+      context: ../../src/backend   # ← Esto debe apuntar a D:\Repositorio\Billing
+      dockerfile: src/Services/Billing.API/Dockerfile
+    container_name: billing.api
+    ports:
+      - "${BILLING_API_PORT_HTTP}:8080"
+      - "${BILLING_API_PORT_HTTPS}:8081"
+    environment:
+      ConnectionStrings__Database: "Server=${POSTGRES_HOST};Port=${POSTGRES_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Include Error Detail=true"
+      DatabaseConfig__Server: ${BILLING_POSTGRES_HOST}
+      DatabaseConfig__Port: ${BILLING_POSTGRES_PORT}
+      DatabaseConfig__Database: ${BILLING_POSTGRES_DB}
+      MessageBroker__Host: ${RABBITMQ_HOST}
+      MessageBroker__Username: ${RABBITMQ_USER}
+      MessageBroker__Password: ${RABBITMQ_PASSWORD}
+      ConsulConfig__ServiceId: "ed721f0a-0657-4f19-a84d-580e3d8524e8"
+      ConsulConfig__ServiceName: ${BILLING_SERVICE_NAME}
+      ConsulConfig__Host: ${CONSUL_ADDR}
+      ConsulConfig__ServiceAddress: ${BILLING_SERVICE_NAME}
+      ConsulConfig__ServicePort: ${BILLING_API_PORT_HTTPS}
+      ConsulConfig__HealthCheckUrl: ${BILLING_API_URL}
+      logging__Service: "app"
+      logging__ServiceName: ${BILLING_SERVICE_NAME}
+      logging__LokiUrl: ${LOKI_URL}
+      VAULT_ADDR: http://vault:${VAULT_PORT}
+      VAULT_TOKEN: ${VAULT_DEV_TOKEN}
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: 8080
+      #ASPNETCORE_HTTPS_PORTS: 8081
+      #ASPNETCORE_Kestrel__Certificates__Default__Path: /app/certs/aspnetcore-dev-cert.pfx
+      #ASPNETCORE_Kestrel__Certificates__Default__Password: ${KESTREL_DEFAULT_PASSWORD}
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "${BILLING_API_URL}" ]
+      interval: "30s"
+      timeout: "10s"
+      retries: 5
+    depends_on:
+      - billing
+      - consul
+      - messagebroker
+      - vault
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      #- ../certs/aspnetcore-dev-cert.pfx:/https/aspnetcore-dev-cert.pfx
+      #S- ../certs:/app/certs:ro  # Asegúrate de que la carpeta local 'certs' existe y contiene tu certificado-
+    networks:
+      - observability
+      - billing-net
+      
+#  eventrelay:
+#    build:
+#      context: ../../src/backend
+#      dockerfile: /Workers/billing.IntegrationService/Dockerfile
+#    container_name: eventrelay
+#    depends_on:
+#      messagebroker:
+#        condition: service_healthy
+#    environment:
+#      ConnectionStrings__Database: "Server=${EVT_POSTGRES_HOST};Port=${EVT_POSTGRES_PORT};Database=${EVT_POSTGRES_DB};Username=${EVT_POSTGRES_USER};Password=${EVT_POSTGRES_PASSWORD};Include Error Detail=true"
+#      MessageBroker__Host: ${RABBITMQ_HOST}
+#      MessageBroker__Username: ${RABBITMQ_USER}
+#      MessageBroker__Password: ${RABBITMQ_PASSWORD}
+#    networks:
+#      - billing-net
+
+
+  # ---------------------
+  # --- Gateway      ---
+  # ---------------------
+
+  #yarpapigateway:
+  #  container_name: yarpapigateway
+  #  build:
+  #    context: ../../src/backend   # ← Esto debe apuntar a D:\Repositorio\Axenta
+  #    dockerfile: src/ApiGateways/YarpApiGateway/Dockerfile
+  #  environment:
+  #    - ASPNETCORE_ENVIRONMENT=Development
+  #    - ASPNETCORE_HTTP_PORTS=8080
+  #    #- ASPNETCORE_HTTPS_PORTS=8081
+  #  depends_on:
+  #    - billing.api
+  #  ports:
+  #    - "6009:8080"
+  #    #- "6069:8081"
+  #  volumes:
+  #    - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+  #    - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+  #  networks:
+  #    - billing-net
+
+volumes:
+  grafana_data:
+  prometheus-data:
+  tempo-data:
+  loki-data:
+
+networks:
+  observability:
+    driver: bridge
+  billing-net:
+    driver: bridge

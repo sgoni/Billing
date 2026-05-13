@@ -1,0 +1,40 @@
+postgres:
+  - name: billing
+    host: ${BILLING_POSTGRES_HOST}
+    docker_host: ${BILLING_POSTGRES_DB}   # para Vault
+    port: ${BILLING_POSTGRES_PORT}
+    user: ${BILLING_POSTGRES_USER}
+    password: ${BILLING_POSTGRES_PASSWORD}
+    db: ${BILLING_POSTGRES_DB}
+
+    vault:
+      role_name: billing-role
+      ttl: 5m
+      max_ttl: 30m
+
+    consul:
+      service_name: billing-db
+      tags: ["db", "postgres"]
+
+rabbitmq:
+  url: ${RABBITMQ_URL}
+  user: ${RABBITMQ_USER}
+  password: ${RABBITMQ_PASSWORD}
+
+http:
+  - name: vault
+    url: ${VAULT_URL}
+  - name: consul
+    url: ${CONSUL_URL}
+  - name: prometheus
+    url: ${PROMETHEUS_URL}
+  - name: grafana
+    url: ${GRAFANA_URL}
+  - name: loki
+    url: ${LOKI_URL_HEALTH}
+  - name: billing.api
+    url: http://localhost:8080/health
+
+    consul:
+      service_name: billing.api
+      tags: ["api"]
