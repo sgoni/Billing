@@ -71,12 +71,12 @@ namespace Billing.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Description = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
+                    InvoiceId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Description = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
                     Quantity = table.Column<int>(type: "integer", nullable: false),
                     PriceAmount = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
                     PriceCurrency = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
                     LineNumber = table.Column<int>(type: "integer", nullable: false),
-                    InvoiceId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -103,12 +103,6 @@ namespace Billing.Infrastructure.Migrations
                 name: "IX_InvoiceItems_InvoiceId",
                 table: "InvoiceItems",
                 column: "InvoiceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Invoices_Number",
-                table: "Invoices",
-                column: "Number",
-                unique: true);
         }
 
         /// <inheritdoc />

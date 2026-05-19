@@ -25,7 +25,11 @@ public class CreateInvoiceHandler(IApplicationDbContext dbContext)
         var lineNumber = 1;
         foreach (var item in command.Lines)
         {
-            invoice.AddItem(item.Description, item.Quantity, Money.Of(item.Price, "CRC"), lineNumber);
+            invoice.AddItem(InvoiceId.Of(item.InvoiceId),
+                item.Description,
+                item.Quantity,
+                Money.Of(item.Price, "CRC"),
+                lineNumber);
             lineNumber++;
         }
 

@@ -17,6 +17,7 @@ public class InitialData
             );
 
             invoiceOne.AddItem(
+                InvoiceId.Of(invoiceOne.Id.Value),
                 "IPhone XR 10",
                 1,
                 Money.Of(85000, "CRC"),
@@ -24,6 +25,7 @@ public class InitialData
             );
 
             invoiceOne.AddItem(
+                InvoiceId.Of(invoiceOne.Id.Value),
                 "Funda protectora IPhone XR 10",
                 1,
                 Money.Of(8000, "CRC"),
@@ -31,6 +33,7 @@ public class InitialData
             );
 
             invoiceOne.AddItem(
+                InvoiceId.Of(invoiceOne.Id.Value),
                 "Cubo cargador 10 Watts",
                 1,
                 Money.Of(4500, "CRC"),

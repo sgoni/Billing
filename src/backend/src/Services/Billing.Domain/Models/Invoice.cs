@@ -8,10 +8,12 @@ public class Invoice : Aggregate<InvoiceId>
     {
     } // Necesario para EF
 
+    public IReadOnlyCollection<InvoiceItem> Items => _items.AsReadOnly();
+    
     public string Number { get; private set; } = default!;
     public DateTime IssueDate { get; private set; }
     public CustomerId? CustomerId { get; private set; }
-    public IReadOnlyCollection<InvoiceItem> Items => _items.AsReadOnly();
+
     public decimal Total { get; private set; }
 
     public static Invoice Create(InvoiceId id, CustomerId? customerId, DateTime issueDate)
@@ -48,21 +50,21 @@ public class Invoice : Aggregate<InvoiceId>
         AddDomainEvent(new InvoiceUpdatedDomainEvent(before, this));
     }
 
-    public void AddItem(string description, int quantity, Money price, int lineNumber = 1)
+    public void AddItem(InvoiceId invoiceId, string description, int quantity, Money price, int lineNumber = 1)
     {
-        var item = InvoiceItem.Create(description, quantity, price, lineNumber);
+        var item = InvoiceItem.Create(invoiceId, description, quantity, price, lineNumber);
         _items.Add(item);
         RecalculateTotals();
     }
 
-    public void UpdateLine(LineId idLine, string description, int quantity, Money price)
+    public void UpdateLine(Guid invoiceId, LineId idLine, string description, int quantity, Money price)
     {
         var line = _items.SingleOrDefault(x => x.Id == idLine);
 
         if (line is null)
-            throw new DomainException($"Line {line.Id} not found.");
+            throw new DomainException($"Line {idLine} not found.");
 
-        line.Update(description, quantity, price);
+        line.Update(invoiceId, description, quantity, price);
 
         RecalculateTotals();
     }

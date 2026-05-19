@@ -4,124 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f62b9c27-5c66-4e98-a1f8-b7d35b7bc70c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/deploy/dockers/docker_compose_dev.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/dockers/docker_compose_prod.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/dockers/docker_compose_stage.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/scripts/register_services_consul.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/services.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Billing.sln" beforeDir="false" afterPath="$PROJECT_DIR$/Billing.sln" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.API/Billing.API.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.API/Billing.API.http" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.API/DependencyInjection.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.API/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.API/Endpoints/Invoices/CreateInvoice.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.API/Endpoints/Invoices/GetInvoiceById.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.API/Endpoints/Invoices/GetInvoices.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.API/Endpoints/Invoices/UpdateInvoice.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.API/GlobalUsing.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.API/Program.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.API/Properties/launchSettings.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.API/appsettings.Development.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.API/appsettings.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Application/Abstractions/Persintence/IApplicationDbContext.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Application/Billing.Application.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Application/Data/EventLogRepository.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Application/Data/IEventLogRepository.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Application/DependencyInjection.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Application/Dtos/InvoiceDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Application/Dtos/InvoiceLineDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Application/Exceptions/EntityNotFoundException.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Application/Extensions/InvoiceExtensions.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Application/Features/Invoices/Commands/CreateInvoice/CreateInvoiceCommand.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Application/Features/Invoices/Commands/CreateInvoice/CreateInvoiceHandler.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Application/Features/Invoices/Commands/UpdateApInvoice/UpdatelApInvoiceCommand.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Application/Features/Invoices/Commands/UpdateApInvoice/UpdatelApInvoiceHandler.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Application/Features/Invoices/EventHandlers/Domain/InvoiceCreatedDomainEventHandler.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Application/Features/Invoices/Queries/GetInvoices/GetInvoicesQuery.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Application/Features/Invoices/Queries/GetInvoices/GetInvoicesQueryHandler.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Application/Features/Invoices/Queries/GetnvoicebyId/GetInvoiceByIdQuery.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Application/Features/Invoices/Queries/GetnvoicebyId/GetInvoiceByIdQueryHandler.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Application/GlobalUsing.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Application/Validators/InvoiceLineValidator.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Domain/Abstractions/Aggregate.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Domain/Abstractions/Entity.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Domain/Abstractions/IAggregate.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Domain/Abstractions/IDomainEvent.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Domain/Abstractions/IEntity.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Domain/Billing.Domain.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Domain/Events/InvoiceCreatedDomainEvent.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Domain/Events/InvoiceUpdatedDomainEvent.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Domain/Exceptions/DomainException.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Domain/GlobalUsing.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Domain/Models/AuditLog.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Domain/Models/EventLog.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Domain/Models/Invoice.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Domain/Models/InvoiceItem.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Domain/ValueObjects/AuditLogId.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Domain/ValueObjects/CustomerId.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Domain/ValueObjects/EventLogId.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Domain/ValueObjects/InvoiceId.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Domain/ValueObjects/InvoiceNumber.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Domain/ValueObjects/LineId.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Infrastructure/Billing.Infrastructure.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Infrastructure/Data/ApplicationDbContext.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Infrastructure/Data/Configuration/AuditLogConfiguration.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Infrastructure/Data/Configuration/EventLogConfiguration.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Infrastructure/Data/Configuration/InvoiceConfiguration.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Infrastructure/Data/Configuration/InvoiceItemConfiguration.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Infrastructure/Data/Extensions/DatabaseExtensions.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Infrastructure/Data/Extensions/InitialData.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Infrastructure/Data/Interceptors/AuditableEntityInterceptor.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Infrastructure/Data/Interceptors/DispatchDomainEventsInterceptor.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Infrastructure/DependencyInjection.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Infrastructure/GlobalUsing.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Infrastructure/Migrations/20260508022052_Initial.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Infrastructure/Migrations/20260508022052_Initial.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Services/Billing.Infrastructure/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Workers/IntegrationService/Application/Consumers/InvoiceCreatedConsumer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Workers/IntegrationService/Application/Services/EventRelayService.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Workers/IntegrationService/BackgroundTasks/EventRelayWorker.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Workers/IntegrationService/Domain/Entities/EventRelayLog.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Workers/IntegrationService/Domain/Enums/EventRelayStatus.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Workers/IntegrationService/GlobalUsing.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Workers/IntegrationService/Infrastructure/Persistence/Configurations/EventRelayLogConfiguration.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Workers/IntegrationService/IntegrationService.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Workers/IntegrationService/Program.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/Workers/IntegrationService/appsettings.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks.Logging/BuildingBlocks.Logging.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks.Logging/Extensions/ObservabilityExtensions.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks.Logging/GlobalUsing.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks.Messaging/BuildingBlocks.Messaging.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks.Messaging/Events/IntegrationEvent.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks.Messaging/Events/Invoices/InvoiceCreatedIntegrationEvent.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks.Messaging/GlobalUsing.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks.Messaging/MassTransit/Extensions.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks/Behaviors/AuditLogBehavior.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks/Behaviors/LogginBehavior.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks/Behaviors/ValidationBehavior.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks/BuildingBlocks.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks/CQRS/ICommand.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks/CQRS/ICommandHandler.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks/CQRS/IQuery.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks/CQRS/IQueryHandler.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks/Common/Error.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks/Common/Result.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks/Enumeration/Enumeration.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks/Exceptions/BadRequestException.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks/Exceptions/ConflictException.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks/Exceptions/ForbiddenAccessException.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks/Exceptions/Handler/CustomExceptionHandler.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks/Exceptions/InternalServerException.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks/Exceptions/NotFoundException.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks/Exceptions/ValidationException.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks/GlobalUsing.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks/Pagination/PaginatedResult.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks/Pagination/PaginationRequest.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks/ValueObjects/GuidValueObject.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks/ValueObjects/Money.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/shared/BuildingBlocks/ValueObjects/StringValueObject.cs" beforeDir="false" />
+    <list default="true" id="f62b9c27-5c66-4e98-a1f8-b7d35b7bc70c" name="Changes" comment="New features are being added to the demo project: business logic, new endpoints, DevOps, and more.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Billing.API.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Billing.API.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Billing.API.http" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Billing.API.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Endpoints/Invoices/GetInvoices.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Endpoints/Invoices/GetInvoices.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Properties/launchSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Properties/launchSettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/appsettings.Development.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Dtos/InvoiceLineDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Dtos/InvoiceLineDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Extensions/InvoiceExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Extensions/InvoiceExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Features/Invoices/Commands/CreateInvoice/CreateInvoiceHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Features/Invoices/Commands/CreateInvoice/CreateInvoiceHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Features/Invoices/Commands/UpdateApInvoice/UpdatelApInvoiceHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Features/Invoices/Commands/UpdateApInvoice/UpdatelApInvoiceHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Features/Invoices/Queries/GetInvoices/GetInvoicesQueryHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Features/Invoices/Queries/GetInvoices/GetInvoicesQueryHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Domain/Models/Invoice.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Domain/Models/Invoice.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Domain/Models/InvoiceItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Domain/Models/InvoiceItem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Data/Configuration/InvoiceConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Data/Configuration/InvoiceConfiguration.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Data/Configuration/InvoiceItemConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Data/Configuration/InvoiceItemConfiguration.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Data/Extensions/InitialData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Data/Extensions/InitialData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Migrations/20260508022052_Initial.Designer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Migrations/20260508022052_Initial.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/IntegrationService.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/IntegrationService.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,7 +33,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="1255" />
+    <option name="cachedIndexableFilesCount" value="1261" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -141,6 +45,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;sgoni&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/sgoni/Billing.git&quot;,
+    &quot;accountId&quot;: &quot;c8cfe096-132a-4b6d-aa87-ab3b5f83cffe&quot;
+  }
+}</component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
@@ -196,9 +112,30 @@
       <option name="presentableId" value="Default" />
       <updated>1778546852201</updated>
     </task>
+    <task id="LOCAL-00001" summary="New features are being added to the demo project: business logic, new endpoints, DevOps, and more.">
+      <option name="closed" value="true" />
+      <created>1778645801793</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1778645801793</updated>
+    </task>
+    <task id="LOCAL-00002" summary="New features are being added to the demo project: business logic, new endpoints, DevOps, and more.">
+      <option name="closed" value="true" />
+      <created>1778645877022</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1778645877022</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="New features are being added to the demo project: business logic, new endpoints, DevOps, and more." />
+    <option name="LAST_COMMIT_MESSAGE" value="New features are being added to the demo project: business logic, new endpoints, DevOps, and more." />
   </component>
 </project>

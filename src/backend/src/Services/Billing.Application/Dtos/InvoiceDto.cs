@@ -5,5 +5,6 @@ public record InvoiceDto(
     string Number,
     DateTime IssueDate,
     Guid? CustomerId,
+    decimal Total,
     List<InvoiceLineDto> Lines
 );

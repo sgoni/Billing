@@ -10,7 +10,7 @@ public class GetInvoicesQueryHandler(IApplicationDbContext dbContext)
 
         var pageIndex = query.PaginationRequest.PageIndex;
         var pageSize = query.PaginationRequest.PageSize;
-        var totalCount = await dbContext.InvoiceItems.LongCountAsync(cancellationToken);
+        var totalCount = await dbContext.Invoices.LongCountAsync(cancellationToken);
 
         var apInvoices = await dbContext.Invoices
             .Include(vi => vi.Items)

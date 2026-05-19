@@ -1,41 +1,48 @@
-﻿namespace Billing.Infrastructure.Data.Configuration;
-
-public class InvoiceItemConfiguration : IEntityTypeConfiguration<InvoiceItem>
+﻿public class InvoiceItemConfiguration : IEntityTypeConfiguration<InvoiceItem>
 {
     public void Configure(EntityTypeBuilder<InvoiceItem> builder)
     {
         builder.ToTable("InvoiceItems");
 
-        builder.HasKey(x => x.Id);
+        // PK
+        builder.HasKey(i => i.Id);
 
-        builder.Property(x => x.Id)
+        builder.Property(i => i.Id)
             .HasConversion(
                 id => id.Value,
-                value => LineId.Of(value));
+                value => LineId.Of(value))
+            .ValueGeneratedNever();
 
-        builder.Property(x => x.Description)
+        // FK (Value Object)
+        builder.Property(i => i.InvoiceId)
             .IsRequired()
-            .HasMaxLength(300);
+            .HasConversion(
+                id => id.Value,
+                value => InvoiceId.Of(value));
 
-        builder.Property(x => x.Quantity)
+        // Properties
+        builder.Property(i => i.Description)
+            .IsRequired()
+            .HasMaxLength(250);
+
+        builder.Property(i => i.Quantity)
             .IsRequired();
 
-        builder.Property(x => x.LineNumber)
+        builder.Property(i => i.LineNumber)
             .IsRequired();
 
-        // Money como Value Object (Owned)
-        builder.OwnsOne(x => x.Price, money =>
+        // Money (Owned Entity)
+        builder.OwnsOne(i => i.Price, money =>
         {
             money.Property(m => m.Amount)
                 .HasColumnName("PriceAmount")
-                .HasPrecision(18, 2);
+                .HasPrecision(18, 2)
+                .IsRequired();
 
             money.Property(m => m.CurrencyCode)
                 .HasColumnName("PriceCurrency")
-                .HasMaxLength(10);
+                .HasMaxLength(10)
+                .IsRequired();
         });
-
-        // Ignorar propiedad calculada
-        builder.Ignore(x => x.Total);
     }
 }

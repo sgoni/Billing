@@ -1,44 +1,42 @@
-﻿namespace Billing.Infrastructure.Data.Configuration;
-
-public class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
+﻿public class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
 {
     public void Configure(EntityTypeBuilder<Invoice> builder)
     {
         builder.ToTable("Invoices");
 
-        builder.HasKey(x => x.Id);
+        // PK
+        builder.HasKey(i => i.Id);
 
-        builder.Property(x => x.Id)
+        builder.Property(i => i.Id)
             .HasConversion(
                 id => id.Value,
-                value => InvoiceId.Of(value));
+                value => InvoiceId.Of(value))
+            .ValueGeneratedNever();
 
-        builder.Property(x => x.Number)
+        // Properties
+        builder.Property(i => i.Number)
             .IsRequired()
             .HasMaxLength(50);
 
-        builder.HasIndex(x => x.Number)
-            .IsUnique();
-
-        builder.Property(x => x.IssueDate)
+        builder.Property(i => i.IssueDate)
             .IsRequired();
 
-        builder.Property(x => x.Total)
+        builder.Property(i => i.Total)
             .HasPrecision(18, 2);
 
-        // CustomerId (Value Object nullable)
-        builder.Property(x => x.CustomerId)
+        // CustomerId (nullable VO)
+        builder.Property(i => i.CustomerId)
             .HasConversion(
                 id => id != null ? id.Value : (Guid?)null,
                 value => value != null ? CustomerId.Of(value.Value) : null);
 
-        // Relación con Items
+        // Relationship (IMPORTANTE)
         builder.HasMany(x => x.Items)
-            .WithOne()
-            .HasForeignKey("InvoiceId")
+            .WithOne(x => x.Invoice)
+            .HasForeignKey(x => x.InvoiceId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Navigation(x => x.Items)
-            .UsePropertyAccessMode(PropertyAccessMode.Field);
+        // Ignorar DomainEvents si aplica
+        builder.Ignore("DomainEvents");
     }
 }

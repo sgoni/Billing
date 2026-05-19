@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Billing.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260508022052_Initial")]
+    [Migration("20260519001919_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -129,9 +129,6 @@ namespace Billing.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Number")
-                        .IsUnique();
-
                     b.ToTable("Invoices", (string)null);
                 });
 
@@ -148,10 +145,10 @@ namespace Billing.Infrastructure.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
 
-                    b.Property<Guid?>("InvoiceId")
+                    b.Property<Guid>("InvoiceId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("LastModified")
@@ -175,10 +172,11 @@ namespace Billing.Infrastructure.Migrations
 
             modelBuilder.Entity("Billing.Domain.Models.InvoiceItem", b =>
                 {
-                    b.HasOne("Billing.Domain.Models.Invoice", null)
+                    b.HasOne("Billing.Domain.Models.Invoice", "Invoice")
                         .WithMany("Items")
                         .HasForeignKey("InvoiceId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.OwnsOne("BuildingBlocks.ValueObjects.Money", "Price", b1 =>
                         {
@@ -203,6 +201,8 @@ namespace Billing.Infrastructure.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("InvoiceItemId");
                         });
+
+                    b.Navigation("Invoice");
 
                     b.Navigation("Price")
                         .IsRequired();

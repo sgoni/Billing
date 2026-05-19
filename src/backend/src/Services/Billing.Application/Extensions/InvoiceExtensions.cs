@@ -9,8 +9,10 @@ public static class InvoiceExtensions
             invoice.Number,
             invoice.IssueDate,
             invoice.CustomerId.Value,
+            invoice.Total,
             invoice.Items.Select(i => new InvoiceLineDto(
                 i.Id.Value,
+                i.InvoiceId.Value,
                 i.Description,
                 i.Quantity,
                 i.Price.Amount,
@@ -31,8 +33,10 @@ public static class InvoiceExtensions
             invoice.Number,
             invoice.IssueDate,
             invoice.CustomerId.Value,
+            invoice.Total,
             invoice.Items.Select(i => new InvoiceLineDto(
                 i.Id.Value,
+                i.InvoiceId.Value,
                 i.Description,
                 i.Quantity,
                 i.Price.Amount,

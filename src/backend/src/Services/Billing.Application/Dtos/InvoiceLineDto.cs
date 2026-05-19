@@ -2,6 +2,7 @@
 
 public record InvoiceLineDto(
     Guid Id,
+    Guid InvoiceId,
     string Description,
     int Quantity,
     decimal Price,

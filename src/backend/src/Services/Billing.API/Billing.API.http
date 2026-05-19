@@ -1,6 +1,20 @@
-@Billing.API_HostAddress = http://localhost:5245
+# curl -i http://httpbin.org/ip
+GET {{API_HostAddress}}/health
 
-GET {{Billing.API_HostAddress}}/weatherforecast/
-Accept: application/json
+###
+
+# curl -X 'GET' 
+#  'http://localhost:5000/billings?PageIndex=10&PageSize=1' 
+#  -H 'accept: application/json'
+GET {{API_HostAddress}}/billings?PageIndex=0&PageSize=10
+accept: application/json
+
+###
+
+# curl -X 'GET' 
+#  'http://localhost:5000/billings/b45e75af-fe29-4c2e-9653-aad9bf5b42ef' 
+#  -H 'accept: application/json'
+GET {{API_HostAddress}}/billings/b45e75af-fe29-4c2e-9653-aad9bf5b42ef
+accept: application/json
 
 ###
