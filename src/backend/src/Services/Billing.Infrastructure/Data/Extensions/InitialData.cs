@@ -20,8 +20,7 @@ public class InitialData
                 InvoiceId.Of(invoiceOne.Id.Value),
                 "IPhone XR 10",
                 1,
-                Money.Of(85000, "CRC"),
-                1
+                Money.Of(85000, "CRC")
             );
 
             invoiceOne.AddItem(

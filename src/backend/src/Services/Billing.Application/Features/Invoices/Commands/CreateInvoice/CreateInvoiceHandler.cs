@@ -21,7 +21,7 @@ public class CreateInvoiceHandler(IApplicationDbContext dbContext)
     private Invoice CreatenewInvoice(InvoiceDto command)
     {
         var invoiceId = InvoiceId.Of(Guid.NewGuid());
-        
+
         //Create header
         var invoice = Invoice.Create(
             invoiceId,
@@ -32,14 +32,12 @@ public class CreateInvoiceHandler(IApplicationDbContext dbContext)
         //Add details
         var lineNumber = 0;
         foreach (var item in command.Lines)
-        {
             invoice.AddItem(
                 invoiceId,
                 item.Description,
                 item.Quantity,
                 Money.Of(item.Price, "CRC"),
                 lineNumber++);
-        }
 
         return invoice;
     }

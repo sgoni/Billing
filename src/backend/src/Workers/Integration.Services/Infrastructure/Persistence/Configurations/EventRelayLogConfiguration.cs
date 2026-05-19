@@ -1,4 +1,4 @@
-﻿namespace IntegrationService.Infrastructure.Persistence.Configurations;
+﻿namespace Integration.Services.Infrastructure.Persistence.Configurations;
 
 public class EventRelayLogConfiguration : IEntityTypeConfiguration<EventRelayLog>
 {

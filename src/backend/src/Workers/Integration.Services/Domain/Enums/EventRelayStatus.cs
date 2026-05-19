@@ -1,4 +1,4 @@
-﻿namespace IntegrationService.Domain.Enums;
+﻿namespace Integration.Services.Domain.Enums;
 
 public class EventRelayStatus : Enumeration
 {

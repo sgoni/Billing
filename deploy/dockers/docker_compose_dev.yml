@@ -204,13 +204,13 @@
 
   eventlogrelay:
     image: postgres:latest
-    container_name: eventlogrelaydb
+    container_name: ${EVT_POSTGRES_DB}
     ports:
-      - "5434:5432"
+      - "${EVT_POSTGRES_PORT}:5432"
     environment:
       POSTGRES_USER: ${EVT_POSTGRES_USER}
       POSTGRES_PASSWORD: ${EVT_POSTGRES_PASSWORD}
-      POSTGRES_DB: eventrelaylogDb
+      POSTGRES_DB: ${EVT_POSTGRES_DB}
       RUNNING_IN_DOCKER: true
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${EVT_POSTGRES_USER}" ]
@@ -275,21 +275,21 @@
       - observability
       - billing-net
       
-#  eventrelay:
-#    build:
-#      context: ../../src/backend
-#      dockerfile: /Workers/billing.IntegrationService/Dockerfile
-#    container_name: eventrelay
-#    depends_on:
-#      messagebroker:
-#        condition: service_healthy
-#    environment:
-#      ConnectionStrings__Database: "Server=${EVT_POSTGRES_HOST};Port=${EVT_POSTGRES_PORT};Database=${EVT_POSTGRES_DB};Username=${EVT_POSTGRES_USER};Password=${EVT_POSTGRES_PASSWORD};Include Error Detail=true"
-#      MessageBroker__Host: ${RABBITMQ_HOST}
-#      MessageBroker__Username: ${RABBITMQ_USER}
-#      MessageBroker__Password: ${RABBITMQ_PASSWORD}
-#    networks:
-#      - billing-net
+  eventrelay:
+    build:
+      context: ../../src/backend
+      dockerfile: src/Workers/Integration.Services/Dockerfile
+    container_name: eventrelay
+    depends_on:
+      messagebroker:
+        condition: service_healthy
+    environment:
+      ConnectionStrings__Database: "Server=${EVT_POSTGRES_HOST};Port=${EVT_POSTGRES_PORT};Database=${EVT_POSTGRES_DB};Username=${EVT_POSTGRES_USER};Password=${EVT_POSTGRES_PASSWORD};Include Error Detail=true"
+      MessageBroker__Host: ${RABBITMQ_HOST}
+      MessageBroker__Username: ${RABBITMQ_USER}
+      MessageBroker__Password: ${RABBITMQ_PASSWORD}
+    networks:
+      - billing-net
 
 
   # ---------------------

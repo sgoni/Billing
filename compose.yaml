@@ -11,3 +11,9 @@
       context: .
       dockerfile: src/backend/Services/Billing.API/Dockerfile
 
+  integration.services:
+    image: integration.services
+    build:
+      context: .
+      dockerfile: src/backend/src/Workers/Integration.Services/Dockerfile
+

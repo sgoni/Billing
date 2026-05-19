@@ -16,6 +16,23 @@ postgres:
       service_name: billing-db
       tags: ["db", "postgres"]
 
+  - name: eventrelay
+    host: ${EVT_POSTGRES_HOST}
+    docker_host: ${EVT_POSTGRES_DB}   # para Vault
+    port: ${EVT_POSTGRES_PORT}
+    user: ${EVT_POSTGRES_USER}
+    password: ${EVT_POSTGRES_PASSWORD}
+    db: ${EVT_POSTGRES_DB}
+
+    vault:
+      role_name: eventrelay-role
+      ttl: 5m
+      max_ttl: 30m
+
+    consul:
+      service_name: eventrelay-db
+      tags: ["db", "postgres"]
+
 rabbitmq:
   url: ${RABBITMQ_URL}
   user: ${RABBITMQ_USER}

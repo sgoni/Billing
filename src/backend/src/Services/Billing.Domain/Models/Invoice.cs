@@ -9,7 +9,7 @@ public class Invoice : Aggregate<InvoiceId>
     } // Necesario para EF
 
     public IReadOnlyCollection<InvoiceItem> Items => _items.AsReadOnly();
-    
+
     public string Number { get; private set; } = default!;
     public DateTime IssueDate { get; private set; }
     public CustomerId? CustomerId { get; private set; }

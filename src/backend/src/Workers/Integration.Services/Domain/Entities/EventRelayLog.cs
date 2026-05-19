@@ -1,4 +1,4 @@
-﻿namespace IntegrationService.Domain.Entities;
+﻿namespace Integration.Services.Domain.Entities;
 
 public class EventRelayLog
 {

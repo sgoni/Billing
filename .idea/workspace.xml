@@ -5,24 +5,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f62b9c27-5c66-4e98-a1f8-b7d35b7bc70c" name="Changes" comment="New features are being added to the demo project: business logic, new endpoints, DevOps, and more.">
-      <change afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Domain/Models/OutboxMessage.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Data/Configuration/OutboxMessageConfiguration.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Application/Services/EventRelayService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/BackgroundTasks/EventRelayWorker.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Domain/Entities/EventRelayLog.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Infrastructure/Persistence/Configurations/EventRelayLogConfiguration.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/appsettings.Development.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Abstractions/Persintence/IApplicationDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Abstractions/Persintence/IApplicationDbContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Data/EventLogRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Data/EventLogRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Data/IEventLogRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Data/IEventLogRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/DependencyInjection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/DependencyInjection.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Billing.sln" beforeDir="false" afterPath="$PROJECT_DIR$/Billing.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/compose.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/dockers/docker_compose_dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/dockers/docker_compose_dev.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/environments/.env.dev" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/environments/.env.dev" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/services.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/services.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Extensions/InvoiceExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Extensions/InvoiceExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Features/Invoices/EventHandlers/Domain/InvoiceCreatedDomainEventHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Features/Invoices/EventHandlers/Domain/InvoiceCreatedDomainEventHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/GlobalUsing.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/GlobalUsing.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Domain/Models/EventLog.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Data/ApplicationDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Data/ApplicationDbContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Data/Configuration/EventLogConfiguration.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Migrations/20260519001919_Initial.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Migrations/20260519001919_Initial.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Features/Invoices/Commands/CreateInvoice/CreateInvoiceHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Features/Invoices/Commands/CreateInvoice/CreateInvoiceHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Domain/Models/Invoice.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Domain/Models/Invoice.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Data/Extensions/InitialData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Data/Extensions/InitialData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/Application/Consumers/InvoiceCreatedConsumer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/Application/Services/EventRelayService.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/BackgroundTasks/EventRelayWorker.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/Dockerfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/Domain/Entities/EventRelayLog.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/Domain/Enums/EventRelayStatus.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Domain/Enums/EventRelayStatus.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/GlobalUsing.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/Infrastructure/Persistence/Configurations/EventRelayLogConfiguration.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/IntegrationService.csproj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/Program.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/appsettings.Development.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/appsettings.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Messaging/BuildingBlocks.Messaging.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Messaging/BuildingBlocks.Messaging.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Messaging/Events/Invoices/InvoiceCreatedIntegrationEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Messaging/Events/Invoices/InvoiceCreatedIntegrationEvent.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,6 +67,65 @@
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0" />
+      <entry key="S2" value="1.0000311588173127" />
+      <entry key="S5" value="1.015755507107728" />
+      <entry key="S10" value="1.1255209429048716" />
+      <entry key="S30" value="1.500693627921439" />
+      <entry key="S60" value="1.7076083078799777" />
+      <entry key="M2" value="1.8469617143013712" />
+      <entry key="M5" value="2.2608894666427597" />
+      <entry key="M10" value="3.336251580324072" />
+      <entry key="M15" value="4.207593069191908" />
+      <entry key="M30" value="5.637581161767561" />
+      <entry key="H1" value="6.670493996406953" />
+      <entry key="H2" value="7.293238656374409" />
+      <entry key="H4" value="7.635427402580057" />
+      <entry key="D1" value="7.937621154483754" />
+      <entry key="W1" value="7.991048303390964" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="0.0" />
+      <entry key="S30" value="0.0" />
+      <entry key="S60" value="0.0" />
+      <entry key="M2" value="0.0" />
+      <entry key="M5" value="0.0" />
+      <entry key="M10" value="0.0" />
+      <entry key="M15" value="0.0" />
+      <entry key="M30" value="0.0" />
+      <entry key="H1" value="0.0" />
+      <entry key="H2" value="0.0" />
+      <entry key="H4" value="0.0" />
+      <entry key="D1" value="0.0" />
+      <entry key="W1" value="0.0" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="0.9265880618903709" />
+      <entry key="MS500" value="0.9848664428955506" />
+      <entry key="S2" value="0.9962260530030064" />
+      <entry key="S5" value="1.0142208283146932" />
+      <entry key="S10" value="1.124715276900123" />
+      <entry key="S30" value="1.5003816671944792" />
+      <entry key="S60" value="1.7074403649507466" />
+      <entry key="M2" value="1.8468731748298255" />
+      <entry key="M5" value="2.260833443411255" />
+      <entry key="M10" value="3.336187096850519" />
+      <entry key="M15" value="4.207528782908864" />
+      <entry key="M30" value="5.637530806689179" />
+      <entry key="H1" value="6.67046205313991" />
+      <entry key="H2" value="7.293220616466433" />
+      <entry key="H4" value="7.635417810408611" />
+      <entry key="D1" value="7.937619471205785" />
+      <entry key="W1" value="7.991048060781586" />
+    </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4,

@@ -1,4 +1,4 @@
-﻿var builder = Host.CreateApplicationBuilder(args);
+var builder = Host.CreateApplicationBuilder(args);
 
 builder.Services.AddScoped<IEventRelayService, EventRelayService>();
 builder.Services.AddMessageBroker(builder.Configuration, Assembly.GetExecutingAssembly());

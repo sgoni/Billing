@@ -1,4 +1,4 @@
-﻿namespace IntegrationService.Application.Services;
+﻿namespace Integration.Services.Application.Services;
 
 public interface IEventRelayService
 {
