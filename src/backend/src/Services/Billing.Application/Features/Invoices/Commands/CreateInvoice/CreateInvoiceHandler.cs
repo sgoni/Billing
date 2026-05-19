@@ -10,27 +10,35 @@ public class CreateInvoiceHandler(IApplicationDbContext dbContext)
         //save to database
         //return result 
 
-        throw new NotImplementedException();
+        var newInvoice = CreatenewInvoice(command.Invoice);
+
+        dbContext.Invoices.Add(newInvoice);
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        return new CreateInvoiceCommandResult(newInvoice.Id.Value);
     }
 
     private Invoice CreatenewInvoice(InvoiceDto command)
     {
+        var invoiceId = InvoiceId.Of(Guid.NewGuid());
+        
         //Create header
-        var invoice = Invoice.Create(InvoiceId.Of(Guid.NewGuid()),
+        var invoice = Invoice.Create(
+            invoiceId,
             CustomerId.FromNullable(command.CustomerId),
             DateTime.UtcNow
         );
 
         //Add details
-        var lineNumber = 1;
+        var lineNumber = 0;
         foreach (var item in command.Lines)
         {
-            invoice.AddItem(InvoiceId.Of(item.InvoiceId),
+            invoice.AddItem(
+                invoiceId,
                 item.Description,
                 item.Quantity,
                 Money.Of(item.Price, "CRC"),
-                lineNumber);
-            lineNumber++;
+                lineNumber++);
         }
 
         return invoice;

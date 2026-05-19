@@ -42,7 +42,7 @@ public class UpdatelApInvoiceHandler(
             {
                 // UPDATE
                 invoice.UpdateLine(
-                    line.InvoiceId,
+                    invoice.Id.Value,
                     LineId.Of(line.Id),
                     line.Description,
                     line.Quantity,
@@ -55,7 +55,7 @@ public class UpdatelApInvoiceHandler(
             {
                 // CREATE
                 invoice.AddItem(
-                    InvoiceId.Of(line.InvoiceId),
+                    invoice.Id,
                     line.Description,
                     line.Quantity,
                     Money.Of(line.Price, "CRC"),
