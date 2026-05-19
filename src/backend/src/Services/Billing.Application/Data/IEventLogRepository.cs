@@ -3,5 +3,5 @@
 public interface IEventLogRepository
 {
     Task<bool> AlreadyProcessedAsync(Guid messageId);
-    Task SaveProcessedAsync(Guid messageId);
+    Task SaveProcessedAsync(string type, string content, Guid correlativeId);
 }

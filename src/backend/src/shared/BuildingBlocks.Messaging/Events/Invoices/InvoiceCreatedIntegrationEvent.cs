@@ -2,9 +2,16 @@
 
 public record InvoiceCreatedIntegrationEvent : IntegrationEvent
 {
-    public InvoiceCreatedIntegrationEvent(string numberInvoice, DateTime issueDate, Guid? customerId, decimal total,
-        Guid correlationId, List<InvoiceLines> lines)
+    public InvoiceCreatedIntegrationEvent(
+        Guid id,
+        string numberInvoice,
+        DateTime issueDate,
+        Guid? customerId,
+        decimal total,
+        Guid correlationId,
+        IEnumerable<InvoiceLines> lines)
     {
+        Id = id;
         NumberInvoice = numberInvoice;
         IssueDate = issueDate;
         CustomerId = customerId;
@@ -13,12 +20,13 @@ public record InvoiceCreatedIntegrationEvent : IntegrationEvent
         Lines = lines;
     }
 
+    public Guid Id { get; set; }
     public string NumberInvoice { get; set; }
     public DateTime IssueDate { get; set; }
     public Guid? CustomerId { get; set; }
     public decimal Total { get; private set; }
     public Guid? CorrelationId { get; set; }
-    public List<InvoiceLines> Lines { get; set; }
+    public IEnumerable<InvoiceLines> Lines { get; set; }
 }
 
 public record InvoiceLines

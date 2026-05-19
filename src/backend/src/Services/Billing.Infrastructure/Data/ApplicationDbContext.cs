@@ -11,7 +11,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Invoice> Invoices => Set<Invoice>();
     public DbSet<InvoiceItem> InvoiceItems => Set<InvoiceItem>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
-    public DbSet<EventLog> EventLogs => Set<EventLog>();
+    public DbSet<OutboxMessage> EventLogs => Set<OutboxMessage>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

@@ -44,4 +44,25 @@ public static class InvoiceExtensions
                 i.Total)).ToList()
         );
     }
+
+    public static InvoiceCreatedIntegrationEvent ToIntegrationEvent(this Invoice invoice)
+    {
+        return new InvoiceCreatedIntegrationEvent(
+            id: invoice.Id.Value,
+            numberInvoice: invoice.Number,
+            issueDate: invoice.IssueDate,
+            customerId: invoice.CustomerId?.Value,
+            total: invoice.Total,
+            correlationId: Guid.NewGuid(), // o el que venga del contexto
+            lines: invoice.Items.Select(x => new InvoiceLines
+            {
+                Id = x.Id.Value,
+                Description = x.Description,
+                Quantity = x.Quantity,
+                Price = x.Price.Amount,
+                LineNumber = x.LineNumber,
+                Total = x.Total
+            })
+        );
+    }
 }

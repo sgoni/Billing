@@ -5,6 +5,6 @@ public interface IApplicationDbContext
     DbSet<Invoice> Invoices { get; }
     DbSet<InvoiceItem> InvoiceItems { get; }
     DbSet<AuditLog> AuditLogs { get; }
-    DbSet<EventLog> EventLogs { get; }
+    DbSet<OutboxMessage> EventLogs { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

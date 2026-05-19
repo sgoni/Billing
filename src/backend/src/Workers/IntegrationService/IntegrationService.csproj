@@ -10,7 +10,6 @@
 
     <ItemGroup>
         <Folder Include="Application\EventRelay\"/>
-        <Folder Include="GlobalUsing\"/>
     </ItemGroup>
 
     <ItemGroup>

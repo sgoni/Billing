@@ -2,6 +2,8 @@
 
 public class InvoiceCreatedDomainEventHandler(
     IApplicationDbContext dbContext,
+    IPublishEndpoint publishEndpoint,
+    IEventLogRepository eventLogRepository,
     IFeatureManager featureManager,
     ILogger<InvoiceCreatedDomainEventHandler> logger)
     : INotificationHandler<InvoiceCreatedDomainEvent>
@@ -15,8 +17,22 @@ public class InvoiceCreatedDomainEventHandler(
         await PersistAuditLog(domainEvent, cancellationToken);
 
         // Publica evento de integración (si aplica)
-        //if (await featureManager.IsEnabledAsync("InvoiceFullfilment"))
-        //await PublishIntegrationEvent(invoice, cancellationToken);
+        if (await featureManager.IsEnabledAsync("InvoiceFullfilment"))
+            await PublishIntegrationEvent(domainEvent.Invoice, cancellationToken);
+    }
+
+    private async Task PublishIntegrationEvent(Invoice invoice, CancellationToken cancellationToken)
+    {
+        var integrationEvent = invoice.ToIntegrationEvent();
+
+        // OutboxMessage
+        await eventLogRepository.SaveProcessedAsync(
+            integrationEvent.GetType().Name,
+            JsonSerializer.Serialize(integrationEvent),
+            Guid.NewGuid() // correlative
+        );
+
+        await publishEndpoint.Publish(integrationEvent, cancellationToken);
     }
 
     private async Task PersistAuditLog(InvoiceCreatedDomainEvent domainEvent, CancellationToken cancellationToken)
@@ -31,22 +47,7 @@ public class InvoiceCreatedDomainEventHandler(
 
     private AuditLog CreateNewAuditLog(InvoiceDto apInvoiceCreatedDomainEvent)
     {
-        var details = JsonSerializer.Serialize(new
-        {
-            apInvoiceCreatedDomainEvent.Id,
-            apInvoiceCreatedDomainEvent.Number,
-            apInvoiceCreatedDomainEvent.IssueDate,
-            apInvoiceCreatedDomainEvent.CustomerId,
-            Lines = apInvoiceCreatedDomainEvent.Lines.Select(l => new
-            {
-                l.Id,
-                l.Price,
-                l.Quantity,
-                l.Total,
-                l.Description,
-                l.LineNumber
-            })
-        });
+        var details = JsonSerializer.Serialize(apInvoiceCreatedDomainEvent);
 
         return AuditLog.Create(
             AuditLogId.Of(Guid.NewGuid()),

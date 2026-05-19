@@ -13,18 +13,6 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateLogger();
 
-//builder.Services.AddMassTransit(x =>
-//{
-//    x.AddConsumers(typeof(YourConsumer).Assembly);
-//    x.UsingRabbitMq((context, cfg) =>
-//    {
-//        cfg.Host("rabbitmq://localhost");
-//        cfg.ConfigureEndpoints(context);
-//        // Habilita health checks
-//        cfg.UseHealthCheck(context);
-//    });
-// });
-
 builder.Services
     .AddHealthChecks()
     //.AddRabbitMQ("amqp://localhost", name: "rabbitmq", timeout: TimeSpan.FromSeconds(5))

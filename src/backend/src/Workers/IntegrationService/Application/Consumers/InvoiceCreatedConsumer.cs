@@ -26,8 +26,8 @@ public class InvoiceCreatedConsumer(
         var relayLog = CreateNewEventLogRelay(
             nameof(InvoiceCreatedIntegrationEvent),
             "Integration",
-            "Accounting.API",
-            "AP.API",
+            "Billing.API",
+            "Anywhere",
             JsonSerializer.Serialize(evt),
             evt.CorrelationId!,
             EventRelayStatus.Published);
