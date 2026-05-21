@@ -17,6 +17,7 @@ public static class DependencyInjection
         });
 
         services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+        services.AddDiscovery(configuration); // Add Discovery
 
         return services;
     }
