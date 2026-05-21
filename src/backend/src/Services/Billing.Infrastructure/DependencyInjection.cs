@@ -7,8 +7,11 @@ public static class DependencyInjection
     {
         var connectionString = configuration.GetConnectionString("Database");
 
+        services.AddDiscovery(configuration); // Add Discovery
         services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
         services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
+        services.AddScoped<VaultDbConnectionInterceptor>();
+        services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 
         services.AddDbContext<ApplicationDbContext>((sp, options) =>
         {
@@ -16,8 +19,22 @@ public static class DependencyInjection
             options.UseNpgsql(connectionString);
         });
 
-        services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
-        services.AddDiscovery(configuration); // Add Discovery
+        var environment = configuration["ASPNETCORE_ENVIRONMENT"];
+        
+        if (environment == "Development")
+            services.AddDbContext<ApplicationDbContext>((sp, options) =>
+            {
+                options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+                options.UseNpgsql(connectionString);
+            });
+        
+        if (environment != "Development")
+            services.AddDbContext<ApplicationDbContext>((sp, options) =>
+            {
+                options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+                options.AddInterceptors(sp.GetServices<VaultDbConnectionInterceptor>());
+                options.UseNpgsql();
+            });
 
         return services;
     }

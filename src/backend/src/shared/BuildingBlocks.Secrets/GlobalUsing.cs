@@ -1,0 +1,10 @@
+﻿global using System.Reflection;
+global using BuildingBlocks.Secrets.Extensions;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Logging;
+global using Microsoft.Extensions.Options;
+global using VaultSharp;
+global using VaultSharp.V1.AuthMethods.Token;
+global using VaultSharp.V1.Commons;
+global using VaultSharp.V1.SecretsEngines;

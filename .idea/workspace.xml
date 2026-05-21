@@ -4,36 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f62b9c27-5c66-4e98-a1f8-b7d35b7bc70c" name="Changes" comment="New features are being added to the demo project: business logic, new endpoints, DevOps, and more.">
-      <change afterPath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Application/Services/EventRelayService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/BackgroundTasks/EventRelayWorker.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Domain/Entities/EventRelayLog.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Infrastructure/Persistence/Configurations/EventRelayLogConfiguration.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Billing.sln" beforeDir="false" afterPath="$PROJECT_DIR$/Billing.sln" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/compose.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/dockers/docker_compose_dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/dockers/docker_compose_dev.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/environments/.env.dev" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/environments/.env.dev" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/services.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/services.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Extensions/InvoiceExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Extensions/InvoiceExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Features/Invoices/Commands/CreateInvoice/CreateInvoiceHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Features/Invoices/Commands/CreateInvoice/CreateInvoiceHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Domain/Models/Invoice.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Domain/Models/Invoice.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Data/Extensions/InitialData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Data/Extensions/InitialData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/Application/Consumers/InvoiceCreatedConsumer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/Application/Services/EventRelayService.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/BackgroundTasks/EventRelayWorker.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/Domain/Entities/EventRelayLog.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/Domain/Enums/EventRelayStatus.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Domain/Enums/EventRelayStatus.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/GlobalUsing.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/Infrastructure/Persistence/Configurations/EventRelayLogConfiguration.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/IntegrationService.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/Program.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/appsettings.Development.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/IntegrationService/appsettings.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Messaging/BuildingBlocks.Messaging.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Messaging/BuildingBlocks.Messaging.csproj" afterDir="false" />
-    </list>
+    <list default="true" id="f62b9c27-5c66-4e98-a1f8-b7d35b7bc70c" name="Changes" comment="New features are being added to the demo project: business logic, new endpoints, DevOps, and more." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
