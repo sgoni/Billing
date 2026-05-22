@@ -1,6 +1,4 @@
-﻿
-
-namespace Billing.Infrastructure.Data.Interceptors;
+﻿namespace Billing.Infrastructure.Data.Interceptors;
 
 public class VaultDbConnectionInterceptor : DbConnectionInterceptor
 {

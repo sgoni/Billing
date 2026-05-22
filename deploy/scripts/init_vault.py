@@ -56,7 +56,7 @@ def check_postgres_instance(prefix: str, retries: int = 5, delay: int = 3, verbo
     return {"status": "unreachable", "error": "Max retries exceeded", "prefix": prefix}
 
 
-def wait_for_postgres(instance, retries=10, delay=3):
+def wait_for_postgres(instance, retries=6, delay=3):
     name = instance["name"]
 
     for attempt in range(1, retries + 1):
@@ -85,6 +85,19 @@ def resolve_env(value: str):
         value = value.replace(f"${{{var}}}", env_value)
 
     return value
+
+
+def is_running_in_docker():
+    return (
+            os.getenv("RUNNING_IN_DOCKER", "false").lower() == "true"
+            or os.path.exists("/.dockerenv")
+    )
+
+
+def resolve_port(instance):
+    if is_running_in_docker():
+        return int(instance.get("docker_port", 5432))
+    return int(resolve_env(instance.get("port", 5432)))
 
 
 def configure_postgres_instances(root_token, instances: list):

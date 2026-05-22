@@ -17,7 +17,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\shared\BuildingBlocks.Discovery\BuildingBlocks.Discovery.csproj"/>
         <ProjectReference Include="..\..\shared\BuildingBlocks.Logging\BuildingBlocks.Logging.csproj"/>
-        <ProjectReference Include="..\..\shared\BuildingBlocks.Secrets\BuildingBlocks.Secrets.csproj" />
+        <ProjectReference Include="..\..\shared\BuildingBlocks.Secrets\BuildingBlocks.Secrets.csproj"/>
         <ProjectReference Include="..\..\shared\BuildingBlocks\BuildingBlocks.csproj"/>
         <ProjectReference Include="..\Billing.Application\Billing.Application.csproj"/>
         <ProjectReference Include="..\Billing.Domain\Billing.Domain.csproj"/>

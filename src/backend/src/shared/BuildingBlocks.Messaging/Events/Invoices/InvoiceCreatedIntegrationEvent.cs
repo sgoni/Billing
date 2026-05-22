@@ -2,31 +2,31 @@
 
 public record InvoiceCreatedIntegrationEvent : IntegrationEvent
 {
-    public InvoiceCreatedIntegrationEvent(
-        Guid id,
-        string numberInvoice,
-        DateTime issueDate,
-        Guid? customerId,
-        decimal total,
-        Guid correlationId,
-        IEnumerable<InvoiceLines> lines)
-    {
-        Id = id;
-        NumberInvoice = numberInvoice;
-        IssueDate = issueDate;
-        CustomerId = customerId;
-        Total = total;
-        CorrelationId = correlationId;
-        Lines = lines;
-    }
+    //public InvoiceCreatedIntegrationEvent(
+    //    Guid id,
+    //    string numberInvoice,
+    //    DateTime issueDate,
+    //    Guid? customerId,
+    //    decimal total,
+    //    Guid correlationId,
+    //    IEnumerable<InvoiceLines> lines)
+    //{
+    //    Id = id;
+    //    NumberInvoice = numberInvoice;
+    //    IssueDate = issueDate;
+    //    CustomerId = customerId;
+    //    Total = total;
+    //    CorrelationId = correlationId;
+    //    Lines = lines;
+    //}
 
-    public Guid Id { get; set; }
-    public string NumberInvoice { get; set; }
-    public DateTime IssueDate { get; set; }
-    public Guid? CustomerId { get; set; }
-    public decimal Total { get; private set; }
-    public Guid? CorrelationId { get; set; }
-    public IEnumerable<InvoiceLines> Lines { get; set; }
+    public Guid Id { get; init; }
+    public string NumberInvoice { get; init; } = default!;
+    public DateTime IssueDate { get; init; }
+    public Guid? CustomerId { get; init; }
+    public decimal Total { get; init; }
+    public Guid? CorrelationId { get; init; }
+    public IEnumerable<InvoiceLines> Lines { get; init; } = [];
 }
 
 public record InvoiceLines

@@ -4,7 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f62b9c27-5c66-4e98-a1f8-b7d35b7bc70c" name="Changes" comment="New features are being added to the demo project: business logic, new endpoints, DevOps, and more." />
+    <list default="true" id="f62b9c27-5c66-4e98-a1f8-b7d35b7bc70c" name="Changes" comment="New features are being added to the demo project: business logic, new endpoints, DevOps, and more.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Billing.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/Billing.sln.DotSettings.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/dockers/docker_compose_dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/dockers/docker_compose_dev.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/environments/.env.dev" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/environments/.env.dev" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/scripts/deploy_compose.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/scripts/deploy_compose.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/scripts/init_vault.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/scripts/init_vault.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/scripts/register_services_consul.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/scripts/register_services_consul.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/services.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/services.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/ApiGateways/YarpApiGateway/YarpApiGateway.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/ApiGateways/YarpApiGateway/YarpApiGateway.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/http-client.private.env.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/http-client.private.env.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Extensions/InvoiceExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Extensions/InvoiceExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Billing.Infrastructure.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Billing.Infrastructure.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Data/Interceptors/VaultDbConnectionInterceptor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Data/Interceptors/VaultDbConnectionInterceptor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/DependencyInjection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/DependencyInjection.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Messaging/Events/Invoices/InvoiceCreatedIntegrationEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Messaging/Events/Invoices/InvoiceCreatedIntegrationEvent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Secrets/Extensions/Extensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Secrets/Extensions/Extensions.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -43,59 +60,59 @@
     <decayedCancelled>
       <entry key="MS100" value="1.0" />
       <entry key="MS500" value="1.0" />
-      <entry key="S2" value="1.0000311588173127" />
-      <entry key="S5" value="1.015755507107728" />
-      <entry key="S10" value="1.1255209429048716" />
-      <entry key="S30" value="1.500693627921439" />
-      <entry key="S60" value="1.7076083078799777" />
-      <entry key="M2" value="1.8469617143013712" />
-      <entry key="M5" value="2.2608894666427597" />
-      <entry key="M10" value="3.336251580324072" />
-      <entry key="M15" value="4.207593069191908" />
-      <entry key="M30" value="5.637581161767561" />
-      <entry key="H1" value="6.670493996406953" />
-      <entry key="H2" value="7.293238656374409" />
-      <entry key="H4" value="7.635427402580057" />
-      <entry key="D1" value="7.937621154483754" />
-      <entry key="W1" value="7.991048303390964" />
+      <entry key="S2" value="1.0000000004192413" />
+      <entry key="S5" value="1.0001774270530197" />
+      <entry key="S10" value="1.0134378568991327" />
+      <entry key="S30" value="1.2861223870169356" />
+      <entry key="S60" value="1.7084067487667238" />
+      <entry key="M2" value="2.1684903424256223" />
+      <entry key="M5" value="2.6263667715463344" />
+      <entry key="M10" value="2.9989108556532846" />
+      <entry key="M15" value="3.470901693370581" />
+      <entry key="M30" value="5.836888805619164" />
+      <entry key="H1" value="11.122111231819868" />
+      <entry key="H2" value="17.5415585825734" />
+      <entry key="H4" value="22.727854553723574" />
+      <entry key="D1" value="28.608959785246316" />
+      <entry key="W1" value="29.79636338596344" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
       <entry key="MS500" value="0.0" />
-      <entry key="S2" value="0.0" />
-      <entry key="S5" value="0.0" />
-      <entry key="S10" value="0.0" />
-      <entry key="S30" value="0.0" />
-      <entry key="S60" value="0.0" />
-      <entry key="M2" value="0.0" />
-      <entry key="M5" value="0.0" />
-      <entry key="M10" value="0.0" />
-      <entry key="M15" value="0.0" />
-      <entry key="M30" value="0.0" />
-      <entry key="H1" value="0.0" />
-      <entry key="H2" value="0.0" />
-      <entry key="H4" value="0.0" />
-      <entry key="D1" value="0.0" />
-      <entry key="W1" value="0.0" />
+      <entry key="S2" value="1.8636000718286367E-256" />
+      <entry key="S5" value="5.106708725109017E-103" />
+      <entry key="S10" value="7.146123931971104E-52" />
+      <entry key="S30" value="8.940397900623341E-18" />
+      <entry key="S60" value="2.990049815742765E-9" />
+      <entry key="M2" value="5.46813479693283E-5" />
+      <entry key="M5" value="0.01973039068090861" />
+      <entry key="M10" value="0.14046490907307996" />
+      <entry key="M15" value="0.27021651896471804" />
+      <entry key="M30" value="0.5198235459891346" />
+      <entry key="H1" value="0.7209878958686716" />
+      <entry key="H2" value="0.8491100611043728" />
+      <entry key="H4" value="0.921471682204273" />
+      <entry key="D1" value="0.9864619364120348" />
+      <entry key="W1" value="0.9980546747822518" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.9265880618903709" />
-      <entry key="MS500" value="0.9848664428955506" />
-      <entry key="S2" value="0.9962260530030064" />
-      <entry key="S5" value="1.0142208283146932" />
-      <entry key="S10" value="1.124715276900123" />
-      <entry key="S30" value="1.5003816671944792" />
-      <entry key="S60" value="1.7074403649507466" />
-      <entry key="M2" value="1.8468731748298255" />
-      <entry key="M5" value="2.260833443411255" />
-      <entry key="M10" value="3.336187096850519" />
-      <entry key="M15" value="4.207528782908864" />
-      <entry key="M30" value="5.637530806689179" />
-      <entry key="H1" value="6.67046205313991" />
-      <entry key="H2" value="7.293220616466433" />
-      <entry key="H4" value="7.635417810408611" />
-      <entry key="D1" value="7.937619471205785" />
-      <entry key="W1" value="7.991048060781586" />
+      <entry key="MS100" value="0.9659363289248456" />
+      <entry key="MS500" value="0.9930924954370359" />
+      <entry key="S2" value="0.998268633015908" />
+      <entry key="S5" value="0.9994843971049595" />
+      <entry key="S10" value="1.0130866951500819" />
+      <entry key="S30" value="1.2859749507232003" />
+      <entry key="S60" value="1.7083106322003805" />
+      <entry key="M2" value="2.168484274134812" />
+      <entry key="M5" value="2.645946389362655" />
+      <entry key="M10" value="3.1389235715232937" />
+      <entry key="M15" value="3.740545353930026" />
+      <entry key="M30" value="6.356155832082318" />
+      <entry key="H1" value="11.842699215238262" />
+      <entry key="H2" value="18.39042338223837" />
+      <entry key="H4" value="23.64918902242227" />
+      <entry key="D1" value="29.59539642770242" />
+      <entry key="W1" value="30.794414381544208" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -170,6 +187,17 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="New features are being added to the demo project: business logic, new endpoints, DevOps, and more." />

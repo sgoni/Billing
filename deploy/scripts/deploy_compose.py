@@ -12,6 +12,7 @@ import yaml
 from typing import List, Dict
 from dotenv import load_dotenv
 from pathlib import Path
+from config_loader import load_services_config
 
 # Basic logging settings
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -33,18 +34,6 @@ def load_env(environment: str):
     logging.info(f"✅ Environment variables loaded from {env_file}")
 
 
-def load_services_config():
-    config_path = BASE_DIR / "services.yml"
-
-    if not config_path.exists():
-        raise FileNotFoundError(f"Missing config file: {config_path}")
-
-    with open(config_path, "r") as f:
-        raw_config = yaml.safe_load(f)
-
-    return raw_config
-
-
 def resolve_env(value: str):
     if not isinstance(value, str):
         return value
@@ -59,10 +48,12 @@ def resolve_env(value: str):
     return value
 
 
-def check_postgres_from_config(instances: List[Dict], retries=12, delay=3):
+def check_postgres_from_config(instances: List[Dict], retries=5, delay=3):
     results = []
 
+    logging.info(f"📦 Loaded instances: {[i['name'] for i in instances]}")
     for instance in instances:
+        logging.info(f"➡️ Raw instance: {instance}")
         try:
             name = instance["name"]
 
@@ -101,7 +92,12 @@ def check_postgres_from_config(instances: List[Dict], retries=12, delay=3):
                 results.append({"name": name, "status": "healthy"})
 
         except Exception as e:
-            results.append({"name": instance.get("name"), "status": "error", "error": str(e)})
+            logging.error(f"💥 Error before checking [{instance.get('name')}]: {e}")
+            results.append({
+                "name": instance.get("name"),
+                "status": "error",
+                "error": str(e)
+            })
 
     return results
 
@@ -201,9 +197,9 @@ def run_healthchecks():
     # RabbitMQ
     if "rabbitmq" in config:
         rmq = config["rabbitmq"]
-        os.environ["RABBITMQ_URL"] = resolve_env(rmq["url"])
-        os.environ["RABBITMQ_USER"] = resolve_env(rmq["user"])
-        os.environ["RABBITMQ_PASSWORD"] = resolve_env(rmq["password"])
+        os.environ["RABBITMQ_HEALTH_URL"] = resolve_env(rmq["health_url"])
+        os.environ["RABBITMQ_USER"] = resolve_env(rmq["credentials"]["user"])
+        os.environ["RABBITMQ_PASSWORD"] = resolve_env(rmq["credentials"]["password"])
         check_health_rabbitmq()
 
     # Postgres dinámico
@@ -227,20 +223,20 @@ def deploy(environment: str, action: str):
     run_docker(environment, action)
 
     if action == "up":
-        # Wait for Vault to be ready before init
-        vault_url = os.getenv("VAULT_URL", "http://localhost:8200/v1/sys/health")
-        _check_http("Vault", vault_url, retries=15, delay=5)
-
-        # Vault
+        # Consul
         subprocess.run(
-            [sys.executable, os.path.join(os.path.dirname(__file__), "init_vault.py")],
+            [sys.executable, os.path.join(os.path.dirname(__file__), "register_services_consul.py")],
             check=True,
             env={**os.environ, "ENVIRONMENT": environment}
         )
 
-        # Consul
+        # Wait for Vault to be ready before init
+        vault_url = os.getenv("VAULT_URL", "http://localhost:8200/v#1/sys/health")
+        _check_http("Vault", vault_url, retries=8, delay=5)  ##
+
+        ## Vault
         subprocess.run(
-            [sys.executable, os.path.join(os.path.dirname(__file__), "register_services_consul.py")],
+            [sys.executable, os.path.join(os.path.dirname(__file__), "vault_deploy.py")],
             check=True,
             env={**os.environ, "ENVIRONMENT": environment}
         )

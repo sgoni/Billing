@@ -1,6 +1,4 @@
-﻿
-
-namespace BuildingBlocks.Secrets.Extensions;
+﻿namespace BuildingBlocks.Secrets.Extensions;
 
 public static class Extensions
 {

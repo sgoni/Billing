@@ -50,7 +50,7 @@
   messagebroker:
     image: rabbitmq:3-management
     container_name: messagebroker
-    hostname: billing-mq
+    hostname: ${RABBITMQ_DOCKER_HOST}
     restart: always
     environment:
       - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
@@ -186,9 +186,9 @@
   # ---------------------
   billing:
     image: postgres:latest
-    container_name: ${BILLING_POSTGRES_DB}
+    container_name: ${BILLING_POSTGRES_DOCKER_HOST}
     ports:
-      - "${BILLING_POSTGRES_PORT}:5432"
+      - "5432:5432"
     environment:
       POSTGRES_USER: ${BILLING_POSTGRES_USER}
       POSTGRES_PASSWORD: ${BILLING_POSTGRES_PASSWORD}
@@ -206,7 +206,7 @@
     image: postgres:latest
     container_name: ${EVT_POSTGRES_DB}
     ports:
-      - "${EVT_POSTGRES_PORT}:5432"
+      - "5433:5432"
     environment:
       POSTGRES_USER: ${EVT_POSTGRES_USER}
       POSTGRES_PASSWORD: ${EVT_POSTGRES_PASSWORD}

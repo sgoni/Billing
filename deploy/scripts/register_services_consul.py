@@ -65,7 +65,7 @@ def register_postgres_services(c, instances):
                 address=docker_host,  # nombre del contenedor
                 port=port,
                 check={
-                    "tcp": f"{docker_host}:{port}",
+                    "tcp": f"{docker_host}:5432",
                     "interval": "10s",
                     "timeout": "3s"
                 }

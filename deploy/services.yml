@@ -1,8 +1,9 @@
 postgres:
   - name: billing
     host: ${BILLING_POSTGRES_HOST}
-    docker_host: ${BILLING_POSTGRES_DB}   # para Vault
+    docker_host: ${BILLING_POSTGRES_DOCKER_HOST}   # para Vault
     port: ${BILLING_POSTGRES_PORT}
+    docker_port: 5432
     user: ${BILLING_POSTGRES_USER}
     password: ${BILLING_POSTGRES_PASSWORD}
     db: ${BILLING_POSTGRES_DB}
@@ -16,27 +17,32 @@ postgres:
       service_name: billing-db
       tags: ["db", "postgres"]
 
-  - name: eventrelay
+  - name: event-relay
     host: ${EVT_POSTGRES_HOST}
     docker_host: ${EVT_POSTGRES_DB}   # para Vault
     port: ${EVT_POSTGRES_PORT}
+    docker_port: 5432
     user: ${EVT_POSTGRES_USER}
     password: ${EVT_POSTGRES_PASSWORD}
     db: ${EVT_POSTGRES_DB}
 
     vault:
-      role_name: eventrelay-role
+      role_name: evt-role
       ttl: 5m
       max_ttl: 30m
 
     consul:
-      service_name: eventrelay-db
+      service_name: evt-db
       tags: ["db", "postgres"]
 
 rabbitmq:
-  url: ${RABBITMQ_URL}
-  user: ${RABBITMQ_USER}
-  password: ${RABBITMQ_PASSWORD}
+  management_url: ${RABBITMQ_MANAGEMENT_URL}
+  amqp_url: ${RABBITMQ_AMQP}
+  health_url: ${RABBITMQ_HEALTH_URL}
+  docker_host: ${RABBITMQ_DOCKER_HOST}
+  credentials:
+    user: ${RABBITMQ_USER}
+    password: ${RABBITMQ_PASSWORD}
 
 http:
   - name: vault
@@ -49,6 +55,7 @@ http:
     url: ${GRAFANA_URL}
   - name: loki
     url: ${LOKI_URL_HEALTH}
+
   - name: billing.api
     url: http://localhost:8080/health
 
