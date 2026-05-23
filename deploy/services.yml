@@ -1,21 +1,77 @@
 services:
+
   - name: billing-db
     type: postgres
-    internal_host: billing-postgres
-    external_host: localhost
-    port: 5432
+
+    connection:
+      internal_host: billing-postgres   # Docker
+      external_host: localhost          # Host machine
+      port: 5432
+      database: billingdb
+      admin_user: postgres
+      admin_password: postgres
+
+    vault:
+      enabled: true
+
+      engine: database
+      connection_name: billing-db
+
+      roles:
+        - name: billing-role
+          ttl: 1h
+          max_ttl: 24h
+
+          permissions:
+            - read
+            - write
 
   - name: event-db
     type: postgres
-    internal_host: event-postgres
-    external_host: localhost
-    port: 5433
+
+    connection:
+      internal_host: eventrelay-postgres   # Docker
+      external_host: localhost             # Host machine
+      port: 5432
+      database: eventrelaylogdb
+      admin_user: postgres
+      admin_password: postgres
+
+    vault:
+      enabled: true
+      engine: database
+      connection_name: event-db
+
+      roles:
+        - name: event-role
+          ttl: 1h
+          max_ttl: 24h
+
+          permissions:
+            - read
 
   - name: rabbitmq
     type: rabbitmq
-    internal_host: billing-mq
-    external_host: localhost
-    port: 5672
-    management_port: 15672
-    user: guest
-    password: guest
+
+
+    connection:
+      internal_host: billing-mq      #  docker
+      external_host: localhost       #  host
+      port: 5672
+      management_port: 15672
+      admin_user: guest
+      admin_password: guest
+
+    vault:
+      enabled: true
+      engine: rabbitmq
+
+      roles:
+        - name: rabbit-role
+          tags: administrator
+
+          vhosts:
+            "/":
+              configure: ".*"
+              write: ".*"
+              read: ".*"

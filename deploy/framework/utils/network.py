@@ -1,20 +1,17 @@
 import os
 
 
-def is_running_in_docker():
+def running_in_docker():
     return os.path.exists("/.dockerenv")
 
 
 def resolve_host(svc):
-    if is_running_in_docker():
-        host = svc.get("internal_host")
+    conn = svc["connection"]
+
+    if running_in_docker():
+        return conn["internal_host"]  # Docker
     else:
-        host = svc.get("external_host")
-
-    if not host:
-        raise Exception(f"❌ Service '{svc['name']}' sin host definido")
-
-    return host
+        return conn["external_host"]  # Host
 
 
 def resolve_port(svc, key="port"):

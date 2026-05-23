@@ -224,24 +224,32 @@ This project implements a deployment system with **Docker Compose + Python scrip
 ### 📂 Folder structure
 
 ```bash
-    Axenta/
-    ├── backend/                # .NET services
-    ├── frontend/               # Angular app
-    ├── deploy/
-    │   ├── scripts/
-    │   │   ├── deploy_compose.py   # Main deployment script
-    │   │   ├── init_vault.py       # Vault initialization/roles
-    │   │   └── init_consul.py      # Consul service registration
-    │   ├── dockers/
-    │   │   ├── docker_compose_dev.yml
-    │   │   ├── docker_compose_stage.yml
-    │   │   └── docker_compose_prod.yml
-    │   └── environments/
-    │       ├── .env.dev
-    │       ├── .env.stage
-    │       └── .env.prod
-    ├── docs/
-    └── Billing.sln
+    deploy/
+    │
+    ├── framework/
+    │   ├── core/
+    │   │   ├── engine.py          # Orquestador principal
+    │   │   ├── context.py         # Estado compartido (env, clientes, etc.)
+    │   │   └── registry.py        # Registro de providers
+    │   │
+    │   ├── providers/
+    │   │   ├── postgres.py
+    │   │   ├── rabbitmq.py
+    │   │   ├── consul.py
+    │   │   ├── vault.py
+    │   │   └── http.py
+    │   │
+    │   ├── health/
+    │   │   ├── postgres.py
+    │   │   ├── rabbitmq.py
+    │   │   └── http.py
+    │   │
+    │   └── utils/
+    │       ├── config_loader.py
+    │       └── resolver.py
+    │
+    ├── services.yml
+    └── main.py
 ```
 
 ------------------------------------------------------------------------
@@ -293,25 +301,19 @@ initialized dynamically.
 ### Bring up environment
 
 ``` bash
-  python deploy/scripts/deploy_compose.py dev up
+  python deploy/main.py --env dev
 ```
 
 ### Bring down environment
 
 ``` bash
-  python deploy/scripts/deploy_compose.py dev down
+  python deploy/main.py --env dev --down
 ```
 
 ### Check status
 
-``` bash
-  python deploy/scripts/deploy_compose.py dev ps
-```
-
-### View logs
-
-``` bash
-  python deploy/scripts/deploy_compose.py dev logs
+``` bash  
+  python deploy/main.py --env dev ps
 ```
 
 ------------------------------------------------------------------------

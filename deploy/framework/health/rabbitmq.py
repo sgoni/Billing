@@ -1,19 +1,20 @@
 import requests
-from framework.utils.network import build_http_url
+from framework.utils.network import resolve_host
 
 
 class RabbitHealth:
 
     def check(self, svc):
         try:
-            url = build_http_url(
-                svc,
-                port_key="management_port",
-                path="/api/health/checks/virtual-hosts"
-            )
+            conn = svc["connection"]
 
-            user = svc.get("user", "guest")
-            password = svc.get("password", "guest")
+            host = resolve_host(svc)
+            port = conn["management_port"]
+
+            user = conn.get("admin_user", "guest")
+            password = conn.get("admin_password", "guest")
+
+            url = f"http://{host}:{port}/api/overview"
 
             print(f"🔌 Checking RabbitMQ: {url}")
 
@@ -23,7 +24,12 @@ class RabbitHealth:
                 timeout=3
             )
 
-            return r.status_code == 200
+            # 🔥 acepta 200 como healthy
+            if r.status_code == 200:
+                return True
+
+            print(f"⚠️ Rabbit status: {r.status_code}")
+            return False
 
         except Exception as e:
             print(f"❌ RabbitMQ error: {e}")

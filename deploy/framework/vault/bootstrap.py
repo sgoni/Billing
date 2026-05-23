@@ -1,4 +1,5 @@
 import logging
+import json
 
 from framework.utils.network import resolve_host
 
@@ -9,16 +10,17 @@ class VaultBootstrap:
         self.client = client
 
     # =========================
-    # GENERIC SAFE EXEC
+    # SAFE EXEC (IDEMPOTENTE)
     # =========================
     def safe(self, fn, msg):
         try:
             fn()
             logging.info(f"✅ {msg}")
         except Exception as e:
-            if "exists" in str(e) or "in use" in str(e):
+            if any(x in str(e).lower() for x in ["exists", "in use", "already"]):
                 logging.info(f"ℹ️ {msg} (already exists)")
             else:
+                logging.error(f"❌ {msg}: {e}")
                 raise
 
     # =========================
@@ -42,33 +44,48 @@ class VaultBootstrap:
         )
 
     # =========================
-    # POSTGRES MULTI INSTANCE
+    # VALIDATION GUARD
+    # =========================
+    def is_vault_enabled(self, svc):
+        return svc.get("vault", {}).get("enabled", False)
+
+    # =========================
+    # POSTGRES MULTI-TENANT
     # =========================
     def setup_postgres(self, svc):
-        print("→ creating role:", svc["vault"])
-
         name = svc["name"]
-        role = svc["vault"]["role_name"]
-        host = resolve_host(svc)
+        conn = svc["connection"]
+        vault = svc["vault"]
 
-        connection_name = f"{name}-db"
+        # host = resolve_host(svc)
+        host = conn["internal_host"]
+        connection_name = vault["connection_name"]
+
+        roles = vault.get("roles", [])
+        role_names = [r["name"] for r in roles]
 
         logging.info(f"🐘 Vault Postgres setup: {name}")
 
-        # 1. Connection
+        # -------------------------
+        # 1. CONNECTION
+        # -------------------------
         self.safe(
             lambda: self.client.secrets.database.configure(
                 name=connection_name,
                 plugin_name="postgresql-database-plugin",
-                allowed_roles=[role],
-                connection_url=f"postgresql://{svc['user']}:{svc['password']}@{host}:{svc['port']}/{svc['db']}"
-                # connection_url=f"postgresql://{svc['user']}:{svc['password']}@{svc['host']}:{svc['port']}/{svc['db']}?sslmode=disable",
+                allowed_roles=role_names,
+                connection_url=(
+                    f"postgresql://{conn['admin_user']}:{conn['admin_password']}"
+                    f"@{host}:{conn['port']}/{conn['database']}"
+                )
             ),
             f"Postgres connection {connection_name}"
         )
 
-        # 2. Role
-        creation_statements = """
+        # -------------------------
+        # 2. ROLES (MULTI)
+        # -------------------------
+        creation_statements_template = """
         CREATE ROLE "{{name}}" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}';
 
         GRANT CONNECT ON DATABASE "{{db}}" TO "{{name}}";
@@ -80,45 +97,67 @@ class VaultBootstrap:
         GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO "{{name}}";
         """
 
-        self.safe(
-            lambda: self.client.secrets.database.create_role(
-                name=role,
-                db_name=connection_name,
-                creation_statements=creation_statements.replace("{{db}}", svc["db"]),
-                default_ttl=svc["vault"]["ttl"],
-                max_ttl=svc["vault"]["max_ttl"]
-            ),
-            f"Postgres role {role}"
-        )
+        for role in roles:
+            role_name = role["name"]
+
+            logging.info(f"   ↳ creating role: {role_name}")
+
+            self.safe(
+                lambda r=role: self.client.secrets.database.create_role(
+                    name=r["name"],
+                    db_name=connection_name,
+                    creation_statements=creation_statements_template.replace(
+                        "{{db}}", conn["database"]
+                    ),
+                    default_ttl=r.get("ttl", "1h"),
+                    max_ttl=r.get("max_ttl", "24h")
+                ),
+                f"Postgres role {role_name}"
+            )
 
     # =========================
-    # RABBITMQ
+    # RABBITMQ MULTI-TENANT
     # =========================
     def setup_rabbitmq(self, svc):
-        role = svc["vault"]["role_name"]
+        name = svc["name"]
+        conn = svc["connection"]
+        vault = svc["vault"]
         host = resolve_host(svc)
 
-        logging.info(f"🐇 Vault RabbitMQ setup: {svc['name']}")
+        # host = conn.get("docker_host") or conn["host"]
+        roles = vault.get("roles", [])
 
-        # ✅ FIX connection
+        logging.info(f"🐇 Vault RabbitMQ setup: {name}")
+
+        # -------------------------
+        # 1. CONNECTION
+        # -------------------------
         self.safe(
             lambda: self.client.secrets.rabbitmq.configure(
-                connection_uri=f"http://{host}:15672",
-                username=svc["user"],
-                password=svc["password"],
+                connection_uri=f"http://{host}:{conn['management_port']}",
+                username=conn["admin_user"],
+                password=conn["admin_password"],
+                verify_connection=False
             ),
             "RabbitMQ connection"
         )
 
-        # ✅ FIX role
-        self.safe(
-            lambda: self.client.secrets.rabbitmq.create_role(
-                name=role,
-                tags="administrator",
-                vhosts='{"\/": {"configure": ".*", "write": ".*", "read": ".*"}}'
-            ),
-            f"RabbitMQ role {role}"
-        )
+        # -------------------------
+        # 2. ROLES
+        # -------------------------
+        for role in roles:
+            role_name = role["name"]
+
+            logging.info(f"   ↳ creating role: {role_name}")
+
+            self.safe(
+                lambda r=role: self.client.secrets.rabbitmq.create_role(
+                    name=r["name"],
+                    tags=r.get("tags", ""),
+                    vhosts=json.dumps(r.get("vhosts", {}))
+                ),
+                f"RabbitMQ role {role_name}"
+            )
 
     # =========================
     # ENTRYPOINT
@@ -129,15 +168,23 @@ class VaultBootstrap:
         self.enable_engines()
 
         for svc in services:
-            logging.info(f"🔐 Setting up Vault for {svc['name']}")
+            name = svc.get("name", "unknown")
+            logging.info(f"🔐 Setting up Vault for {name}")
 
-            if not svc.get("vault"):
+            # 🔥 GUARD GLOBAL (NO MÁS KeyError)
+            if not self.is_vault_enabled(svc):
+                logging.info(f"⏭️ Vault disabled for {name}")
                 continue
 
-            if svc["type"] == "postgres":
+            svc_type = svc.get("type")
+
+            if svc_type == "postgres":
                 self.setup_postgres(svc)
 
-            elif svc["type"] == "rabbitmq":
+            elif svc_type == "rabbitmq":
                 self.setup_rabbitmq(svc)
+
+            else:
+                logging.warning(f"⚠️ Unsupported service type: {svc_type}")
 
         logging.info("✅ Vault bootstrap completed")

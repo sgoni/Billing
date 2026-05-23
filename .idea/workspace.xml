@@ -4,26 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f62b9c27-5c66-4e98-a1f8-b7d35b7bc70c" name="Changes" comment="Mini Deploy Framework">
-      <change afterPath="$PROJECT_DIR$/deploy/framework/providers/docker_compose.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/framework/utils/network.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/framework/utils/runtime.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/framework/utils/validator.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/framework/utils/waiters.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/framework/vault/bootstrap.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/framework/vault/client.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/framework/vault/manager.py" afterDir="false" />
+    <list default="true" id="f62b9c27-5c66-4e98-a1f8-b7d35b7bc70c" name="Changes" comment="Expanding the functions of the Mini Deploy Framework">
+      <change afterPath="$PROJECT_DIR$/deploy/framework/utils/is_running_inside_docker.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/deploy/dockers/docker_compose_dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/dockers/docker_compose_dev.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/environments/.env.dev" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/environments/.env.dev" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/framework/core/engine.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/core/engine.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/deploy/framework/health/postgres.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/health/postgres.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/deploy/framework/health/rabbitmq.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/health/rabbitmq.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/deploy/framework/orchestrator.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/orchestrator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/framework/providers/postgres.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/providers/postgres.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/framework/providers/rabbitmq.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/providers/rabbitmq.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/scripts/deploy_compose.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/scripts/deploy_compose.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/framework/utils/network.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/utils/network.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/framework/utils/waiters.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/utils/waiters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/framework/vault/bootstrap.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/vault/bootstrap.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/deploy/services.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/services.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -64,59 +55,59 @@
     <decayedCancelled>
       <entry key="MS100" value="1.0" />
       <entry key="MS500" value="1.0" />
-      <entry key="S2" value="1.0" />
-      <entry key="S5" value="1.0000000000097145" />
-      <entry key="S10" value="1.0000031168064527" />
-      <entry key="S30" value="1.0146074930438362" />
-      <entry key="S60" value="1.121300302670314" />
-      <entry key="M2" value="1.3691639098967059" />
-      <entry key="M5" value="1.962869329983332" />
-      <entry key="M10" value="2.8289878163622486" />
-      <entry key="M15" value="3.5472212917854686" />
-      <entry key="M30" value="5.303803929539208" />
-      <entry key="H1" value="8.39664337667229" />
-      <entry key="H2" value="14.46648036472779" />
-      <entry key="H4" value="27.55762925446324" />
-      <entry key="D1" value="72.19461403192942" />
-      <entry key="W1" value="88.78782747131118" />
+      <entry key="S2" value="1.0000000000343239" />
+      <entry key="S5" value="1.000065198576881" />
+      <entry key="S10" value="1.0080745635721629" />
+      <entry key="S30" value="1.200619442575124" />
+      <entry key="S60" value="1.447905626498865" />
+      <entry key="M2" value="1.6693500693165655" />
+      <entry key="M5" value="1.8759569240330891" />
+      <entry key="M10" value="2.0792579269991602" />
+      <entry key="M15" value="2.2445083804397514" />
+      <entry key="M30" value="2.6715697879252125" />
+      <entry key="H1" value="4.037419013945726" />
+      <entry key="H2" value="8.599254425408358" />
+      <entry key="H4" value="20.29988296747732" />
+      <entry key="D1" value="73.8367593648164" />
+      <entry key="W1" value="98.08025012627348" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
       <entry key="MS500" value="0.0" />
-      <entry key="S2" value="2.859634779000557E-98" />
-      <entry key="S5" value="1.3956203468035458E-39" />
-      <entry key="S10" value="5.2431167213007385E-20" />
-      <entry key="S30" value="5.931128703344289E-7" />
-      <entry key="S60" value="0.0010891882902861246" />
-      <entry key="M2" value="0.0471992190179214" />
-      <entry key="M5" value="0.5092065945632676" />
-      <entry key="M10" value="1.441577361781347" />
-      <entry key="M15" value="2.3199410748615557" />
-      <entry key="M30" value="4.4170425912973785" />
-      <entry key="H1" value="7.201497870815894" />
-      <entry key="H2" value="10.099958707148769" />
-      <entry key="H4" value="12.651866569198846" />
-      <entry key="D1" value="16.69426604323888" />
-      <entry key="W1" value="17.79734638039693" />
+      <entry key="S2" value="5.270818659788047E-243" />
+      <entry key="S5" value="1.2267363377295945E-97" />
+      <entry key="S10" value="3.502479604122762E-49" />
+      <entry key="S30" value="7.048962578346756E-17" />
+      <entry key="S60" value="8.395810013540537E-9" />
+      <entry key="M2" value="9.162865279780413E-5" />
+      <entry key="M5" value="0.024255627838990983" />
+      <entry key="M10" value="0.15574247982580927" />
+      <entry key="M15" value="0.2895360880318311" />
+      <entry key="M30" value="0.5583810264927873" />
+      <entry key="H1" value="1.2198716397244114" />
+      <entry key="H2" value="3.595219348448938" />
+      <entry key="H4" value="7.869062442703734" />
+      <entry key="D1" value="17.483761756975905" />
+      <entry key="W1" value="20.444620557155915" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.030185510278901425" />
-      <entry key="MS500" value="0.49654624771851796" />
-      <entry key="S2" value="0.8394405146113748" />
-      <entry key="S5" value="0.9323864864455247" />
-      <entry key="S10" value="0.9656045671773574" />
-      <entry key="S30" value="1.0027397164572525" />
-      <entry key="S60" value="1.1154415772700583" />
-      <entry key="M2" value="1.411409682801759" />
-      <entry key="M5" value="2.4646294272388265" />
-      <entry key="M10" value="4.258053270678202" />
-      <entry key="M15" value="5.8534264665862175" />
-      <entry key="M30" value="9.708815635073947" />
-      <entry key="H1" value="15.589810424605789" />
-      <entry key="H2" value="24.561321147606712" />
-      <entry key="H4" value="40.20642596755567" />
-      <entry key="D1" value="88.88816518362842" />
-      <entry key="W1" value="106.5850621032826" />
+      <entry key="MS100" value="0.9726549474122855" />
+      <entry key="MS500" value="0.9944701686732144" />
+      <entry key="S2" value="0.9986146661352575" />
+      <entry key="S5" value="0.9995107622815286" />
+      <entry key="S10" value="1.0077928668850427" />
+      <entry key="S30" value="1.200489948301607" />
+      <entry key="S60" value="1.4478180326640644" />
+      <entry key="M2" value="1.6693869573906222" />
+      <entry key="M5" value="1.9001123557112598" />
+      <entry key="M10" value="2.2347457930198127" />
+      <entry key="M15" value="2.53373611797685" />
+      <entry key="M30" value="3.229627679182709" />
+      <entry key="H1" value="5.256612030831521" />
+      <entry key="H2" value="12.193078002416906" />
+      <entry key="H4" value="28.1672897392425" />
+      <entry key="D1" value="91.3198341210916" />
+      <entry key="W1" value="118.52475208260186" />
     </decayedShown>
   </component>
   <component name="ProblemsViewState">
@@ -205,7 +196,15 @@
       <option name="project" value="LOCAL" />
       <updated>1779478436778</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Expanding the functions of the Mini Deploy Framework">
+      <option name="closed" value="true" />
+      <created>1779557153082</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1779557153082</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -216,7 +215,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -225,6 +236,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="New features are being added to the demo project: business logic, new endpoints, DevOps, and more." />
     <MESSAGE value="Mini Deploy Framework" />
-    <option name="LAST_COMMIT_MESSAGE" value="Mini Deploy Framework" />
+    <MESSAGE value="Expanding the functions of the Mini Deploy Framework" />
+    <option name="LAST_COMMIT_MESSAGE" value="Expanding the functions of the Mini Deploy Framework" />
   </component>
 </project>

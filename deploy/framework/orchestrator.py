@@ -1,7 +1,8 @@
+import logging
 import subprocess
 
 from framework.health.engine import HealthEngine
-from framework.utils.waiters import wait_for_postgres
+from framework.utils.waiters import wait_for_postgres, wait_rabbit
 from framework.utils.network import resolve_host
 
 
@@ -20,14 +21,23 @@ class Orchestrator:
 
         # 🔥 PRE-CHECK (AQUÍ VA LA MEJORA)
         for svc in infra_services:
-            if svc["type"] == "postgres":
-                print(f"⏳ Waiting for Postgres {svc['name']}...")
-                timeout = 40
-            elif svc["type"] == "rabbitmq":
-                timeout = 40
-
+            conn = svc["connection"]
             host = resolve_host(svc)
-            wait_for_postgres(host, svc["port"], timeout=timeout)
+            timeout = 60
+
+            if svc["type"] == "postgres":
+                logging.info(f"⏳ Waiting for Postgres {svc['name']}...")
+                wait_for_postgres(host, conn["port"], timeout=timeout)
+
+            elif svc["type"] == "rabbitmq":
+                logging.info(f"⏳ Waiting for RabbitMQ {svc['name']}...")
+                wait_rabbit(
+                    host,
+                    conn["management_port"],
+                    conn["admin_user"],
+                    conn["admin_password"],
+                    timeout=timeout
+                )
 
         # 👇 tu lógica existente sigue intacta
         health = HealthEngine(infra_services)
