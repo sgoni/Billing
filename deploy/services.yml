@@ -1,23 +1,21 @@
 services:
-  - name: billing
+  - name: billing-db
     type: postgres
-    host: ${BILLING_POSTGRES_HOST}
+    internal_host: billing-postgres
+    external_host: localhost
     port: 5432
 
-  - name: event-relay
+  - name: event-db
     type: postgres
-    host: ${EVT_POSTGRES_HOST}
-    port: 5432
+    internal_host: event-postgres
+    external_host: localhost
+    port: 5433
 
-  - type: rabbitmq
-    name: rabbit
-    management_url: ${RABBITMQ_MANAGEMENT_URL}
-    user: ${RABBITMQ_USER}
-    password: ${RABBITMQ_PASSWORD}
-
-  - type: http
-    name: billing.api
-    url: http://localhost:8080/health
-    depends_on:
-      - billing
-      - rabbit
+  - name: rabbitmq
+    type: rabbitmq
+    internal_host: billing-mq
+    external_host: localhost
+    port: 5672
+    management_port: 15672
+    user: guest
+    password: guest

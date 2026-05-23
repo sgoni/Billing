@@ -1,6 +1,8 @@
 import subprocess
 
 from framework.health.engine import HealthEngine
+from framework.utils.waiters import wait_for_postgres
+from framework.utils.network import resolve_host
 
 
 class Orchestrator:
@@ -16,7 +18,18 @@ class Orchestrator:
             if s["type"] in ["postgres", "rabbitmq"]
         ]
 
-        #print(f"🔎 Infra services: {[s['name'] for s in infra_services]}")
+        # 🔥 PRE-CHECK (AQUÍ VA LA MEJORA)
+        for svc in infra_services:
+            if svc["type"] == "postgres":
+                print(f"⏳ Waiting for Postgres {svc['name']}...")
+                timeout = 40
+            elif svc["type"] == "rabbitmq":
+                timeout = 40
+
+            host = resolve_host(svc)
+            wait_for_postgres(host, svc["port"], timeout=timeout)
+
+        # 👇 tu lógica existente sigue intacta
         health = HealthEngine(infra_services)
 
         try:
@@ -25,7 +38,6 @@ class Orchestrator:
         except Exception as e:
             print("\n🚨 Infra failed. Fetching Docker logs...\n")
 
-            # ⬇️ AQUÍ agregas logs automáticos
             subprocess.run(
                 ["docker", "compose", "logs"],
                 check=False

@@ -8,7 +8,6 @@ import os
 import re
 import logging
 import socket
-import yaml
 from typing import List, Dict
 from dotenv import load_dotenv
 from pathlib import Path

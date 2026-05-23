@@ -7,7 +7,7 @@ from framework.utils.resolver import resolve_dict
 
 class DeployEngine:
 
-    def __init__(self, config_path: str):
+    def __init__(self, config_path: str, vault_manager=None):
         base_dir = os.path.dirname(
             os.path.dirname(
                 os.path.dirname(__file__)
@@ -27,6 +27,7 @@ class DeployEngine:
         self.config = resolve_dict(raw_config)
         self.registry = ProviderRegistry()
         self.context = Context()
+        self.context.vault = vault_manager
 
     def run(self):
         services = self._resolve_dependencies(self.config["services"])

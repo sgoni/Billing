@@ -1,24 +1,24 @@
 import requests
+from framework.utils.network import build_http_url
 
 
 class RabbitHealth:
 
-    def check(self, config):
-        url = config.get("management_url")
-        user = config.get("user")
-        password = config.get("password")
-
-        if not url:
-            print("❌ RabbitMQ sin management_url")
-            return False
-
+    def check(self, svc):
         try:
-            health_url = f"{url}/api/health/checks/virtual-hosts"
+            url = build_http_url(
+                svc,
+                port_key="management_port",
+                path="/api/health/checks/virtual-hosts"
+            )
 
-            print(f"🔌 Checking RabbitMQ: {health_url}")
+            user = svc.get("user", "guest")
+            password = svc.get("password", "guest")
+
+            print(f"🔌 Checking RabbitMQ: {url}")
 
             r = requests.get(
-                health_url,
+                url,
                 auth=(user, password),
                 timeout=3
             )

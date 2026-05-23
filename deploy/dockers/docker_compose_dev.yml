@@ -4,24 +4,13 @@
   # --- Secrets ---
   # ---------------------
   vault:
-    image: hashicorp/vault:1.13
+    image: vault:1.13.0
     container_name: vault
-    cap_add:
-      - IPC_LOCK
-    command: [ "vault", "server", "-dev", "-dev-listen-address=0.0.0.0:8200" ]
-    environment:
-      # in production scenarios the token mechanisim for loggin will be forbidden,
-      # it cannot be in source control.
-      VAULT_DEV_ROOT_TOKEN_ID: ${VAULT_DEV_TOKEN}
-      VAULT_TOKEN: ${VAULT_DEV_TOKEN}
-      #VAULT_DISABLE_MLOCK: "true"
     ports:
-      - "${VAULT_PORT}:8200"
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "${VAULT_URL}" ]
-      interval: "10s"
-      timeout: "5s"
-      retries: 5
+      - "8200:8200"
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: dev-token
+    command: server -dev
     networks:
       - billing-net
 
@@ -47,23 +36,12 @@
   # ---------------------
   # --- RabbitMQ ---
   # ---------------------
-  messagebroker:
+  billing-mq:
     image: rabbitmq:3-management
-    container_name: messagebroker
-    hostname: ${RABBITMQ_DOCKER_HOST}
-    restart: always
-    environment:
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    container_name: billing-mq
     ports:
-      - "${RABBITMQ_PORT}:5672"
+      - "5672:5672"
       - "15672:15672"
-    healthcheck:
-      test: [ "CMD", "rabbitmq-diagnostics", "check_running" ]
-      interval: "10s"
-      timeout: "5s"
-      retries: 5
-      start_period: 20s
     networks:
       - billing-net
 
@@ -184,39 +162,27 @@
   # ---------------------
   # --- Database      ---
   # ---------------------
-  billing:
-    image: postgres:latest
-    container_name: ${BILLING_POSTGRES_DOCKER_HOST}
+  billing-postgres:
+    image: postgres:15
+    container_name: billing-postgres
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: ${BILLING_POSTGRES_USER}
-      POSTGRES_PASSWORD: ${BILLING_POSTGRES_PASSWORD}
-      POSTGRES_DB: ${BILLING_POSTGRES_DB}
-      RUNNING_IN_DOCKER: false
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${BILLING_POSTGRES_USER}" ]
-      interval: "10s"
-      timeout: "5s"
-      retries: 5
+      POSTGRES_DB: billingdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     networks:
       - billing-net
 
-  eventlogrelay:
-    image: postgres:latest
-    container_name: ${EVT_POSTGRES_DB}
+  eventrelay-postgres:
+    image: postgres:15
+    container_name: eventrelay-postgres
     ports:
       - "5433:5432"
     environment:
-      POSTGRES_USER: ${EVT_POSTGRES_USER}
-      POSTGRES_PASSWORD: ${EVT_POSTGRES_PASSWORD}
-      POSTGRES_DB: ${EVT_POSTGRES_DB}
-      RUNNING_IN_DOCKER: true
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${EVT_POSTGRES_USER}" ]
-      interval: "10s"
-      timeout: "5s"
-      retries: 5
+      POSTGRES_DB: eventrelaylogdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     networks:
       - billing-net
 
@@ -224,72 +190,72 @@
   # --- Services      ---
   # ---------------------
 
-  billing.api:
-    build:
-      context: ../../src/backend   # ← Esto debe apuntar a D:\Repositorio\Billing
-      dockerfile: src/Services/Billing.API/Dockerfile
-    container_name: billing.api
-    ports:
-      - "${BILLING_API_PORT_HTTP}:8080"
-      - "${BILLING_API_PORT_HTTPS}:8081"
-    environment:
-      ConnectionStrings__Database: "Server=${POSTGRES_HOST};Port=${POSTGRES_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Include Error Detail=true"
-      DatabaseConfig__Server: ${BILLING_POSTGRES_HOST}
-      DatabaseConfig__Port: ${BILLING_POSTGRES_PORT}
-      DatabaseConfig__Database: ${BILLING_POSTGRES_DB}
-      MessageBroker__Host: ${RABBITMQ_HOST}
-      MessageBroker__Username: ${RABBITMQ_USER}
-      MessageBroker__Password: ${RABBITMQ_PASSWORD}
-      ConsulConfig__ServiceId: "ed721f0a-0657-4f19-a84d-580e3d8524e8"
-      ConsulConfig__ServiceName: ${BILLING_SERVICE_NAME}
-      ConsulConfig__Host: ${CONSUL_ADDR}
-      ConsulConfig__ServiceAddress: ${BILLING_SERVICE_NAME}
-      ConsulConfig__ServicePort: ${BILLING_API_PORT_HTTPS}
-      ConsulConfig__HealthCheckUrl: ${BILLING_API_URL}
-      logging__Service: "app"
-      logging__ServiceName: ${BILLING_SERVICE_NAME}
-      logging__LokiUrl: ${LOKI_URL}
-      VAULT_ADDR: http://vault:${VAULT_PORT}
-      VAULT_TOKEN: ${VAULT_DEV_TOKEN}
-      ASPNETCORE_ENVIRONMENT: Development
-      ASPNETCORE_HTTP_PORTS: 8080
-      #ASPNETCORE_HTTPS_PORTS: 8081
-      #ASPNETCORE_Kestrel__Certificates__Default__Path: /app/certs/aspnetcore-dev-cert.pfx
-      #ASPNETCORE_Kestrel__Certificates__Default__Password: ${KESTREL_DEFAULT_PASSWORD}
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "${BILLING_API_URL}" ]
-      interval: "30s"
-      timeout: "10s"
-      retries: 5
-    depends_on:
-      - billing
-      - consul
-      - messagebroker
-      - vault
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
-      #- ../certs/aspnetcore-dev-cert.pfx:/https/aspnetcore-dev-cert.pfx
-      #S- ../certs:/app/certs:ro  # Asegúrate de que la carpeta local 'certs' existe y contiene tu certificado-
-    networks:
-      - observability
-      - billing-net
-      
-  eventrelay:
-    build:
-      context: ../../src/backend
-      dockerfile: src/Workers/Integration.Services/Dockerfile
-    container_name: eventrelay
-    depends_on:
-      messagebroker:
-        condition: service_healthy
-    environment:
-      ConnectionStrings__Database: "Server=${EVT_POSTGRES_HOST};Port=${EVT_POSTGRES_PORT};Database=${EVT_POSTGRES_DB};Username=${EVT_POSTGRES_USER};Password=${EVT_POSTGRES_PASSWORD};Include Error Detail=true"
-      MessageBroker__Host: ${RABBITMQ_HOST}
-      MessageBroker__Username: ${RABBITMQ_USER}
-      MessageBroker__Password: ${RABBITMQ_PASSWORD}
-    networks:
-      - billing-net
+#  billing.api:
+#    build:
+#      context: ../../src/backend   # ← Esto debe apuntar a D:\Repositorio\Billing
+#      dockerfile: src/Services/Billing.API/Dockerfile
+#    container_name: billing.api
+#    ports:
+#      - "${BILLING_API_PORT_HTTP}:8080"
+#      - "${BILLING_API_PORT_HTTPS}:8081"
+#    environment:
+#      ConnectionStrings__Database: "Server=${POSTGRES_HOST};Port=${POSTGRES_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Include Error Detail=true"
+#      DatabaseConfig__Server: ${BILLING_POSTGRES_HOST}
+#      DatabaseConfig__Port: ${BILLING_POSTGRES_PORT}
+#      DatabaseConfig__Database: ${BILLING_POSTGRES_DB}
+#      MessageBroker__Host: ${RABBITMQ_HOST}
+#      MessageBroker__Username: ${RABBITMQ_USER}
+#      MessageBroker__Password: ${RABBITMQ_PASSWORD}
+#      ConsulConfig__ServiceId: "ed721f0a-0657-4f19-a84d-580e3d8524e8"
+#      ConsulConfig__ServiceName: ${BILLING_SERVICE_NAME}
+#      ConsulConfig__Host: ${CONSUL_ADDR}
+#      ConsulConfig__ServiceAddress: ${BILLING_SERVICE_NAME}
+#      ConsulConfig__ServicePort: ${BILLING_API_PORT_HTTPS}
+#      ConsulConfig__HealthCheckUrl: ${BILLING_API_URL}
+#      logging__Service: "app"
+#      logging__ServiceName: ${BILLING_SERVICE_NAME}
+#      logging__LokiUrl: ${LOKI_URL}
+#      VAULT_ADDR: http://vault:${VAULT_PORT}
+#      VAULT_TOKEN: ${VAULT_DEV_TOKEN}
+#      ASPNETCORE_ENVIRONMENT: Development
+#      ASPNETCORE_HTTP_PORTS: 8080
+#      #ASPNETCORE_HTTPS_PORTS: 8081
+#      #ASPNETCORE_Kestrel__Certificates__Default__Path: /app/certs/aspnetcore-dev-cert.pfx
+#      #ASPNETCORE_Kestrel__Certificates__Default__Password: ${KESTREL_DEFAULT_PASSWORD}
+#    healthcheck:
+#      test: [ "CMD", "curl", "-f", "${BILLING_API_URL}" ]
+#      interval: "30s"
+#      timeout: "10s"
+#      retries: 5
+#    depends_on:
+#      - billing
+#      - consul
+#      - messagebroker
+#      - vault
+#    volumes:
+#      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+#      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+#      #- ../certs/aspnetcore-dev-cert.pfx:/https/aspnetcore-dev-cert.pfx
+#      #S- ../certs:/app/certs:ro  # Asegúrate de que la carpeta local 'certs' existe y contiene tu certificado-
+#    networks:
+#      - observability
+#      - billing-net
+#
+#  eventrelay:
+#    build:
+#      context: ../../src/backend
+#      dockerfile: src/Workers/Integration.Services/Dockerfile
+#    container_name: eventrelay
+#    depends_on:
+#      messagebroker:
+#        condition: service_healthy
+#    environment:
+#      ConnectionStrings__Database: "Server=${EVT_POSTGRES_HOST};Port=${EVT_POSTGRES_PORT};Database=${EVT_POSTGRES_DB};Username=${EVT_POSTGRES_USER};Password=${EVT_POSTGRES_PASSWORD};Include Error Detail=true"
+#      MessageBroker__Host: ${RABBITMQ_HOST}
+#      MessageBroker__Username: ${RABBITMQ_USER}
+#      MessageBroker__Password: ${RABBITMQ_PASSWORD}
+#    networks:
+#      - billing-net
 
 
   # ---------------------

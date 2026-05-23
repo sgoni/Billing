@@ -1,15 +1,10 @@
-import json
-
 class RabbitMQProvider:
 
-    def deploy(self, config, context):
-        print(f"🐇 Configuring RabbitMQ {config['name']}")
+    def deploy(self, svc, context):
+        print(f"🐇 Configuring RabbitMQ {svc['name']}")
 
-        # Ejemplo futuro Vault:
-        """
-        client.secrets.rabbitmq.configure(...)
-        client.secrets.rabbitmq.create_role(
-            name=config["name"],
-            vhosts=json.dumps({...})
-        )
-        """
+        # ✅ PROTEGER ACCESO A VAULT
+        if context.vault:
+            context.vault.inject_rabbitmq(svc, context)
+        else:
+            print("⚠️ Skipping Vault injection (Vault not available)")
