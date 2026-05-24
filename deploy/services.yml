@@ -11,6 +11,10 @@ services:
       admin_user: postgres
       admin_password: postgres
 
+    consul:
+      enabled: true
+      service_name: billing-postgres
+
     vault:
       enabled: true
 
@@ -36,6 +40,10 @@ services:
       database: eventrelaylogdb
       admin_user: postgres
       admin_password: postgres
+
+    consul:
+      enabled: true
+      service_name: eventrelay-postgres
 
     vault:
       enabled: true

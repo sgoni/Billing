@@ -25,3 +25,21 @@ def require_env(var):
     if not value:
         raise ValueError(f"Missing env var: {var}")
     return value
+
+
+def resolve_consul_address(svc):
+    mode = os.getenv("DEPLOY_MODE", "docker")  # docker | host
+
+    if mode == "docker":
+        # Consul dentro de Docker → usar red interna
+        return svc.connection.internal_host
+
+    elif mode == "host":
+        # Consul en host → usar localhost / host access
+        return svc.connection.external_host
+
+    elif mode == "hybrid":
+        # caso Windows/macOS
+        return "host.docker.internal"
+
+    return svc.connection.external_host

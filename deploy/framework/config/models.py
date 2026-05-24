@@ -46,6 +46,15 @@ class VaultConfig(BaseModel):
 
 
 # -----------------------------
+# CONSUL
+# -----------------------------
+class ConsulConfig(BaseModel):
+    enabled: bool = False
+    service_name: Optional[str] = None
+    service_id: Optional[str] = None
+
+
+# -----------------------------
 # SERVICE
 # -----------------------------
 class Service(BaseModel):
@@ -54,6 +63,7 @@ class Service(BaseModel):
 
     connection: Connection
     vault: Optional[VaultConfig] = None
+    consul: Optional[ConsulConfig] = None
 
     # 🔥 VALIDACIÓN CENTRAL (SIN ROMPER TU MODELO)
     @model_validator(mode="after")

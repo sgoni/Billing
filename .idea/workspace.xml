@@ -4,32 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f62b9c27-5c66-4e98-a1f8-b7d35b7bc70c" name="Changes" comment="refactor(infra): unify service connection model + fix healthchecks + docker/host consistency&#10;&#10;* Introduced unified connection contract across all services:&#10;&#10;  * internal_host (docker network)&#10;  * external_host (host machine)&#10;  * connection.* as single source of truth&#10;&#10;* Implemented resolve_host() to correctly route traffic depending on runtime context&#10;&#10;* Fixed Vault integration:&#10;&#10;  * Vault now consistently uses internal_host&#10;  * Avoids localhost misrouting inside containers&#10;&#10;* Refactored orchestrator and waiters:&#10;&#10;  * Removed ambiguity between host/docker_host&#10;  * Standardized access to connection config&#10;&#10;* Fixed healthcheck system:&#10;&#10;  * Updated Postgres and RabbitMQ checkers to use connection.*&#10;  * Added authentication support for RabbitMQ management API&#10;  * Improved logging and error visibility&#10;&#10;* Eliminated multiple KeyError issues caused by inconsistent schema&#10;&#10;Result:&#10;✔ Full infra bootstrap stable&#10;✔ Vault + Postgres + RabbitMQ working end-to-end&#10;✔ Healthchecks deterministic and consistent&#10;✔ Docker vs localhost conflict fully resolved">
-      <change afterPath="$PROJECT_DIR$/deploy/framework/config/loader.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/framework/config/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/framework/runtime/health.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/framework/runtime/health_factory.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/framework/runtime/orchestrator.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/framework/runtime/resolver.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/framework/runtime/vault_runner.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/framework/runtime/waiters.py" afterDir="false" />
+    <list default="true" id="f62b9c27-5c66-4e98-a1f8-b7d35b7bc70c" name="Changes" comment="Add RabbitMQ readiness handling and complete Vault dynamic secrets integration&#10;&#10;* Improved `wait_for_service` to support service-specific readiness checks&#10;* Added dedicated RabbitMQ management API health check to ensure proper availability before Vault configuration&#10;* Fixed timing issue where Vault attempted to connect to RabbitMQ before it was ready&#10;* Updated Vault bootstrap flow to correctly initialize RabbitMQ secrets engine&#10;* Implemented RabbitMQ connection configuration using management endpoint and admin credentials&#10;* Fixed role creation payload format for RabbitMQ (vhosts now correctly serialized as JSON string)&#10;* Ensured dynamic roles and permissions are successfully created in Vault for RabbitMQ&#10;* Verified full orchestration flow: Postgres + RabbitMQ + Vault integration working end-to-end&#10;* Confirmed services health checks and deployment stability&#10;&#10;Result: Full dynamic secrets provisioning for Postgres and RabbitMQ is now operational">
+      <change afterPath="$PROJECT_DIR$/deploy/framework/runtime/ConsulRunner.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/framework/core/engine.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/framework/health/engine.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/framework/health/postgres.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/health/postgres.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/framework/health/rabbitmq.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/health/rabbitmq.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/framework/utils/config_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/utils/config_loader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/framework/utils/network.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/utils/network.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/framework/vault/bootstrap.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/framework/vault/manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/vault/manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/dockers/docker_compose_dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/dockers/docker_compose_dev.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/framework/config/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/config/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/framework/runtime/orchestrator.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/runtime/orchestrator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/framework/utils/resolver.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/utils/resolver.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/deploy/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/scripts/config_loader.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/scripts/deploy_compose.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/scripts/init_vault.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/scripts/register_services_consul.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/scripts/validate_vault_roles.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/scripts/vault_deploy.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/services.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/services.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +32,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="Schema-Validation" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -76,61 +59,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0000014029032855" />
-      <entry key="MS500" value="1.1776002905911775" />
-      <entry key="S2" value="3.3245545927259097" />
-      <entry key="S5" value="8.277203319536572" />
-      <entry key="S10" value="13.806464064935133" />
-      <entry key="S30" value="20.777719863726112" />
-      <entry key="S60" value="23.21665381822746" />
-      <entry key="M2" value="24.7938891900854" />
-      <entry key="M5" value="26.895207100075186" />
-      <entry key="M10" value="28.428922876945872" />
-      <entry key="M15" value="29.146236428795905" />
-      <entry key="M30" value="30.14609600130487" />
-      <entry key="H1" value="31.46067870810362" />
-      <entry key="H2" value="34.98965510214646" />
-      <entry key="H4" value="45.15241166530237" />
-      <entry key="D1" value="100.6172269545113" />
-      <entry key="W1" value="128.26051032488567" />
-    </decayedCancelled>
-    <decayedSelected>
       <entry key="MS100" value="0.0" />
       <entry key="MS500" value="0.0" />
-      <entry key="S2" value="0.0" />
-      <entry key="S5" value="0.0" />
-      <entry key="S10" value="8.633474993634111E-183" />
-      <entry key="S30" value="2.0514544501837634E-61" />
-      <entry key="S60" value="4.52929845581386E-31" />
-      <entry key="M2" value="6.730006745099401E-16" />
-      <entry key="M5" value="8.546699036146981E-7" />
-      <entry key="M10" value="9.579808148779059E-4" />
-      <entry key="M15" value="0.010538050489900114" />
-      <entry key="M30" value="0.13105823241284095" />
-      <entry key="H1" value="0.6116037997342573" />
-      <entry key="H2" value="2.340131827904738" />
-      <entry key="H4" value="6.286686352501682" />
-      <entry key="D1" value="17.442728409328943" />
-      <entry key="W1" value="21.2675289507615" />
+      <entry key="S2" value="1.2415729354921725E-95" />
+      <entry key="S5" value="1.090407662755949E-38" />
+      <entry key="S10" value="1.0442258676914439E-19" />
+      <entry key="S30" value="4.7090302736740963E-7" />
+      <entry key="S60" value="6.86223744392024E-4" />
+      <entry key="M2" value="0.026195872670607" />
+      <entry key="M5" value="0.2330078708860129" />
+      <entry key="M10" value="0.48954651263470916" />
+      <entry key="M15" value="0.6700265841102292" />
+      <entry key="M30" value="2.035721860802048" />
+      <entry key="H1" value="9.597248545844819" />
+      <entry key="H2" value="25.95497326581751" />
+      <entry key="H4" value="48.56710722649845" />
+      <entry key="D1" value="125.02251414535426" />
+      <entry key="W1" value="162.17629239184453" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="1.0000007692735282" />
+      <entry key="MS500" value="1.0598709511389186" />
+      <entry key="S2" value="1.4946568634916115" />
+      <entry key="S5" value="1.754608366076593" />
+      <entry key="S10" value="1.8686819706178972" />
+      <entry key="S30" value="1.9541579414858101" />
+      <entry key="S60" value="1.9768100846560759" />
+      <entry key="M2" value="1.98833702989217" />
+      <entry key="M5" value="1.995318388393599" />
+      <entry key="M10" value="1.9977152812123187" />
+      <entry key="M15" value="2.0003443171437816" />
+      <entry key="M30" value="2.0624946067381513" />
+      <entry key="H1" value="2.417247041796652" />
+      <entry key="H2" value="3.6082844727710612" />
+      <entry key="H4" value="6.901297614558372" />
+      <entry key="D1" value="19.760027094297172" />
+      <entry key="W1" value="24.96740220546753" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.9862340596086088" />
-      <entry key="MS500" value="1.1736047760827983" />
-      <entry key="S2" value="3.319876334263059" />
-      <entry key="S5" value="8.272061051632916" />
-      <entry key="S10" value="13.802104382627794" />
-      <entry key="S30" value="20.77552334783853" />
-      <entry key="S60" value="23.215421304324177" />
-      <entry key="M2" value="24.79318157523294" />
-      <entry key="M5" value="26.89479415046681" />
-      <entry key="M10" value="28.429609475177088" />
-      <entry key="M15" value="29.156558997866565" />
-      <entry key="M30" value="30.276947618466604" />
-      <entry key="H1" value="32.07193621643444" />
-      <entry key="H2" value="37.328957120850866" />
-      <entry key="H4" value="51.43784506065118" />
-      <entry key="D1" value="118.05928950543384" />
-      <entry key="W1" value="149.5279190111023" />
+      <entry key="MS100" value="0.003852471613600224" />
+      <entry key="MS500" value="0.33918689744049435" />
+      <entry key="S2" value="1.0753114096243812" />
+      <entry key="S5" value="1.5271290541694018" />
+      <entry key="S10" value="1.7411322025999616" />
+      <entry key="S30" value="1.908100573884664" />
+      <entry key="S60" value="1.953985661933029" />
+      <entry key="M2" value="2.002544128537236" />
+      <entry key="M5" value="2.2231379288252304" />
+      <entry key="M10" value="2.4844424981061723" />
+      <entry key="M15" value="2.668401060347779" />
+      <entry key="M30" value="4.096989491459419" />
+      <entry key="H1" value="12.013356235322858" />
+      <entry key="H2" value="29.562021949190243" />
+      <entry key="H4" value="55.46701016744063" />
+      <entry key="D1" value="144.78178122518972" />
+      <entry key="W1" value="187.1435528271844" />
     </decayedShown>
   </component>
   <component name="ProblemsViewState">
@@ -145,30 +128,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "devops",
-    "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "D:/Repositorio/Billing",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
-    "to.speed.mode.migration.done": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;devops&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Repositorio/Billing&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Repositorio\Billing\deploy\framework\consul" />
       <recent name="D:\Repositorio\Billing\deploy" />
     </key>
   </component>
@@ -252,7 +236,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="Schema-Validation" />
+                        <option value="devops" />
                       </list>
                     </value>
                   </entry>

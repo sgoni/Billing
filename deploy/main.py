@@ -3,6 +3,7 @@ import os
 import sys
 import logging
 
+from framework.consul.ConsulManager import ConsulManager
 from framework.config.loader import load_services_config
 from framework.runtime.orchestrator import Orchestrator
 from framework.docker.compose import DockerCompose
@@ -11,7 +12,6 @@ from framework.vault.client import VaultClient
 from framework.vault.manager import VaultManager
 from framework.utils.waiters import wait_for_vault
 from dotenv import load_dotenv
-
 
 logging.basicConfig(
     level=logging.INFO,
@@ -81,6 +81,28 @@ def main():
         logging.info("⚠️ Continuing WITHOUT Vault...")
 
     # =========================
+    # 3.5 CONSUL INIT
+    # =========================
+    consul_manager = None
+
+    try:
+        consul_host = os.environ.get("CONSUL_HOST", "localhost")
+        consul_port = int(os.environ.get("CONSUL_PORT", 8500))
+
+        logging.info("🧭 Initializing Consul...")
+
+        consul_manager = ConsulManager(
+            host=consul_host,
+            port=consul_port
+        )
+
+        logging.info("🧭 Consul connected")
+
+    except Exception as e:
+        logging.info(f"⚠️ Consul not available: {e}")
+        logging.info("⚠️ Continuing WITHOUT Consul...")
+
+    # =========================
     # 4. LOAD CONFIG (🔥 NUEVO)
     # =========================
     config = load_services_config("deploy/services.yml")
@@ -91,8 +113,12 @@ def main():
     # =========================
     orchestrator = Orchestrator(
         services=services,
-        vault_manager=vault_manager
+        vault_manager=vault_manager,
+        consul_manager=consul_manager
     )
+
+    #for svc in services:
+    #    print(svc.model_dump())
 
     orchestrator.run()
 
