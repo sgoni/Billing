@@ -6,15 +6,13 @@ class RabbitHealth:
 
     def check(self, svc):
         try:
-            conn = svc["connection"]
+            conn = svc.connection
 
             host = resolve_host(svc)
-            port = conn["management_port"]
 
-            user = conn.get("admin_user", "guest")
-            password = conn.get("admin_password", "guest")
-
-            url = f"http://{host}:{port}/api/overview"
+            user = conn.admin_user
+            password = conn.admin_password
+            url = f"http://{host}:{conn.management_port}/api/overview"
 
             print(f"🔌 Checking RabbitMQ: {url}")
 

@@ -8,7 +8,7 @@ class PostgresHealth:
             conn = svc["connection"]
 
             host = resolve_host(svc)
-            port = conn["port"]
+            port = svc.connection.port
 
             import socket
             print(f"🔌 Checking Postgres: {host}:{port}")

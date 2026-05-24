@@ -1,19 +1,17 @@
 import argparse
 import os
-import subprocess
 import sys
 import logging
 
-from framework.core.engine import DeployEngine
-from framework.health.engine import HealthEngine
+from framework.config.loader import load_services_config
+from framework.runtime.orchestrator import Orchestrator
 from framework.docker.compose import DockerCompose
 from framework.utils.env_loader import load_env
-from framework.orchestrator import Orchestrator
 from framework.vault.client import VaultClient
 from framework.vault.manager import VaultManager
-from framework.vault.bootstrap import VaultBootstrap
 from framework.utils.waiters import wait_for_vault
 from dotenv import load_dotenv
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -24,9 +22,9 @@ logging.basicConfig(
 def main():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--env", default="dev", help="Environment (dev/stage/prod)")
-    parser.add_argument("--down", action="store_true", help="Stop infrastructure")
-    parser.add_argument("--no-docker", action="store_true", help="Skip docker compose")
+    parser.add_argument("--env", default="dev")
+    parser.add_argument("--down", action="store_true")
+    parser.add_argument("--no-docker", action="store_true")
 
     args = parser.parse_args()
     ENV = args.env
@@ -34,12 +32,12 @@ def main():
     print(f"🌍 Environment: {ENV}")
 
     # =========================
-    # 1. Load env
+    # 1. ENV
     # =========================
     load_env(ENV)
 
     # =========================
-    # 2. Docker control
+    # 2. DOCKER
     # =========================
     docker = DockerCompose(ENV)
 
@@ -52,9 +50,8 @@ def main():
         docker.up()
 
     # =========================
-    # 3. Vault init (safe)
+    # 3. VAULT INIT
     # =========================
-    vault_client = None
     vault_manager = None
 
     load_dotenv()
@@ -65,19 +62,18 @@ def main():
         vault_token = os.environ.get("VAULT_TOKEN")
 
         if vault_url:
-            wait_for_vault(vault_url)  # 👈 AQUÍ
+            wait_for_vault(vault_url)
 
         if not vault_url or not vault_token:
-            raise ValueError("Missing VAULT_URL or VAULT_TOKEN")
+            raise ValueError("Missing VAULT config")
 
         vault_client = VaultClient(
             url=vault_url,
             token=vault_token
         )
 
-        vault_manager = VaultManager()
+        vault_manager = VaultManager(vault_client)
 
-        logging.info(f"Vault manager: {vault_manager}")
         logging.info("🔐 Vault connected")
 
     except Exception as e:
@@ -85,44 +81,20 @@ def main():
         logging.info("⚠️ Continuing WITHOUT Vault...")
 
     # =========================
-    # 4. Load config
+    # 4. LOAD CONFIG (🔥 NUEVO)
     # =========================
-    engine = DeployEngine("services.yml")
+    config = load_services_config("deploy/services.yml")
+    services = config.services
 
     # =========================
-    # 5. Vault bootstrap (ANTES de health)
+    # 5. ORCHESTRATION TOTAL
     # =========================
-    if vault_manager:
-        bootstrap = VaultBootstrap(vault_client)
-        bootstrap.run(engine.config["services"])
+    orchestrator = Orchestrator(
+        services=services,
+        vault_manager=vault_manager
+    )
 
-        # inyectar vault en el contexto del engine
-        engine.context.vault = vault_manager
-
-    # =========================
-    # 6. Wait infra
-    # =========================
-    orchestrator = Orchestrator(engine.config["services"])
-    orchestrator.wait_for_infra()
-
-    # =========================
-    # 7. Deploy lógico
-    # =========================
-    engine.run()
-
-    # =========================
-    # 8. Final health
-    # =========================
-    health = HealthEngine(engine.config["services"])
-
-    try:
-        health.run()
-        print("\n✅ Deployment successful")
-
-    except Exception as e:
-        print("\n🚨 Final health failed. Docker logs:\n")
-        subprocess.run(["docker", "compose", "logs"], check=False)
-        raise e
+    orchestrator.run()
 
 
 if __name__ == "__main__":

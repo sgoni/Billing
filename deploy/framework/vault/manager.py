@@ -1,48 +1,103 @@
-import os
-
-import hvac
-from dotenv import load_dotenv
-
-
-def get_vault_role(svc):
-    return svc.get("vault", {}).get("role_name")
+import json
+import logging
 
 
 class VaultManager:
 
-    def __init__(self):
-        load_dotenv()
+    def __init__(self, client=None):
+        self.client = client
 
-        url = os.getenv("VAULT_URL")
-        token = os.getenv("VAULT_TOKEN")
+    # -------------------------
+    # ENABLE ENGINES
+    # -------------------------
+    def enable_database_engine(self):
+        mounts = self.client.sys.list_mounted_secrets_engines()
 
-        if not url or not token:
-            raise Exception("Missing VAULT config")
-
-        self.client = hvac.Client(
-            url=url,
-            token=token
-        )
-
-        if not self.client.is_authenticated():
-            raise Exception("Vault authentication failed")
-
-    def inject_postgres(self, svc, context):
-        creds = self.client.generate_db_creds(svc["name"])
-
-        svc["user"] = creds["username"]
-        svc["password"] = creds["password"]
-
-        print(f"🔐 Vault injected Postgres creds for {svc['name']}")
-
-    def inject_rabbitmq(self, svc, context):
-        role = get_vault_role(svc)
-        if not role:
+        if "database/" in mounts:
+            logging.info("⚠️ Database engine already enabled")
             return
 
-        creds = self.client.read(f"rabbitmq/creds/{role}")
+        logging.info("✅ Enabling Database engine")
 
-        svc["user"] = creds["data"]["username"]
-        svc["password"] = creds["data"]["password"]
+        self.client.sys.enable_secrets_engine(
+            backend_type="database",
+            path="database",
+        )
 
-        print(f"🔐 Vault injected RabbitMQ creds for {svc['name']}")
+    def enable_rabbitmq_engine(self):
+        mounts = self.client.sys.list_mounted_secrets_engines()
+
+        if "rabbitmq/" in mounts:
+            logging.info("⚠️ RabbitMQ engine already enabled")
+            return
+
+        logging.info("✅ Enabling RabbitMQ engine")
+
+        self.client.sys.enable_secrets_engine(
+            backend_type="rabbitmq",
+            path="rabbitmq",
+        )
+
+    # -------------------------
+    # POSTGRES
+    # -------------------------
+    def create_postgres_connection(
+            self, name, host, port, database, username, password
+    ):
+        logging.info(f"🐘 Creating Postgres connection: {name}")
+
+        self.client.secrets.database.configure(
+            name=name,
+            plugin_name="postgresql-database-plugin",
+            allowed_roles="*",
+
+            # ✅ FIX 1: URL limpia
+            connection_url=f"postgresql://{{username}}:{{password}}@{host}:{port}/{database}",
+
+            username=username,
+            password=password,
+
+            # ✅ FIX 2: evitar validación inicial (clave en Docker)
+            verify_connection=False,
+        )
+
+    def create_postgres_role(
+            self, connection_name, role_name, ttl, max_ttl, permissions
+    ):
+        logging.info(f"🐘 Creating Postgres role: {role_name}")
+
+        creation_statements = [
+            f"CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}';",
+            f"GRANT {', '.join(permissions)} ON ALL TABLES IN SCHEMA public TO \"{{name}}\";",
+        ]
+
+        self.client.secrets.database.create_role(
+            name=role_name,
+            db_name=connection_name,
+            creation_statements=creation_statements,
+            default_ttl=ttl,
+            max_ttl=max_ttl,
+        )
+
+    # -------------------------
+    # RABBITMQ
+    # -------------------------
+    def create_rabbitmq_connection(self, host, port, username, password):
+        logging.info("🐇 Creating RabbitMQ connection")
+
+        self.client.secrets.rabbitmq.configure(
+            connection_uri=f"http://{host}:{port}",
+
+            # 🔥 CLAVE: credenciales separadas
+            username=username,
+            password=password,
+        )
+
+    def create_rabbitmq_role(self, role_name, tags, vhosts):
+        logging.info(f"🐇 Creating RabbitMQ role: {role_name}")
+
+        self.client.secrets.rabbitmq.create_role(
+            name=role_name,
+            tags=",".join(tags),  # 🔥 también importante
+            vhosts=json.dumps(vhosts),  # 🔥 ESTE ES EL FIX
+        )

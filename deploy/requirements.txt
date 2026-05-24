@@ -6,3 +6,4 @@ py-consul==1.7.1
 psycopg2-binary==2.9.11 
 requests==2.32.5
 pyyaml
+pydantic

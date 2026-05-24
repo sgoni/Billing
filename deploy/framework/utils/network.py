@@ -6,12 +6,12 @@ def running_in_docker():
 
 
 def resolve_host(svc):
-    conn = svc["connection"]
+    conn = svc.connection
 
     if running_in_docker():
-        return conn["internal_host"]  # Docker
+        return conn.internal_host  # Docker
     else:
-        return conn["external_host"]  # Host
+        return conn.external_host  # Host
 
 
 def resolve_port(svc, key="port"):
