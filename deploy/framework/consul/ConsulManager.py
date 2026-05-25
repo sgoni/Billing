@@ -4,24 +4,25 @@ import requests
 class ConsulManager:
 
     def __init__(self, host="localhost", port=8500):
-        self.base_url = f"http://{host}:{port}"  # ✅ FIX
+        self.base_url = f"http://{host}:{port}"
 
-    def register_service(self, name, service_id, address, port):
+    def register_service(self, name, service_id, address, port, check=None, tags=None):
         payload = {
             "Name": name,
             "ID": service_id,
             "Address": address,
             "Port": port,
-            "Check": {
-                "TCP": f"{address}:{port}",
-                "Interval": "10s",
-                "Timeout": "5s"
-            }
         }
+
+        if check:
+            payload["Check"] = check
+
+        if tags:
+            payload["Tags"] = tags
 
         response = requests.put(
             f"{self.base_url}/v1/agent/service/register",
             json=payload
         )
 
-        print(response.status_code, response.text)
+        print(f"{response.status_code} → {name}")

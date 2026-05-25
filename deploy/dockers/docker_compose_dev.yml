@@ -175,7 +175,7 @@
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: "10s"
       timeout: "5s"
       retries: 5
@@ -192,7 +192,7 @@
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: "10s"
       timeout: "5s"
       retries: 5
@@ -203,72 +203,67 @@
   # --- Services      ---
   # ---------------------
 
-#  billing.api:
-#    build:
-#      context: ../../src/backend   # ← Esto debe apuntar a D:\Repositorio\Billing
-#      dockerfile: src/Services/Billing.API/Dockerfile
-#    container_name: billing.api
-#    ports:
-#      - "${BILLING_API_PORT_HTTP}:8080"
-#      - "${BILLING_API_PORT_HTTPS}:8081"
-#    environment:
-#      ConnectionStrings__Database: "Server=${POSTGRES_HOST};Port=${POSTGRES_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Include Error Detail=true"
-#      DatabaseConfig__Server: ${BILLING_POSTGRES_HOST}
-#      DatabaseConfig__Port: ${BILLING_POSTGRES_PORT}
-#      DatabaseConfig__Database: ${BILLING_POSTGRES_DB}
-#      MessageBroker__Host: ${RABBITMQ_HOST}
-#      MessageBroker__Username: ${RABBITMQ_USER}
-#      MessageBroker__Password: ${RABBITMQ_PASSWORD}
-#      ConsulConfig__ServiceId: "ed721f0a-0657-4f19-a84d-580e3d8524e8"
-#      ConsulConfig__ServiceName: ${BILLING_SERVICE_NAME}
-#      ConsulConfig__Host: ${CONSUL_ADDR}
-#      ConsulConfig__ServiceAddress: ${BILLING_SERVICE_NAME}
-#      ConsulConfig__ServicePort: ${BILLING_API_PORT_HTTPS}
-#      ConsulConfig__HealthCheckUrl: ${BILLING_API_URL}
-#      logging__Service: "app"
-#      logging__ServiceName: ${BILLING_SERVICE_NAME}
-#      logging__LokiUrl: ${LOKI_URL}
-#      VAULT_ADDR: http://vault:${VAULT_PORT}
-#      VAULT_TOKEN: ${VAULT_DEV_TOKEN}
-#      ASPNETCORE_ENVIRONMENT: Development
-#      ASPNETCORE_HTTP_PORTS: 8080
-#      #ASPNETCORE_HTTPS_PORTS: 8081
-#      #ASPNETCORE_Kestrel__Certificates__Default__Path: /app/certs/aspnetcore-dev-cert.pfx
-#      #ASPNETCORE_Kestrel__Certificates__Default__Password: ${KESTREL_DEFAULT_PASSWORD}
-#    healthcheck:
-#      test: [ "CMD", "curl", "-f", "${BILLING_API_URL}" ]
-#      interval: "30s"
-#      timeout: "10s"
-#      retries: 5
-#    depends_on:
-#      - billing
-#      - consul
-#      - messagebroker
-#      - vault
-#    volumes:
-#      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
-#      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
-#      #- ../certs/aspnetcore-dev-cert.pfx:/https/aspnetcore-dev-cert.pfx
-#      #S- ../certs:/app/certs:ro  # Asegúrate de que la carpeta local 'certs' existe y contiene tu certificado-
-#    networks:
-#      - observability
-#      - billing-net
-#
-#  eventrelay:
-#    build:
-#      context: ../../src/backend
-#      dockerfile: src/Workers/Integration.Services/Dockerfile
-#    container_name: eventrelay
-#    depends_on:
-#      messagebroker:
-#        condition: service_healthy
-#    environment:
-#      ConnectionStrings__Database: "Server=${EVT_POSTGRES_HOST};Port=${EVT_POSTGRES_PORT};Database=${EVT_POSTGRES_DB};Username=${EVT_POSTGRES_USER};Password=${EVT_POSTGRES_PASSWORD};Include Error Detail=true"
-#      MessageBroker__Host: ${RABBITMQ_HOST}
-#      MessageBroker__Username: ${RABBITMQ_USER}
-#      MessageBroker__Password: ${RABBITMQ_PASSWORD}
-#    networks:
-#      - billing-net
+  billing.api:
+    build:
+      context: ../../src/backend   # ← Esto debe apuntar a D:\Repositorio\Billing
+      dockerfile: src/Services/Billing.API/Dockerfile
+    container_name: billing.api
+    ports:
+      - "6000:8080"
+      - "6060:8081"
+    environment:
+      ConnectionStrings__Database: "Server=billing-postgres;Port=5432;Database=billingdb;User Id=postgres;Password=postgres;Include Error Detail=true"
+      DatabaseConfig__Server: billing-postgres
+      DatabaseConfig__Port: 5432
+      DatabaseConfig__Database: billingdb
+      MessageBroker__Host: billing-mq
+      MessageBroker__Username: guest
+      MessageBroker__Password: guest
+      ConsulConfig__ServiceId: "billing.api-1"
+      ConsulConfig__ServiceName: "billing.api"
+      ConsulConfig__ServiceAddress: "billing.api"
+      ConsulConfig__ServicePort: 8080
+      ConsulConfig__HealthCheckUrl: "http://billing.api:8080/health"
+      ConsulConfig__Host: "http://consul:8500"
+      ConsulConfig__TLSSkipVerify: false
+      logging__Service: "app"
+      logging__ServiceName: "BILLING.api"
+      logging__LokiUrl: "http://loki:3100/loki/api/v1/push"
+      VAULT_ADDR: http://vault:8200
+      VAULT_TOKEN: dev-token
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: 8080
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:6000/health" ]
+      interval: "30s"
+      timeout: "10s"
+      retries: 5
+    depends_on:
+      - consul
+      - vault
+      - rabbitmq
+      - billing-postgres
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+    networks:
+      - billing-net
+
+  #  eventrelay:
+  #    build:
+  #      context: ../../src/backend
+  #      dockerfile: src/Workers/Integration.Services/Dockerfile
+  #    container_name: eventrelay
+  #    depends_on:
+  #      messagebroker:
+  #        condition: service_healthy
+  #    environment:
+  #      ConnectionStrings__Database: "Server=${EVT_POSTGRES_HOST};Port=${EVT_POSTGRES_PORT};Database=${EVT_POSTGRES_DB};Username=${EVT_POSTGRES_USER};Password=${EVT_POSTGRES_PASSWORD};Include Error Detail=true"
+  #      MessageBroker__Host: ${RABBITMQ_HOST}
+  #      MessageBroker__Username: ${RABBITMQ_USER}
+  #      MessageBroker__Password: ${RABBITMQ_PASSWORD}
+  #    networks:
+  #      - billing-net
 
 
   # ---------------------
