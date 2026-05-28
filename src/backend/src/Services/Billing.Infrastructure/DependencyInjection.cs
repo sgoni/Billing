@@ -7,7 +7,7 @@ public static class DependencyInjection
     {
         var connectionString = configuration.GetConnectionString("Database");
 
-        services.AddVault(configuration);     // Add Vault  
+        services.AddVault(configuration); // Add Vault  
         services.AddDiscovery(configuration); // Add Discovery
         services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
         services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
@@ -28,8 +28,8 @@ public static class DependencyInjection
                 options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
                 options.UseNpgsql(connectionString);
             });
-
-        if (environment != "Development")
+        
+        if (environment == "Production")
             services.AddDbContext<ApplicationDbContext>((sp, options) =>
             {
                 options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());

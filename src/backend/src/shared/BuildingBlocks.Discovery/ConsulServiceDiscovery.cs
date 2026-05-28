@@ -63,4 +63,16 @@ public class ConsulServiceDiscovery : IServiceDiscovery
         _consulClient.Agent.ServiceDeregister(_config.ServiceId).Wait();
         Console.WriteLine($"Service {_config.ServiceName} deregistered from Consul");
     }
+
+    public async Task<(string Host, int Port)> GetServiceAsync(string serviceName)
+    {
+        var services = await _consulClient.Health.Service(serviceName, "", true);
+
+        var svc = services.Response.FirstOrDefault();
+
+        if (svc == null)
+            throw new Exception($"Service {serviceName} not found in Consul");
+
+        return (svc.Service.Address, svc.Service.Port);
+    }
 }

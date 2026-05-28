@@ -8,13 +8,23 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Billing.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/Billing.sln.DotSettings.user" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/deploy/dockers/docker_compose_dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/dockers/docker_compose_dev.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/environments/.env.dev" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/environments/.env.dev" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/framework/consul/ConsulManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/consul/ConsulManager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/framework/runtime/ConsulRunner.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/runtime/ConsulRunner.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Billing.API.http" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Billing.API.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/framework/runtime/vault_runner.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/runtime/vault_runner.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/framework/vault/manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/vault/manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/services.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/services.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Billing.API.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Billing.API.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/DependencyInjection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/DependencyInjection.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/GlobalUsing.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/GlobalUsing.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Properties/launchSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Properties/launchSettings.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/appsettings.Development.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/http-client.private.env.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/http-client.private.env.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Messaging/MassTransit/Extensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Messaging/MassTransit/Extensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/appsettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Data/Extensions/DatabaseExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Data/Extensions/DatabaseExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Data/Interceptors/VaultDbConnectionInterceptor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Data/Interceptors/VaultDbConnectionInterceptor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/DependencyInjection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/DependencyInjection.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Discovery/ConsulServiceDiscovery.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Discovery/ConsulServiceDiscovery.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Discovery/IServiceDiscovery.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Discovery/IServiceDiscovery.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Secrets/BuildingBlocks.Secrets.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Secrets/BuildingBlocks.Secrets.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Secrets/GlobalUsing.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Secrets/GlobalUsing.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +62,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$USER_HOME$/AppData/Local/Python/pythoncore-3.14-64/Lib/subprocess.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/.venv/Lib/site-packages/hvac/adapters.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/.venv/Lib/site-packages/hvac/api/secrets_engines/database.py" root0="SKIP_INSPECTION" />
   </component>
@@ -61,61 +72,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0" />
-      <entry key="MS500" value="1.0000013177094966" />
-      <entry key="S2" value="1.0569698143533526" />
-      <entry key="S5" value="1.4818027865547505" />
-      <entry key="S10" value="1.9816316432653296" />
-      <entry key="S30" value="2.577620722037577" />
-      <entry key="S60" value="2.7762998055769494" />
-      <entry key="M2" value="2.884834073852323" />
-      <entry key="M5" value="2.9531124359944654" />
-      <entry key="M10" value="2.9764244753152616" />
-      <entry key="M15" value="2.9846528375007573" />
-      <entry key="M30" value="3.0422055637806404" />
-      <entry key="H1" value="4.501602932355119" />
-      <entry key="H2" value="13.278073850938904" />
-      <entry key="H4" value="33.56437441921085" />
-      <entry key="D1" value="118.73609616172097" />
-      <entry key="W1" value="163.3979844153017" />
+      <entry key="MS100" value="1.496546247718518" />
+      <entry key="MS500" value="1.8693445600900218" />
+      <entry key="S2" value="1.9656016189075247" />
+      <entry key="S5" value="1.9860959930859916" />
+      <entry key="S10" value="1.9930236681294404" />
+      <entry key="S30" value="1.9995094804634226" />
+      <entry key="S60" value="2.041733244620724" />
+      <entry key="M2" value="2.20653838272019" />
+      <entry key="M5" value="2.5324848059700464" />
+      <entry key="M10" value="2.7329982987185213" />
+      <entry key="M15" value="2.8389573811737443" />
+      <entry key="M30" value="3.27542290219785" />
+      <entry key="H1" value="4.627948824695707" />
+      <entry key="H2" value="7.533605308858553" />
+      <entry key="H4" value="17.08097231791485" />
+      <entry key="D1" value="107.35956057238073" />
+      <entry key="W1" value="174.31194566933587" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
       <entry key="MS500" value="0.0" />
       <entry key="S2" value="0.0" />
       <entry key="S5" value="0.0" />
-      <entry key="S10" value="4.6695016142768385E-290" />
-      <entry key="S30" value="5.713094047758861E-97" />
-      <entry key="S60" value="1.0688599481403993E-48" />
-      <entry key="M2" value="1.4620692007287719E-24" />
-      <entry key="M5" value="4.4320369869215944E-10" />
-      <entry key="M10" value="2.977345108381993E-5" />
-      <entry key="M15" value="0.0012114397334818902" />
-      <entry key="M30" value="0.050756462969935266" />
-      <entry key="H1" value="0.37920172272297" />
-      <entry key="H2" value="1.429142062620219" />
-      <entry key="H4" value="4.343282444944565" />
-      <entry key="D1" value="18.292318521709735" />
-      <entry key="W1" value="24.69363134633495" />
+      <entry key="S10" value="0.0" />
+      <entry key="S30" value="2.489518882658138E-286" />
+      <entry key="S60" value="2.230835202626662E-143" />
+      <entry key="M2" value="6.679168900900682E-72" />
+      <entry key="M5" value="5.134529473084442E-29" />
+      <entry key="M10" value="1.01336163559679E-14" />
+      <entry key="M15" value="5.900345986567224E-10" />
+      <entry key="M30" value="3.4619178387756717E-5" />
+      <entry key="H1" value="0.009160090629054865" />
+      <entry key="H2" value="0.19726261997977013" />
+      <entry key="H4" value="1.4583965235637724" />
+      <entry key="D1" value="15.79251899081079" />
+      <entry key="W1" value="25.752287693242202" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.9592641193252643" />
-      <entry key="MS500" value="0.9917179795972091" />
-      <entry key="S2" value="1.054143707138623" />
-      <entry key="S5" value="1.4784352063969215" />
-      <entry key="S10" value="1.9786312527281982" />
-      <entry key="S30" value="2.5760971488459163" />
-      <entry key="S60" value="2.775450759274406" />
-      <entry key="M2" value="2.8843857155567143" />
-      <entry key="M5" value="2.9529270951471194" />
-      <entry key="M10" value="2.976360512478752" />
-      <entry key="M15" value="2.985800392143682" />
-      <entry key="M30" value="3.092900370623619" />
-      <entry key="H1" value="4.880610161588123" />
-      <entry key="H2" value="14.706718564483797" />
-      <entry key="H4" value="37.90677519098006" />
-      <entry key="D1" value="137.0277104624977" />
-      <entry key="W1" value="188.0914754520599" />
+      <entry key="MS100" value="0.9728652467404867" />
+      <entry key="MS500" value="1.7314881051076179" />
+      <entry key="S2" value="1.9291974119176067" />
+      <entry key="S5" value="1.9713721156049928" />
+      <entry key="S10" value="1.9856344289564472" />
+      <entry key="S30" value="1.9970398412765837" />
+      <entry key="S60" value="2.040492444645929" />
+      <entry key="M2" value="2.2059073576649237" />
+      <entry key="M5" value="2.5322240610882156" />
+      <entry key="M10" value="2.7328630097376183" />
+      <entry key="M15" value="2.838856092680923" />
+      <entry key="M30" value="3.2753575998749587" />
+      <entry key="H1" value="4.636981505776792" />
+      <entry key="H2" value="7.730677721160356" />
+      <entry key="H4" value="18.53898448416175" />
+      <entry key="D1" value="123.15145491309312" />
+      <entry key="W1" value="200.0640848739855" />
     </decayedShown>
   </component>
   <component name="ProblemsViewState">

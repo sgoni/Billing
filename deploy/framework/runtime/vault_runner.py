@@ -1,7 +1,5 @@
 import logging
 
-from framework.runtime.resolver import resolve_host
-
 
 class VaultRunner:
 
@@ -51,7 +49,7 @@ class VaultRunner:
                 role_name=role.name,
                 ttl=role.ttl,
                 max_ttl=role.max_ttl,
-                permissions=role.permissions,
+                permissions=role.permissions
             )
 
     # -------------------------

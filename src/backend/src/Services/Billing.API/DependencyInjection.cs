@@ -26,6 +26,7 @@ public static class DependencyInjection
         services.AddSwaggerGen();
 
         services.AddHttpContextAccessor();
+
         //To..Do
         //services.AddDiscovery(configuration);         // Add Discovery
         //services.AddObservability(configuration);     // Add Telemetry

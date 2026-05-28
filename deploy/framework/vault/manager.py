@@ -52,7 +52,12 @@ class VaultManager:
             allowed_roles="*",
 
             # ✅ FIX 1: URL limpia
-            connection_url=f"postgresql://{{username}}:{{password}}@{host}:{port}/{database}",
+            connection_url=f"postgresql://{{{{username}}}}:{{{{password}}}}@{host}:{port}/{database}?sslmode=disable",
+            #connection_url=f"postgresql://{{{{username}}}}:{{{{password}}}}@billing-postgres:5432/billingdb?sslmode=disable",
+            # connection_url=f"postgresql://{{{{username}}}}:{{{{password}}}}@{{{{host}}}}:5432/{{{{database}}}}?sslmode=disable",
+            # connection_url=f"postgresql://{svc['user']}:{svc['password']}@{svc['host']}:{svc['port']}/{svc['db']}?sslmode=disable",
+            # connection_url=f"postgresql://{svc['user']}:{svc['password']}@{svc['host']}:{svc['port']}/{svc['db']}"
+            # connection_url=f"postgresql://{conn['admin_user']}:{conn['admin_password']}@{resolve_host(svc)}:{conn['port']}/{conn['database']}"
 
             username=username,
             password=password,
@@ -67,9 +72,32 @@ class VaultManager:
         logging.info(f"🐘 Creating Postgres role: {role_name}")
 
         creation_statements = [
-            f"CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}';",
-            f"GRANT {', '.join(permissions)} ON ALL TABLES IN SCHEMA public TO \"{{name}}\";",
+            f"CREATE ROLE \"{{{{name}}}}\" WITH LOGIN PASSWORD '{{{{password}}}}' VALID UNTIL '{{{{expiration}}}}';",
+            f"GRANT {', '.join(permissions)} ON ALL TABLES IN SCHEMA public TO \"{{{{name}}}}\";",
         ]
+
+        # creation_statements = [
+        #    # Crear usuario
+        #    f'CREATE ROLE "{{{{name}}}}" WITH LOGIN PASSWORD \'{{{{password}}}}\' VALID UNTIL \'{{{{expiration}}}}\';',
+        #
+        #    # Conexión y schema
+        #    f'GRANT CONNECT ON DATABASE "{db}" TO "{{{{name}}}}";',
+        #    'GRANT USAGE ON SCHEMA public TO "{{name}}";',
+        #
+        #    # Tablas actuales
+        #    'GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO "{{name}}";',
+        #
+        #    # Tablas futuras
+        #    'ALTER DEFAULT PRIVILEGES IN SCHEMA public '
+        #    'GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO "{{name}}";',
+        #
+        #    # Secuencias actuales
+        #    'GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA public TO "{{name}}";',
+        #
+        #    # Secuencias futuras
+        #    'ALTER DEFAULT PRIVILEGES IN SCHEMA public '
+        #    'GRANT USAGE, SELECT, UPDATE ON SEQUENCES TO "{{name}}";',
+        # ]
 
         self.client.secrets.database.create_role(
             name=role_name,

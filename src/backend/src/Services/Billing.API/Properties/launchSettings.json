@@ -8,7 +8,8 @@
       "launchUrl": "swagger",
       "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "VAULT_TOKEN": "dev-token"
       }
     },
     "https": {
@@ -18,7 +19,8 @@
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:6000",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "VAULT_TOKEN": "dev-token"        
       }
     }
   }
