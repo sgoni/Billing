@@ -1,4 +1,6 @@
-﻿namespace BuildingBlocks.Secrets;
+﻿using BuildingBlocks.Secrets.Config;
+
+namespace BuildingBlocks.Secrets;
 
 public class VaultConfigurationProvider : ISecretManager
 {

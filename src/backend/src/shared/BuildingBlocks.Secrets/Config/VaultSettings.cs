@@ -1,4 +1,4 @@
-﻿namespace BuildingBlocks.Secrets;
+﻿namespace BuildingBlocks.Secrets.Config;
 
 public record VaultSettings
 {

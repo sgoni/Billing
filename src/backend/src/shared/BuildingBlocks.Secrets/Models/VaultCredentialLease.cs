@@ -1,4 +1,4 @@
-﻿namespace BuildingBlocks.Secrets;
+﻿namespace BuildingBlocks.Secrets.Models;
 
 public class VaultCredentialLease
 {
