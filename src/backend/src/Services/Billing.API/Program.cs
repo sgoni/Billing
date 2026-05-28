@@ -21,7 +21,7 @@ internal class Program
 
         if (app.Environment.IsDevelopment())
         {
-            await app.InitialiseDatabaseAsync();
+           // await app.InitialiseDatabaseAsync();
             app.UseSwagger();
             app.UseSwaggerUI();
         }

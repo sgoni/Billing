@@ -9,10 +9,10 @@ public static class DependencyInjection
 
         services.AddVault(configuration); // Add Vault  
         services.AddDiscovery(configuration); // Add Discovery
+        services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
         services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
         services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
         services.AddScoped<VaultDbConnectionInterceptor>();
-        services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 
         services.AddDbContext<ApplicationDbContext>((sp, options) =>
         {
@@ -28,7 +28,7 @@ public static class DependencyInjection
                 options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
                 options.UseNpgsql(connectionString);
             });
-        
+
         if (environment == "Production")
             services.AddDbContext<ApplicationDbContext>((sp, options) =>
             {

@@ -32,4 +32,13 @@ public static class Extensions
 
         return obj;
     }
+
+    public static string GetTokenFromEnvironmentVariable()
+    {
+        var token = Environment.GetEnvironmentVariable("VAULT_TOKEN");
+
+        if (string.IsNullOrEmpty(token))
+            throw new InvalidOperationException("Vault token not found in environment variables.");
+        return token;
+    }
 }

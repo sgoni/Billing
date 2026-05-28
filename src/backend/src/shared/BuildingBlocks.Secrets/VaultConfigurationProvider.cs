@@ -8,7 +8,10 @@ public class VaultConfigurationProvider : ISecretManager
     public VaultConfigurationProvider(IOptions<VaultSettings> options, ILogger<VaultConfigurationProvider> logger)
     {
         _logger = logger;
-        _vaultProviderSettings = options.Value with { TokenApi = GetTokenFromEnvironmentVariable() };
+        _vaultProviderSettings = options.Value with
+        {
+            TokenApi = Extensions.Extensions.GetTokenFromEnvironmentVariable()
+        };
     }
 
     public async Task<T> GetCredential<T>(string path) where T : new()
