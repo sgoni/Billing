@@ -17,7 +17,7 @@ public class InvoiceCreatedDomainEventHandler(
         await PersistAuditLog(domainEvent, cancellationToken);
 
         // Publica evento de integración (si aplica)
-        if (await featureManager.IsEnabledAsync("InvoiceFullfilment"))
+        if (await featureManager.IsEnabledAsync("InvoiceFulfillment"))
             await PublishIntegrationEvent(domainEvent.Invoice, cancellationToken);
     }
 

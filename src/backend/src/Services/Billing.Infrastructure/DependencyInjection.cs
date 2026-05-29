@@ -22,14 +22,14 @@ public static class DependencyInjection
 
         var environment = configuration["ASPNETCORE_ENVIRONMENT"];
 
-        //if (environment == "Development")
-        //    services.AddDbContext<ApplicationDbContext>((sp, options) =>
-        //    {
-        //        options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-        //        options.UseNpgsql(connectionString);
-        //    });
-
-        //if (environment == "Production")
+        if (environment == "Development")
+            services.AddDbContext<ApplicationDbContext>((sp, options) =>
+            {
+                options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+                options.UseNpgsql(connectionString);
+            });
+        
+        if (environment == "Production")
             services.AddDbContext<ApplicationDbContext>((sp, options) =>
             {
                 options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
