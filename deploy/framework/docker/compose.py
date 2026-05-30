@@ -1,6 +1,8 @@
 import subprocess
 import os
 
+from utils.docker_prune import docker_prune
+
 
 class DockerCompose:
 
@@ -45,3 +47,5 @@ class DockerCompose:
         print("🔧 CMD:", " ".join(cmd))  # ⬅️ AQUÍ
 
         subprocess.run(cmd, check=True)
+
+        docker_prune()
