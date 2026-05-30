@@ -272,25 +272,25 @@
   # --- Gateway      ---
   # ---------------------
 
-  #yarpapigateway:
-  #  container_name: yarpapigateway
-  #  build:
-  #    context: ../../src/backend   # ← Esto debe apuntar a D:\Repositorio\Axenta
-  #    dockerfile: src/ApiGateways/YarpApiGateway/Dockerfile
-  #  environment:
-  #    - ASPNETCORE_ENVIRONMENT=Development
-  #    - ASPNETCORE_HTTP_PORTS=8080
-  #    #- ASPNETCORE_HTTPS_PORTS=8081
-  #  depends_on:
-  #    - billing.api
-  #  ports:
-  #    - "6009:8080"
-  #    #- "6069:8081"
-  #  volumes:
-  #    - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
-  #    - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
-  #  networks:
-  #    - billing-net
+  yarpapigateway:
+    container_name: yarpapigateway
+    build:
+      context: ../../src/backend   # ← Esto debe apuntar a D:\Repositorio\Axenta
+      dockerfile: src/ApiGateways/YarpApiGateway/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=8080
+      #- ASPNETCORE_HTTPS_PORTS=8081
+    depends_on:
+      - billing.api
+    ports:
+      - "6004:8080"
+      - "6064:8081"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+    networks:
+      - billing-net
 
 volumes:
   grafana_data:

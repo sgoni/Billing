@@ -1,6 +1,159 @@
-@YarpApiGateway_HostAddress = http://localhost:5069
+# curl -i http://httpbin.org/ip
+GET {{API_HostAddress}}/health
 
-GET {{YarpApiGateway_HostAddress}}/weatherforecast/
-Accept: application/json
+###
+
+# curl -X 'POST' 
+#  'http://localhost:5000/billings' 
+#  -H 'accept: application/json' 
+#  -H 'Content-Type: application/json' 
+#  -d '{
+#  "apInvoice": {
+#    "number": "INV-20260519-001",
+#    "issueDate": "2026-05-19T00:29:43.018Z",
+#    "customerId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+#    "lines": [
+#      {
+#        "description": "Servicio de consultoría",
+#        "quantity": 10,
+#        "price": 150.00,
+#        "lineNumber": 1
+#      },
+#      {
+#        "description": "Licencia de software",
+#        "quantity": 2,
+#        "price": 500.00,
+#        "lineNumber": 2
+#      }
+#    ]
+#  }
+#}
+#'
+POST {{API_HostAddress}}/billings
+accept: application/json
+Content-Type: application/json
+
+{
+  "Invoice": {
+    "number": "INV-20260519-001",
+    "issueDate": "2026-05-19T00:29:43.018Z",
+    "customerId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "lines": [
+      {
+        "description": "Servicio de consultoría",
+        "quantity": 10,
+        "price": 150.00,
+        "lineNumber": 1
+      },
+      {
+        "description": "Licencia de software",
+        "quantity": 2,
+        "price": 500.00,
+        "lineNumber": 2
+      }
+    ]
+  }
+}
+
+###
+
+# curl -X 'GET' 
+#  'http://localhost:5000/billings?PageIndex=10&PageSize=1' 
+#  -H 'accept: application/json'
+GET {{API_HostAddress}}/billings?PageIndex=0&PageSize=10
+accept: application/json
+
+###
+
+# curl -X 'PUT' 
+#  'http://localhost:5000/billings' 
+#  -H 'accept: application/json' 
+#  -H 'Content-Type: application/json' 
+#  -d '{
+#   "invoice":{
+#      "id":"b45e75af-fe29-4c2e-9653-aad9bf5b42ef",
+#      "number":"INV-639147467845222848-UPDATED",
+#      "issueDate":"2026-05-20T09:30:00.000Z",
+#      "customerId":"e44ed594-272c-4978-a3b5-11fb47e9ca12",
+#      "total":102500.00,
+#      "lines":[
+#         {
+#            "id":"c7b8ea78-9994-4b13-b5a6-cd4d1f55dc01",
+#            "description":"IPhone XR 10 (ajustado)",
+#            "quantity":1,
+#            "price":87000.00,
+#            "lineNumber":1
+#         },
+#         {
+#            "id":"7fa2d198-a132-4126-b2fb-d39fd1d1ef9b",
+#            "description":"Funda protectora IPhone XR 10",
+#            "quantity":2,
+#            "price":7500.00,
+#            "lineNumber":2
+#         },
+#         {
+#            "description":"Cable USB-C original",
+#            "quantity":1,
+#            "price":2500.00,
+#            "lineNumber":3
+#         },
+#         {
+#            "description":"Protector de pantalla vidrio templado",
+#            "quantity":1,
+#            "price":3000.00,
+#            "lineNumber":4
+#         }
+#      ]
+#   }
+#}'
+PUT {{API_HostAddress}}/billings
+accept: application/json
+Content-Type: application/json
+
+{
+  "invoice": {
+    "id": "b45e75af-fe29-4c2e-9653-aad9bf5b42ef",
+    "number": "INV-639147467845222848-UPDATED",
+    "issueDate": "2026-05-20T09:30:00.000Z",
+    "customerId": "e44ed594-272c-4978-a3b5-11fb47e9ca12",
+    "total": 102500.00,
+    "lines": [
+      {
+        "id": "c7b8ea78-9994-4b13-b5a6-cd4d1f55dc01",
+        "description": "IPhone XR 10 (ajustado)",
+        "quantity": 1,
+        "price": 87000.00,
+        "lineNumber": 1
+      },
+      {
+        "id": "7fa2d198-a132-4126-b2fb-d39fd1d1ef9b",
+        "description": "Funda protectora IPhone XR 10",
+        "quantity": 2,
+        "price": 7500.00,
+        "lineNumber": 2
+      },
+      {
+        "description": "Cable USB-C original",
+        "quantity": 1,
+        "price": 2500.00,
+        "lineNumber": 3
+      },
+      {
+        "description": "Protector de pantalla vidrio templado",
+        "quantity": 1,
+        "price": 3000.00,
+        "lineNumber": 4
+      }
+    ]
+  }
+}
+
+###
+
+# curl -X 'GET' 
+#  'http://localhost:5000/billings/b45e75af-fe29-4c2e-9653-aad9bf5b42ef' 
+#  -H 'accept: application/json'
+GET {{API_HostAddress}}/billings/b45e75af-fe29-4c2e-9653-aad9bf5b42ef
+accept: application/json
 
 ###
