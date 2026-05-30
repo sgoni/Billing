@@ -61,19 +61,30 @@ class Service(BaseModel):
     name: str
     type: str
 
-    connection: Connection
+    # Infra
+    connection: Optional[Connection] = None
+    # connection: Connection
+
+    # App (HTTP)
+    url: Optional[str] = None
+    depends_on: Optional[List[str]] = None
+
     vault: Optional[VaultConfig] = None
     consul: Optional[ConsulConfig] = None
 
     # 🔥 VALIDACIÓN CENTRAL (SIN ROMPER TU MODELO)
     @model_validator(mode="after")
     def validate_service(self):
-        conn = self.connection
 
         # -------------------------
         # POSTGRES
         # -------------------------
         if self.type == "postgres":
+            if not self.connection:
+                raise ValueError(f"{self.name}: postgres requires connection")
+
+            conn = self.connection
+
             if conn.port is None:
                 raise ValueError(f"{self.name}: postgres requires connection.port")
 
@@ -86,7 +97,12 @@ class Service(BaseModel):
         # -------------------------
         # RABBITMQ
         # -------------------------
-        if self.type == "rabbitmq":
+        elif self.type == "rabbitmq":
+            if not self.connection:
+                raise ValueError(f"{self.name}: rabbitmq requires connection")
+
+            conn = self.connection
+
             if conn.port is None:
                 raise ValueError(f"{self.name}: rabbitmq requires connection.port")
 
@@ -97,7 +113,17 @@ class Service(BaseModel):
                 raise ValueError(f"{self.name}: rabbitmq requires admin credentials")
 
         # -------------------------
-        # VAULT (SI ESTÁ HABILITADO)
+        # HTTP (🔥 NUEVO)
+        # -------------------------
+        elif self.type == "http":
+            if not self.url:
+                raise ValueError(f"{self.name}: http service requires url")
+
+        else:
+            raise ValueError(f"{self.name}: unsupported service type '{self.type}'")
+
+        # -------------------------
+        # VAULT
         # -------------------------
         if self.vault and self.vault.enabled:
             if not self.vault.engine:

@@ -63,7 +63,6 @@ services:
   - name: rabbitmq
     type: rabbitmq
 
-
     connection:
       internal_host: billing-mq      #  docker
       external_host: localhost       #  host
@@ -85,3 +84,7 @@ services:
               configure: ".*"
               write: ".*"
               read: ".*"
+
+  - name: billing.api
+    type: http
+    url: http://localhost:6000/health

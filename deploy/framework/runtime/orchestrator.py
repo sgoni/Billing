@@ -16,7 +16,7 @@ class Orchestrator:
         # 1. WAIT INFRA
         # -------------------------
         for svc in self.services:
-            if svc.type in ["postgres", "rabbitmq"]:
+            if svc.type in ["postgres", "rabbitmq", "http"]:
                 wait_for_service(svc)
 
         # -------------------------

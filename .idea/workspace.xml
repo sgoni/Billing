@@ -5,15 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f62b9c27-5c66-4e98-a1f8-b7d35b7bc70c" name="Changes" comment="Add RabbitMQ readiness handling and complete Vault dynamic secrets integration&#10;&#10;* Improved `wait_for_service` to support service-specific readiness checks&#10;* Added dedicated RabbitMQ management API health check to ensure proper availability before Vault configuration&#10;* Fixed timing issue where Vault attempted to connect to RabbitMQ before it was ready&#10;* Updated Vault bootstrap flow to correctly initialize RabbitMQ secrets engine&#10;* Implemented RabbitMQ connection configuration using management endpoint and admin credentials&#10;* Fixed role creation payload format for RabbitMQ (vhosts now correctly serialized as JSON string)&#10;* Ensured dynamic roles and permissions are successfully created in Vault for RabbitMQ&#10;* Verified full orchestration flow: Postgres + RabbitMQ + Vault integration working end-to-end&#10;* Confirmed services health checks and deployment stability&#10;&#10;Result: Full dynamic secrets provisioning for Postgres and RabbitMQ is now operational">
-      <change afterPath="$PROJECT_DIR$/src/backend/src/ApiGateways/YarpApiGateway/http-client.env.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/deploy/framework/health/HttpHealthChecker.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/dockers/docker_compose_dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/dockers/docker_compose_dev.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/ApiGateways/YarpApiGateway/Properties/launchSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/ApiGateways/YarpApiGateway/Properties/launchSettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/ApiGateways/YarpApiGateway/YarpApiGateway.http" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/ApiGateways/YarpApiGateway/YarpApiGateway.http" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/ApiGateways/YarpApiGateway/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/ApiGateways/YarpApiGateway/appsettings.Development.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/ApiGateways/YarpApiGateway/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/ApiGateways/YarpApiGateway/appsettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Properties/launchSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Properties/launchSettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/http-client.private.env.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/http-client.private.env.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/framework/config/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/config/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/framework/runtime/health_factory.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/runtime/health_factory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/framework/runtime/orchestrator.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/runtime/orchestrator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/services.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/services.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,23 +58,23 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.496546247718518" />
-      <entry key="MS500" value="1.8693445600900218" />
-      <entry key="S2" value="1.9656016189075247" />
-      <entry key="S5" value="1.9860959930859916" />
-      <entry key="S10" value="1.9930236681294404" />
-      <entry key="S30" value="1.9995094804634226" />
-      <entry key="S60" value="2.041733244620724" />
-      <entry key="M2" value="2.20653838272019" />
-      <entry key="M5" value="2.5324848059700464" />
-      <entry key="M10" value="2.7329982987185213" />
-      <entry key="M15" value="2.8389573811737443" />
-      <entry key="M30" value="3.27542290219785" />
-      <entry key="H1" value="4.627948824695707" />
-      <entry key="H2" value="7.533605308858553" />
-      <entry key="H4" value="17.08097231791485" />
-      <entry key="D1" value="107.35956057238073" />
-      <entry key="W1" value="174.31194566933587" />
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0" />
+      <entry key="S2" value="1.0" />
+      <entry key="S5" value="1.000000000000001" />
+      <entry key="S10" value="1.0000000342552415" />
+      <entry key="S30" value="1.0032476983014724" />
+      <entry key="S60" value="1.0569885830269747" />
+      <entry key="M2" value="1.2387778130801914" />
+      <entry key="M5" value="1.598760479203123" />
+      <entry key="M10" value="2.1386922349087163" />
+      <entry key="M15" value="2.7257833485058454" />
+      <entry key="M30" value="4.161021275478108" />
+      <entry key="H1" value="6.257560291657724" />
+      <entry key="H2" value="9.635277169739817" />
+      <entry key="H4" value="19.0620536103377" />
+      <entry key="D1" value="109.32659664527432" />
+      <entry key="W1" value="177.83968104868234" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
@@ -85,37 +82,37 @@
       <entry key="S2" value="0.0" />
       <entry key="S5" value="0.0" />
       <entry key="S10" value="0.0" />
-      <entry key="S30" value="2.489518882658138E-286" />
-      <entry key="S60" value="2.230835202626662E-143" />
-      <entry key="M2" value="6.679168900900682E-72" />
-      <entry key="M5" value="5.134529473084442E-29" />
-      <entry key="M10" value="1.01336163559679E-14" />
-      <entry key="M15" value="5.900345986567224E-10" />
-      <entry key="M30" value="3.4619178387756717E-5" />
-      <entry key="H1" value="0.009160090629054865" />
-      <entry key="H2" value="0.19726261997977013" />
-      <entry key="H4" value="1.4583965235637724" />
-      <entry key="D1" value="15.79251899081079" />
-      <entry key="W1" value="25.752287693242202" />
+      <entry key="S30" value="7.7789453351346E-310" />
+      <entry key="S60" value="3.943393683922191E-155" />
+      <entry key="M2" value="8.880220499927327E-78" />
+      <entry key="M5" value="2.290768384216695E-31" />
+      <entry key="M10" value="6.768691542971712E-16" />
+      <entry key="M15" value="9.713393627570394E-11" />
+      <entry key="M30" value="1.4046350833632373E-5" />
+      <entry key="H1" value="0.005834762028858061" />
+      <entry key="H2" value="0.15743688404571643" />
+      <entry key="H4" value="1.3028861419558526" />
+      <entry key="D1" value="15.498507645385361" />
+      <entry key="W1" value="25.683244321242157" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.9728652467404867" />
-      <entry key="MS500" value="1.7314881051076179" />
-      <entry key="S2" value="1.9291974119176067" />
-      <entry key="S5" value="1.9713721156049928" />
-      <entry key="S10" value="1.9856344289564472" />
-      <entry key="S30" value="1.9970398412765837" />
-      <entry key="S60" value="2.040492444645929" />
-      <entry key="M2" value="2.2059073576649237" />
-      <entry key="M5" value="2.5322240610882156" />
-      <entry key="M10" value="2.7328630097376183" />
-      <entry key="M15" value="2.838856092680923" />
-      <entry key="M30" value="3.2753575998749587" />
-      <entry key="H1" value="4.636981505776792" />
-      <entry key="H2" value="7.730677721160356" />
-      <entry key="H4" value="18.53898448416175" />
-      <entry key="D1" value="123.15145491309312" />
-      <entry key="W1" value="200.0640848739855" />
+      <entry key="MS100" value="0.9138314502294005" />
+      <entry key="MS500" value="0.9821395952633915" />
+      <entry key="S2" value="0.995504677670617" />
+      <entry key="S5" value="0.9981994402866312" />
+      <entry key="S10" value="0.9990993455467143" />
+      <entry key="S30" value="1.0028417563273828" />
+      <entry key="S60" value="1.0559040468029555" />
+      <entry key="M2" value="1.2367376164923471" />
+      <entry key="M5" value="1.5968570564173716" />
+      <entry key="M10" value="2.1373462881754515" />
+      <entry key="M15" value="2.724713065707066" />
+      <entry key="M30" value="4.160324817034103" />
+      <entry key="H1" value="6.262919973547888" />
+      <entry key="H2" value="9.792345855525621" />
+      <entry key="H4" value="20.364482571818645" />
+      <entry key="D1" value="124.82447144881229" />
+      <entry key="W1" value="203.52277442595343" />
     </decayedShown>
   </component>
   <component name="ProblemsViewState">
