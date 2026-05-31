@@ -23,12 +23,13 @@ GET {{API_HostAddress}}/health
 #        "description": "Licencia de software",
 #        "quantity": 2,
 #        "price": 500.00,
-#        "lineNumber": 2
+#        "lineNumber": 2á
 #      }
 #    ]
 #  }
 #}
 #'
+
 POST {{API_HostAddress}}/billings
 accept: application/json
 Content-Type: application/json

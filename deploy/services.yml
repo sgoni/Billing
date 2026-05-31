@@ -88,3 +88,9 @@ services:
   - name: billing.api
     type: http
     url: http://localhost:6000/health
+
+  - name: Integration.Services
+    type: worker
+    command:
+      - dotnet
+      - Integration.Services.dll

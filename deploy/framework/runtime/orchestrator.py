@@ -18,6 +18,8 @@ class Orchestrator:
         for svc in self.services:
             if svc.type in ["postgres", "rabbitmq", "http"]:
                 wait_for_service(svc)
+            elif svc.type == "worker":
+                print(f"⚙️ Worker {svc.name} does not require health check")
 
         # -------------------------
         # 2. VAULT

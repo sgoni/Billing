@@ -1,7 +1,7 @@
 import subprocess
 import os
 
-from utils.docker_prune import docker_prune
+from framework.utils.docker_prune import docker_prune
 
 
 class DockerCompose:

@@ -71,6 +71,7 @@ class Service(BaseModel):
 
     vault: Optional[VaultConfig] = None
     consul: Optional[ConsulConfig] = None
+    command: Optional[List[str]] = None
 
     # 🔥 VALIDACIÓN CENTRAL (SIN ROMPER TU MODELO)
     @model_validator(mode="after")
@@ -113,11 +114,14 @@ class Service(BaseModel):
                 raise ValueError(f"{self.name}: rabbitmq requires admin credentials")
 
         # -------------------------
-        # HTTP (🔥 NUEVO)
+        # HTTP
         # -------------------------
         elif self.type == "http":
             if not self.url:
                 raise ValueError(f"{self.name}: http service requires url")
+        elif self.type == "worker":
+            if not self.command:
+                raise ValueError(f"{self.name}: worker requires command")
 
         else:
             raise ValueError(f"{self.name}: unsupported service type '{self.type}'")
