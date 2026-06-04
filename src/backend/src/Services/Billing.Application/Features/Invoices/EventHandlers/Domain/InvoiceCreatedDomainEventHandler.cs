@@ -23,7 +23,24 @@ public class InvoiceCreatedDomainEventHandler(
 
     private async Task PublishIntegrationEvent(Invoice invoice, CancellationToken cancellationToken)
     {
-        var integrationEvent = invoice.ToIntegrationEvent();
+        var integrationEvent = new InvoiceCreatedIntegrationEvent
+        (
+            invoice.Id.Value,
+            invoice.Number,
+            invoice.IssueDate,
+            invoice.CustomerId?.Value,
+            invoice.Total,
+            Guid.NewGuid(),
+            invoice.Items.Select(x => new InvoiceLines
+            {
+                Id = x.Id.Value,
+                Description = x.Description,
+                Quantity = x.Quantity,
+                Price = x.Price.Amount,
+                LineNumber = x.LineNumber,
+                Total = x.Total
+            }).ToList()
+        );
 
         // OutboxMessage
         await eventLogRepository.SaveProcessedAsync(
@@ -33,6 +50,8 @@ public class InvoiceCreatedDomainEventHandler(
         );
 
         await publishEndpoint.Publish(integrationEvent, cancellationToken);
+        logger.LogInformation("Published integrationEvent {NumberInvoice}",
+            integrationEvent.NumberInvoice);
     }
 
     private async Task PersistAuditLog(InvoiceCreatedDomainEvent domainEvent, CancellationToken cancellationToken)

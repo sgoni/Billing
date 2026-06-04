@@ -59,6 +59,7 @@ services:
 
           permissions:
             - read
+            - write
 
   - name: rabbitmq
     type: rabbitmq

@@ -4,17 +4,36 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f62b9c27-5c66-4e98-a1f8-b7d35b7bc70c" name="Changes" comment="chore(docker): add automatic prune of volumes and networks on shutdown">
-      <change afterPath="$PROJECT_DIR$/deploy/framework/health/NoopHealth.py" afterDir="false" />
+    <list default="true" id="f62b9c27-5c66-4e98-a1f8-b7d35b7bc70c" name="Changes" comment="fix(config): enforce worker command definition in services model">
+      <change afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Messaging/license.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_05_2026_23_08_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_05_2026_23_08__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_23_05_2026_23_10_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_23_05_2026_23_10__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Billing.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/Billing.sln.DotSettings.user" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/deploy/dockers/docker_compose_dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/dockers/docker_compose_dev.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/framework/config/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/config/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/framework/docker/compose.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/docker/compose.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/framework/orchestrator.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/framework/runtime/health_factory.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/runtime/health_factory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/framework/runtime/orchestrator.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/runtime/orchestrator.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/deploy/services.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/services.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/ApiGateways/YarpApiGateway/YarpApiGateway.http" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/ApiGateways/YarpApiGateway/YarpApiGateway.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/ApiGateways/YarpApiGateway/YarpApiGateway.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/ApiGateways/YarpApiGateway/YarpApiGateway.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Billing.API.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Billing.API.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Billing.API.http" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Billing.API.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/appsettings.Development.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Billing.Application.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Billing.Application.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Extensions/InvoiceExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Extensions/InvoiceExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Features/Invoices/EventHandlers/Domain/InvoiceCreatedDomainEventHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Features/Invoices/EventHandlers/Domain/InvoiceCreatedDomainEventHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Billing.Infrastructure.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Billing.Infrastructure.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/DependencyInjection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/DependencyInjection.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Application/Consumers/InvoicePostedConsumer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Application/Consumers/InvoicePostedConsumer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/BackgroundTasks/EventRelayWorker.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/BackgroundTasks/EventRelayWorker.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Integration.Services.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Integration.Services.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Worker.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/appsettings.Development.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Discovery/BuildingBlocks.Discovery.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Discovery/BuildingBlocks.Discovery.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Logging/BuildingBlocks.Logging.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Logging/BuildingBlocks.Logging.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Messaging/BuildingBlocks.Messaging.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Messaging/BuildingBlocks.Messaging.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Messaging/Events/Invoices/InvoiceCreatedIntegrationEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Messaging/Events/Invoices/InvoiceCreatedIntegrationEvent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Messaging/MassTransit/Extensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Messaging/MassTransit/Extensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Secrets/BuildingBlocks.Secrets.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Secrets/BuildingBlocks.Secrets.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,7 +41,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="1261" />
+    <option name="cachedIndexableFilesCount" value="1309" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -62,61 +81,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0105984714485594" />
-      <entry key="MS500" value="1.413463965680356" />
-      <entry key="S2" value="2.118284709562271" />
-      <entry key="S5" value="2.5578209987663967" />
-      <entry key="S10" value="2.850030909303886" />
-      <entry key="S30" value="3.3738078117960004" />
-      <entry key="S60" value="3.6723771636780573" />
-      <entry key="M2" value="3.9977892849712084" />
-      <entry key="M5" value="4.470322665366227" />
-      <entry key="M10" value="5.052756635504796" />
-      <entry key="M15" value="5.653147476342748" />
-      <entry key="M30" value="7.106031751009987" />
-      <entry key="H1" value="9.216462949023258" />
-      <entry key="H2" value="12.603790545497318" />
-      <entry key="H4" value="22.031067775444065" />
-      <entry key="D1" value="112.29710721287744" />
-      <entry key="W1" value="180.832830230039" />
+      <entry key="MS100" value="1.0009111650356324" />
+      <entry key="MS500" value="1.2559033257477847" />
+      <entry key="S2" value="2.291008350491434" />
+      <entry key="S5" value="3.6517159642378454" />
+      <entry key="S10" value="4.8044748763807075" />
+      <entry key="S30" value="6.12714824942661" />
+      <entry key="S60" value="6.879246019428913" />
+      <entry key="M2" value="8.013802451127784" />
+      <entry key="M5" value="10.227053386227167" />
+      <entry key="M10" value="12.307288297969807" />
+      <entry key="M15" value="13.63471957802668" />
+      <entry key="M30" value="16.07269946608124" />
+      <entry key="H1" value="18.867283404299332" />
+      <entry key="H2" value="22.68326631008044" />
+      <entry key="H4" value="32.245181399924576" />
+      <entry key="D1" value="122.64916342902168" />
+      <entry key="W1" value="191.68402741245723" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="3.038789337442546E-7" />
-      <entry key="MS500" value="0.049721030234682405" />
-      <entry key="S2" value="0.4722098366775338" />
-      <entry key="S5" value="0.7407198990101599" />
-      <entry key="S10" value="0.8606508577873841" />
-      <entry key="S30" value="0.9512083820828197" />
-      <entry key="S60" value="0.9752991244140536" />
-      <entry key="M2" value="0.9875723388258976" />
-      <entry key="M5" value="0.9950102780752355" />
-      <entry key="M10" value="0.9975020190832883" />
-      <entry key="M15" value="0.9983339853894667" />
-      <entry key="M30" value="0.9991805112348757" />
-      <entry key="H1" value="1.0053803825138417" />
-      <entry key="H2" value="1.1567201799686195" />
-      <entry key="H4" value="2.3006769869489236" />
-      <entry key="D1" value="16.494314223600593" />
-      <entry key="W1" value="26.68225310902556" />
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="1.968687670443848E-108" />
+      <entry key="S5" value="8.273146761348508E-44" />
+      <entry key="S10" value="2.876307834941961E-22" />
+      <entry key="S30" value="6.601031239950067E-8" />
+      <entry key="S60" value="2.5692472126967583E-4" />
+      <entry key="M2" value="0.016028871490834144" />
+      <entry key="M5" value="0.191408481906378" />
+      <entry key="M10" value="0.43750255074271094" />
+      <entry key="M15" value="0.5763067765667722" />
+      <entry key="M30" value="0.7591592533147732" />
+      <entry key="H1" value="0.8763445184060374" />
+      <entry key="H2" value="1.0799422846670184" />
+      <entry key="H4" value="2.2230117862118575" />
+      <entry key="D1" value="16.40018007359299" />
+      <entry key="W1" value="26.660445798993752" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.012842023075571096" />
-      <entry key="MS500" value="0.7129726202033954" />
-      <entry key="S2" value="2.0925333459334468" />
-      <entry key="S5" value="3.003084901081548" />
-      <entry key="S10" value="3.5387542997062518" />
-      <entry key="S30" value="4.261129520671796" />
-      <entry key="S60" value="4.614211756334803" />
-      <entry key="M2" value="4.967090966986031" />
-      <entry key="M5" value="5.456880531420915" />
-      <entry key="M10" value="6.0456091355124055" />
-      <entry key="M15" value="6.648199919702053" />
-      <entry key="M30" value="8.10339056221156" />
-      <entry key="H1" value="10.220810893026236" />
-      <entry key="H2" value="13.759863440940464" />
-      <entry key="H4" value="24.331148166902842" />
-      <entry key="D1" value="128.79076540396986" />
-      <entry key="W1" value="207.5149290635382" />
+      <entry key="MS100" value="0.973535074819843" />
+      <entry key="MS500" value="1.247758156301767" />
+      <entry key="S2" value="2.2744480302203574" />
+      <entry key="S5" value="3.6352368526100496" />
+      <entry key="S10" value="4.792423095684311" />
+      <entry key="S30" value="6.121799010796326" />
+      <entry key="S60" value="6.876501237440675" />
+      <entry key="M2" value="8.027839590982133" />
+      <entry key="M5" value="10.416057425263864" />
+      <entry key="M10" value="12.74233711546865" />
+      <entry key="M15" value="14.20884923531397" />
+      <entry key="M30" value="16.830329741632998" />
+      <entry key="H1" value="19.74265462921221" />
+      <entry key="H2" value="23.76256735519658" />
+      <entry key="H4" value="34.467598210711394" />
+      <entry key="D1" value="139.04868811912016" />
+      <entry key="W1" value="218.34431861966232" />
     </decayedShown>
   </component>
   <component name="ProblemsViewState">
@@ -161,7 +180,21 @@
   </component>
   <component name="RunManager">
     <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
-      <deployment type="docker-compose.yml" />
+      <deployment type="docker-compose.yml">
+        <settings />
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
+      <deployment type="docker-compose.yml">
+        <settings />
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
+      <deployment type="docker-compose.yml">
+        <settings />
+      </deployment>
       <method v="2" />
     </configuration>
   </component>
@@ -228,7 +261,15 @@
       <option name="project" value="LOCAL" />
       <updated>1779573671201</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="fix(config): enforce worker command definition in services model">
+      <option name="closed" value="true" />
+      <created>1780194801993</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1780194801993</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -262,6 +303,7 @@
     <MESSAGE value="Mini Deploy Framework" />
     <MESSAGE value="Expanding the functions of the Mini Deploy Framework" />
     <MESSAGE value="refactor(infra): unify service connection model + fix healthchecks + docker/host consistency&#10;&#10;* Introduced unified connection contract across all services:&#10;&#10;  * internal_host (docker network)&#10;  * external_host (host machine)&#10;  * connection.* as single source of truth&#10;&#10;* Implemented resolve_host() to correctly route traffic depending on runtime context&#10;&#10;* Fixed Vault integration:&#10;&#10;  * Vault now consistently uses internal_host&#10;  * Avoids localhost misrouting inside containers&#10;&#10;* Refactored orchestrator and waiters:&#10;&#10;  * Removed ambiguity between host/docker_host&#10;  * Standardized access to connection config&#10;&#10;* Fixed healthcheck system:&#10;&#10;  * Updated Postgres and RabbitMQ checkers to use connection.*&#10;  * Added authentication support for RabbitMQ management API&#10;  * Improved logging and error visibility&#10;&#10;* Eliminated multiple KeyError issues caused by inconsistent schema&#10;&#10;Result:&#10;✔ Full infra bootstrap stable&#10;✔ Vault + Postgres + RabbitMQ working end-to-end&#10;✔ Healthchecks deterministic and consistent&#10;✔ Docker vs localhost conflict fully resolved" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor(infra): unify service connection model + fix healthchecks + docker/host consistency&#10;&#10;* Introduced unified connection contract across all services:&#10;&#10;  * internal_host (docker network)&#10;  * external_host (host machine)&#10;  * connection.* as single source of truth&#10;&#10;* Implemented resolve_host() to correctly route traffic depending on runtime context&#10;&#10;* Fixed Vault integration:&#10;&#10;  * Vault now consistently uses internal_host&#10;  * Avoids localhost misrouting inside containers&#10;&#10;* Refactored orchestrator and waiters:&#10;&#10;  * Removed ambiguity between host/docker_host&#10;  * Standardized access to connection config&#10;&#10;* Fixed healthcheck system:&#10;&#10;  * Updated Postgres and RabbitMQ checkers to use connection.*&#10;  * Added authentication support for RabbitMQ management API&#10;  * Improved logging and error visibility&#10;&#10;* Eliminated multiple KeyError issues caused by inconsistent schema&#10;&#10;Result:&#10;✔ Full infra bootstrap stable&#10;✔ Vault + Postgres + RabbitMQ working end-to-end&#10;✔ Healthchecks deterministic and consistent&#10;✔ Docker vs localhost conflict fully resolved" />
+    <MESSAGE value="fix(config): enforce worker command definition in services model" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix(config): enforce worker command definition in services model" />
   </component>
 </project>

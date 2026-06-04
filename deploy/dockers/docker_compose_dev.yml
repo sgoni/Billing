@@ -220,6 +220,7 @@
       MessageBroker__Host: billing-mq
       MessageBroker__Username: guest
       MessageBroker__Password: guest
+      MessageBroker__Port: 5672
       ConsulConfig__ServiceName: "billing.api"
       ConsulConfig__ServiceId: "billing.api-1"
       ConsulConfig__ServiceAddress: "billing.api"
@@ -227,6 +228,7 @@
       ConsulConfig__HealthCheckUrl: "http://billing.api:8080/health"
       ConsulConfig__Host: "http://consul:8500"
       ConsulConfig__TLSSkipVerify: false
+      FeatureManagement__InvoiceFulfillment: true
       logging__Service: "app"
       logging__ServiceName: "BILLING.api"
       logging__LokiUrl: "http://loki:3100/loki/api/v1/push"
@@ -235,6 +237,7 @@
       VAULT_TOKEN: dev-token
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_HTTP_PORTS: 8080
+      MT_LICENSE_PATH: /masstransit/license.txt
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://billing.api:8080/health"]
       interval: "30s"
@@ -260,13 +263,13 @@
       depends_on:
         - rabbitmq
       environment:
-        ConnectionStrings__Database: "Server=${EVT_POSTGRES_HOST};Port=${EVT_POSTGRES_PORT};Database=${EVT_POSTGRES_DB};Username=${EVT_POSTGRES_USER};Password=${EVT_POSTGRES_PASSWORD};Include Error Detail=true"
+        ConnectionStrings__Database: "Server=localhost;Port=5433;Database=eventrelaylogdb;User Id=postgres;Password=postgres;Include Error Detail=true"
         MessageBroker__Host: billing-mq
         MessageBroker__Username: guest
         MessageBroker__Password: guest
+        MessageBroker__Port: 5672
       networks:
         - billing-net
-
 
   # ---------------------
   # --- Gateway      ---

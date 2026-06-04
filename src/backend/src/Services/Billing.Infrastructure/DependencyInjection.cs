@@ -28,7 +28,7 @@ public static class DependencyInjection
                 options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
                 options.UseNpgsql(connectionString);
             });
-        
+
         if (environment == "Production")
             services.AddDbContext<ApplicationDbContext>((sp, options) =>
             {

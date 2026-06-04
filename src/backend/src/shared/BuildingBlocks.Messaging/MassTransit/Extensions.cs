@@ -17,12 +17,20 @@ public static class Extensions
             {
                 var host = configuration["MessageBroker:Host"];
 
-                configurator.Host(host, "/", h =>
-                {
-                    h.Username(configuration["MessageBroker:UserName"]);
-                    h.Password(configuration["MessageBroker:Password"]);
-                });
+                if (string.IsNullOrWhiteSpace(host))
+                    throw new ArgumentNullException(nameof(host), "MessageBroker:Host is not configured");
 
+
+                configurator.Host(
+                    configuration["MessageBroker:Host"],
+                    ushort.Parse(configuration["MessageBroker:Port"]),
+                    "/",
+                    h =>
+                    {
+                        h.Username(configuration["MessageBroker:UserName"]);
+                        h.Password(configuration["MessageBroker:Password"]);
+                    });
+           
                 configurator.ConfigureEndpoints(context);
             });
         });

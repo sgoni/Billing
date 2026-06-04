@@ -12,7 +12,7 @@ public class InvoicePostedConsumer(
         logger.LogInformation("Received InvoiceCreatedIntegrationEvent for InvoiceId: {InvoiceId}", evt.Id);
 
         // Idempotencia
-        var eventRelayLog = relayService.FindRelayEventAsync(evt.CorrelationId.Value, new CancellationToken());
+        var eventRelayLog = relayService.FindRelayEventAsync(evt.CorrelationId, new CancellationToken());
         if (eventRelayLog is null)
         {
             logger.LogWarning("Duplicate InvoiceCreatedIntegrationEvent detected ({CorrelationId})",
@@ -38,7 +38,6 @@ public class InvoicePostedConsumer(
         // To..Do
         // Relaunch the event to another consumer
         //await publishEndpoint.Publish(invoicePostedIntegrationEvent);
-
         logger.LogInformation("Relayed InvoicePostedIntegrationEvent to Accounting.API");
     }
 

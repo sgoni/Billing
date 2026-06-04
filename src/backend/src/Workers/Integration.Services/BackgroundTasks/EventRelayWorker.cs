@@ -11,7 +11,7 @@ public class EventRelayWorker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("Axenta.IntegrationService started at: {time}", DateTimeOffset.Now);
+        _logger.LogInformation("Billing.IntegrationService started at: {time}", DateTimeOffset.Now);
         await Task.Delay(Timeout.Infinite, stoppingToken);
     }
 }
