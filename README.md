@@ -75,7 +75,7 @@ This project is a simple implementation of a billing system, developed as part o
 Minimalist billing system with a modern architecture: microservices in .NET 10, messaging with RabbitMQ, and full observability with Prometheus/Grafana. Designed as a training demo and technical portfolio to showcase best practices in CQRS, DDD, and vertical slicing.
 
 ## ✨ Architectural Project <a id="architectural-project"></a>
-![Architectural Project](images/architectural_project.jpg)
+![Architectural Project](images/architectural_project.png)
 
 ## 📊 Main Tables <a id="main-tables"></a>
 
