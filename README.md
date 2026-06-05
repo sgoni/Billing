@@ -5,6 +5,7 @@
 - [Built With](#built-with)
 - [Overview](#overview)
 - [Summary](#summary)
+- [Architectural Project](#architectural-project)
 - [Main Tables](#main-tables)
 - [Key Features](#key-features)
 - [Objetive](#objetive)
@@ -15,27 +16,25 @@
 - [Error Handling](#error-handling)
 - [Rate Limiting](#rate-limiting)
 - [Pagination](#pagination)
-- [Installation](#installation)
 - [Deployment](#deployment) 
+- [Installation](#installation)
+- [Environment configurationlation](#environment-configuration)
+- [Usage of deploy script](#usage-of-deploy-script)
+- [Vault integration](#vault-integration)
+- [Consul integration](#consul-integration)
+- [General Flow](#general-flow)
 - [Routing Table](#routing-table) 
 - [Endpoints](#endpoints)
   - [Billing API](#general)
     - [Health](#health)
-    - [Periods](#periods)
-    - [Accounting Policy Template](#accounting-policy-template)
-    - [Journal Entries](#journal-entries)
-    - [Document References](#document-references)
-    - [Currency Exchange Rate](#currency-exchange-rate)
-    - [Cost Centers](#cost-centers)
-    - [Companies](#companies)
-    - [Audit Logs](#audit-logs)
-    - [Accounts](#accounts)
-    - [Account Types](#account-types)
-  - [General Accounting Reports](#general-accounting-reports)
+    - [Post](#post)    
+    - [Gets](#gets)   
+    - [Put](#put)       
+    - [Get](#get)     
 - [Data Models](#data-models)
 - [Usage Examples](#usage-examples)
 - [SDKs and Libraries](#sdks-and-libraries)
-- [Changelog](#changelog)
+- [v1.0.0 — Initial Production-Ready Runtime](#initial-production-ready-runtime)
 
 # 🛠 Built With <a id="built-with"></a>
 
@@ -75,7 +74,10 @@ This project is a simple implementation of a billing system, developed as part o
 ## ✨ Summary <a id="summary"></a>
 Minimalist billing system with a modern architecture: microservices in .NET 10, messaging with RabbitMQ, and full observability with Prometheus/Grafana. Designed as a training demo and technical portfolio to showcase best practices in CQRS, DDD, and vertical slicing.
 
-## 📊 Main Tables <a id="main-table"></a>
+## ✨ Architectural Project <a id="architectural-project"></a>
+![Architectural Project](images/architectural_project.jpg)
+
+## 📊 Main Tables <a id="main-tables"></a>
 
 - Invoices → Full CRUD operations, aggregation pattern
 - InvoiceItems → Details of items associated with invoices
@@ -104,7 +106,7 @@ The purpose of this project is to demonstrate how even a small domain can benefi
 1. Clone the repository.
 2. Configure environment variables in docker-compose.override.yml.
 3. Start services with Docker Compose.
-4. Access the API Gateway at http://localhost:5000.
+4. Access the API Gateway at http://localhost:6004/billing-service.
 
 ------------------------------------------------------------------------
 
@@ -217,7 +219,7 @@ All endpoints that return lists support pagination:
 ```
 ------------------------------------------------------------------------
 
-## 🚀 Deployment <a id="installation"></a>
+## 🚀 Deployment <a id="deployment"></a>
 
 This project implements a deployment system with **Docker Compose + Python scripts** 
 
@@ -227,10 +229,19 @@ This project implements a deployment system with **Docker Compose + Python scrip
     deploy/
     │
     ├── framework/
+    │   ├── config/
+    │   │   ├── loader.py
+    │   │   └── models.py	
+    │   │
+    │   ├── consul/
+    │   │   └── ConsulManager.py		
+    │   │	
     │   ├── core/
-    │   │   ├── engine.py          # Orquestador principal
     │   │   ├── context.py         # Estado compartido (env, clientes, etc.)
     │   │   └── registry.py        # Registro de providers
+    │   │
+    │   ├── docker/
+    │   │   └── compose.py	
     │   │
     │   ├── providers/
     │   │   ├── postgres.py
@@ -254,7 +265,7 @@ This project implements a deployment system with **Docker Compose + Python scrip
 
 ------------------------------------------------------------------------
 
-## ⚙️ Installation
+## ⚙️ Installation <a id="installation"></a>
 
 1.  Create Python virtual environment:
 
@@ -272,7 +283,7 @@ This project implements a deployment system with **Docker Compose + Python scrip
 
 ------------------------------------------------------------------------
 
-## 🌍 Environment configuration
+## 🌍 Environment configuration <a id="environment-configuration"></a>
 
 The `.env.{environment}` files contain all required variables.
 
@@ -296,7 +307,7 @@ initialized dynamically.
 
 ------------------------------------------------------------------------
 
-## ▶️ Usage of deploy script
+## ▶️ Usage of deploy script <a id="usage-of-deploy-script"></a>
 
 ### Bring up environment
 
@@ -318,7 +329,7 @@ initialized dynamically.
 
 ------------------------------------------------------------------------
 
-## 🔐 Vault integration
+## 🔐 Vault integration <a id="vault-integration"></a>
 
 -   **Dev**
     -   Uses `VAULT_DEV_TOKEN` defined in `.env.dev`.
@@ -334,21 +345,21 @@ Example: dynamic Postgres credentials (`db-role`).
 
 ------------------------------------------------------------------------
 
-## 📌 Consul integration
+## 📌 Consul integration <a id="consul-integration"></a>
 
--   `init_consul.py` registers key services (e.g., PostgreSQL).
+-   `ConsulManager.py` registers key services (e.g., PostgreSQL).
 -   APIs self-register in Consul when they start.
 
 Example Postgres registration:
 
 ``` json
 {
-  "id": "postgres-dev",
+  "id": "billingdb",
   "name": "postgres",
-  "address": "accountingdb_dev",
+  "address": "billingdb",
   "port": 5432,
   "check": {
-    "tcp": "accountingdb_dev:5432",
+    "tcp": "billingdb:5432",
     "interval": "10s"
   }
 }
@@ -356,13 +367,76 @@ Example Postgres registration:
 
 ------------------------------------------------------------------------
 
-## ✅ General flow
+## ✅ General Flow (v1.0.0) <a id="general-flow"></a>
 
-1.  `deploy_compose.py` loads `.env.{environment}`.
-2.  Starts services with `docker compose`.
-3.  Runs `init_vault.py` (depending on env → init/unseal/config roles).
-4.  Runs `init_consul.py` (registers services).
-5.  Runs healthchecks (Vault, Consul, Postgres, RabbitMQ, etc).
+1. **Load configuration**
+
+   * `services.yml` is loaded and validated via Pydantic.
+   * Environment variables are resolved (`.env` or runtime environment).
+
+2. **Start infrastructure**
+
+   * Services are started using `docker compose` (external step or wrapper).
+   * Includes databases, message brokers, APIs, and workers.
+
+3. **Wait for infrastructure readiness**
+
+   * The orchestrator waits for each service based on its type:
+
+     * `postgres` → TCP connection check
+     * `rabbitmq` → management/API or port check
+     * `http` → HTTP endpoint validation
+     * `worker` → skipped (no health check required)
+   * Ensures dependencies are available before continuing.
+
+4. **Vault bootstrap (idempotent)**
+
+   * Vault is initialized and unsealed (if required).
+   * Engines are enabled dynamically:
+
+     * Database engine (Postgres)
+     * RabbitMQ engine
+   * Roles and connections are configured per service.
+   * Dynamic credentials become available for consumers.
+
+5. **Consul service registration**
+
+   * Services marked with `consul.enabled=true` are registered.
+   * Service names and IDs are resolved automatically.
+   * Health checks are attached when applicable.
+
+6. **System health evaluation**
+
+   * A unified health check pass is executed across all services.
+   * Each service is evaluated using its corresponding checker.
+   * Results are aggregated into a system health summary.
+
+7. **Deployment result**
+
+   * A consolidated health report is printed.
+   * Deployment is marked successful if no critical failures are detected.
+
+---
+
+## 🧠 Notes
+
+* The flow is **idempotent** and safe to re-run.
+* Vault and Consul integrations are fully automated (no manual UI steps required).
+* The system is designed for **On-Premise environments** with minimal external dependencies.
+* Workers are treated as **fire-and-forget processes**, not requiring active health validation.
+
+---
+
+## 🎯 Outcome
+
+A fully initialized environment with:
+
+* Running infrastructure (DB, MQ, APIs, Workers)
+* Dynamic secrets managed by Vault
+* Service discovery via Consul
+* Verified service health and readiness
+
+---
 
 ------------------------------------------------------------------------
 
@@ -376,12 +450,12 @@ Example Postgres registration:
 
 ------------------------------------------------------------------------
 
-## 📑 Routing Table
+## 📑 Routing Table <a id="routing-table"></a>
 
 | Path in Gateway      | Microservice      | Local Env | Docker Env | Docker Inside |
 |----------------------|-------------------|-----------|------------|---------------|
 | `/billing`           | Billing           | 5000–5050 | 6000–6060  | 8080-8081     |
-| `Yarp.ApiGw   `      | Yarp Api Gateway  | 5009–5059 | 6009–6069  | 8080-8081     |
+| `Yarp.ApiGw   `      | Yarp Api Gateway  | 5001–6001 | 6004–6064  | 8080-8081     |
 
 ------------------------------------------------------------------------
 
@@ -405,97 +479,46 @@ GET /health
 
 ------------------------------------------------------------------------
 
-### Accounting Policy Template
-
-Define accounting policy templates for automatic journal entry generation.
-
-------------------------------------------------------------------------
-
-#### Clone Accounting Policy Templates
+#### Post <a id="post"></a>
 
 ```http
-POST /posting-templates/{sourceCompanyId}/{targetCompanyId}/clone
+POST /billings
 ```
 
 **Parameters:**
 
 
-| Parameter          | Type    | Required | Description              |
-| ------------------ | ------- | -------- | -------------------------|
-| `sourceCompanyId`  | UUID    | Yes      | Origin company ID        |
-| `targetCompanyId`  | UUID    | Yes      | Destination  company ID  |
-------------------------------------------------------------------------
-
-**Sample Application:**
-
-```bash
- curl -X 'POST' 
-  'https://localhost:5050/posting-templates/41607051-4bd8-4a54-a5e2-cb713aef6ca2/d30bbc16-c7f6-458c-84fa-ffb1c7727950/clone' 
-  -H 'accept: application/json' 
-  -d ''
-```
-
-**Sample Answer:**
-
-```json
-{
-  "isSuccess": true
-}
-```
-
-------------------------------------------------------------------------
-
-#### Create Accounting Policy Template
-
-```http
-POST /posting-templates
-```
-
-**Parameters:**
-
-
-| Parameter          | Type    | Required | Description                    |
-| ------------------ | ------- | -------- | -------------------------      |
-| `companyId`        | UUID    | Yes      | ID of the company              |
-| `name`             | string  | Yes      | Policy template name           |
-| `module`           | string  | Yes      | Module name                    |
-| `documentType`     | string  | Yes      | Type of document affected      |
-| `trigger`          | string  | Yes      | Initializing event             |
-| `description`      | string  | No       | Template description           |
-| `effectiveFrom`    | Date    | Yes      | Start date                     |
-| `effectiveTo`      | Date    | No       | End date                       |
-| `conditionJson`    | JSON    | No       | Optional                       |
-| `accountId`        | UUID    | Yes      | Accounting Account ID          |
-| `nature`           | string  | Yes      | Credit/Debit                   |
-| `amountSource`     | Date    | Yes      | Source eg: "Subtotal", "Total" |
-| `costCenterId`     | UUID    | No       | ID of affected cost center     |
-| `condition`        | string  | No       | Optional                       |
-------------------------------------------------------------------------
+| Parameter          | Type    | Required | Description               |
+| ------------------ | ------- | -------- | ------------------------- |
+| `number`           | string  | Yes      | Internal invoice number   |
+| `issueDate`        | Date    | Yes      | Date of issue             |
+| `customerId`       | UUID    | No       | Client ID                 |
+| `description`      | string  | Yes      | Item description          |
+| `quantity`         | int     | Yes      | Quantity of item          |
+| `price`            | string  | Yes      | Price unit                |
+| `lineNumber`       | string  | No       | line Number               |
+-----------------------------------------------------------------------
 
 **Body of the Request:**
 
 ```json
 {
-  "policyTemplate": {
-    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "name": "string",
-    "module": "string",
-    "documentType": "string",
-    "trigger": "string",
-    "description": "string",
-    "version": 0,
-    "isActive": true,
-    "effectiveFrom": "2025-12-23",
-    "effectiveTo": "2025-12-23",
-    "conditionJson": "string",
+  "Invoice": {
+    "number": "INV-20260519-001",
+    "issueDate": "2026-05-19T00:29:43.018Z",
+    "customerId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     "lines": [
       {
-        "accountId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "nature": "string",
-        "amountSource": "string",
-        "costCenterId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "condition": "string"
+        "description": "Servicio de consultoría",
+        "quantity": 10,
+        "price": 150.00,
+        "lineNumber": 1
+      },
+      {
+        "description": "Licencia de software",
+        "quantity": 2,
+        "price": 500.00,
+        "lineNumber": 2
       }
     ]
   }
@@ -504,52 +527,37 @@ POST /posting-templates
 
 **Validation Rules:**
 
-- ✅ At least two lines are required
-- ✅ Valid account IDs are required
+- ✅ At least one lines are required
 
 **Sample Application:**
 
 ```bash
  curl -X 'POST' 
-  'https://localhost:5050/posting-templates' 
+  'http://localhost:5000/billings' 
   -H 'accept: application/json' 
   -H 'Content-Type: application/json' 
   -d '{
-  "policyTemplate": {
-    "companyId": "41607051-4bd8-4a54-a5e2-cb713aef6ca2",
-    "name": "FIXED_ASSET_PURCHASE",
-    "module": "AP",
-    "documentType": "FixedAssetPurchase",
-    "trigger": "InvoicePosted",
-    "description": "Compra de activo fijo financiado",
-    "effectiveFrom": "2025-12-22",
-    "effectiveTo": "2026-12-22",
-    "conditionJson": null,
+  "apInvoice": {
+    "number": "INV-20260519-001",
+    "issueDate": "2026-05-19T00:29:43.018Z",
+    "customerId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     "lines": [
       {
-        "accountId": "a04ee151-03d4-4840-8697-600360d6977d",
-        "nature": "Debit",
-        "amountSource": "SUBTOTAL",
-        "costCenterId": null,
-        "condition": null
+        "description": "Servicio de consultoría",
+        "quantity": 10,
+        "price": 150.00,
+        "lineNumber": 1
       },
       {
-        "accountId": "4ff5a2a9-f21e-41f9-87f3-22d0ac0199b2",
-        "nature": "Debit",
-        "amountSource": "TAX",
-        "costCenterId": null,
-        "condition": null
-      },
-      {
-        "accountId": "f4c0eb3c-eefa-49e2-b72b-01b55105d7b7",
-        "nature": "Credit",
-        "amountSource": "TOTAL",
-        "costCenterId": null,
-        "condition": null
-      }	  
+        "description": "Licencia de software",
+        "quantity": 2,
+        "price": 500.00,
+        "lineNumber": 2á
+      }
     ]
   }
-}'
+}
+'
 ```
 
 **Sample Answer:**
@@ -562,10 +570,10 @@ POST /posting-templates
 
 ------------------------------------------------------------------------
 
-#### List Accounting Policy Templates
+#### Gets <a id="gets"></a>
 
 ```http
-GET /posting-templates
+GET /billings?PageIndex=0&PageSize=10
 ```
 
 **Parameters:**
@@ -574,14 +582,13 @@ GET /posting-templates
 | ----------- | ------- | -------- | ----------------- |
 | `PageIndex` | integer | 0        | Page number       |
 | `PageSize`  | integer | 10       | Elements per page |
-| `companyId` | UUID    | Yes      | ID of the company |
 
 
 **Sample Application:**
 
 ```bash
  curl -X 'GET' 
-  'https://localhost:5050/posting-templates?PageIndex=0&PageSize=10&CompanyId=41607051-4bd8-4a54-a5e2-cb713aef6ca2' 
+  'http://localhost:5000/billings?PageIndex=10&PageSize=1' 
   -H 'accept: application/json'
 ```
 
@@ -589,31 +596,44 @@ GET /posting-templates
 
 ```json
 {
-  "policiesTemplate": {
+  "invoices": {
     "pageIndex": 0,
-    "pageSize": 0,
-    "count": 0,
+    "pageSize": 10,
+    "count": 1,
     "data": [
       {
-        "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "name": "string",
-        "module": "string",
-        "documentType": "string",
-        "trigger": "string",
-        "description": "string",
-        "version": 0,
-        "isActive": true,
-        "effectiveFrom": "2025-12-23",
-        "effectiveTo": "2025-12-23",
-        "conditionJson": "string",
+        "id": "b45e75af-fe29-4c2e-9653-aad9bf5b42ef",
+        "number": "INV-639162751332422969",
+        "issueDate": "2026-06-05T16:52:13.241709Z",
+        "customerId": "e44ed594-272c-4978-a3b5-11fb47e9ca12",
+        "total": 97500.00,
         "lines": [
           {
-            "accountId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            "nature": "string",
-            "amountSource": "string",
-            "costCenterId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            "condition": "string"
+            "id": "71f1eeb1-198b-406d-8fb7-d08e04a595e6",
+            "invoiceId": "b45e75af-fe29-4c2e-9653-aad9bf5b42ef",
+            "description": "Cubo cargador 10 Watts",
+            "quantity": 1,
+            "price": 4500.00,
+            "lineNumber": 3,
+            "total": 4500.00
+          },
+          {
+            "id": "8fa3d4dc-fe22-401d-bd85-eeb2d972dd2f",
+            "invoiceId": "b45e75af-fe29-4c2e-9653-aad9bf5b42ef",
+            "description": "Funda protectora IPhone XR 10",
+            "quantity": 1,
+            "price": 8000.00,
+            "lineNumber": 2,
+            "total": 8000.00
+          },
+          {
+            "id": "fa6485c1-d362-4e47-92f9-2fe6c5bddf96",
+            "invoiceId": "b45e75af-fe29-4c2e-9653-aad9bf5b42ef",
+            "description": "IPhone XR 10",
+            "quantity": 1,
+            "price": 85000.00,
+            "lineNumber": 1,
+            "total": 85000.00
           }
         ]
       }
@@ -624,7 +644,7 @@ GET /posting-templates
 
 ------------------------------------------------------------------------
 
-#### Update Accounting Policy Template
+#### PUT <a id="put"></a>
 
 ```http
 PUT /posting-templates
@@ -632,1757 +652,95 @@ PUT /posting-templates
 
 **Parameters:**
 
-| Parameter          | Type    | Required | Description                    |
-| ------------------ | ------- | -------- | -------------------------      |
-| `id`               | UUID    | Yes      | Policy template ID             |
-| `companyId`        | UUID    | Yes      | ID of the company              |
-| `name`             | string  | Yes      | Policy template name           |
-| `module`           | string  | Yes      | Module name                    |
-| `documentType`     | string  | Yes      | Type of document affected      |
-| `trigger`          | string  | Yes      | Initializing event             |
-| `description`      | string  | No       | Template description           |
-| `effectiveFrom`    | Date    | Yes      | Start date                     |
-| `effectiveTo`      | Date    | No       | End date                       |
-| `conditionJson`    | JSON    | No       | Optional                       |
-| `accountId`        | UUID    | Yes      | Accounting Account ID          |
-| `nature`           | string  | Yes      | Credit/Debit                   |
-| `amountSource`     | Date    | Yes      | Source eg: "Subtotal", "Total" |
-| `costCenterId`     | UUID    | No       | ID of affected cost center     |
-| `condition`        | string  | No       | Optional                       |
+| Parameter          | Type    | Required | Description               |
+| ------------------ | ------- | -------- | ------------------------- |
+| `Id        `       | UUID    | No       | Invoice Id                |                 
+| `number`           | string  | Yes      | Internal invoice number   |
+| `issueDate`        | Date    | Yes      | Date of issue             |
+| `customerId`       | UUID    | No       | Client ID                 |
+| `description`      | string  | Yes      | Item description          |
+| `quantity`         | int     | Yes      | Quantity of item          |
+| `price`            | string  | Yes      | Price unit                |
+| `lineNumber`       | string  | No       | line Number               |
 ------------------------------------------------------------------------
 
 **Validation Rules:**
 
 - ✅ At least two lines are required
-- ✅ Valid account IDs are required
 
 **Sample Application:**
 
 ```bash
  curl -X 'PUT' 
-  'https://localhost:5050/posting-templates' 
+  'http://localhost:5000/billings' 
   -H 'accept: application/json' 
   -H 'Content-Type: application/json' 
   -d '{
-  "policyTemplate": {
-    "id":  "c27369e5-47ba-4587-9208-1092201dabba",
-    "companyId": "41607051-4bd8-4a54-a5e2-cb713aef6ca2",
-    "name": "FIXED_ASSET_PURCHASE",
-    "module": "AP",
-    "documentType": "FixedAssetPurchase",
-    "trigger": "InvoicePosted",
-    "description": "Nueva politica de Compra de activo fijo financiado",
-    "effectiveFrom": "2025-12-22",
-    "effectiveTo": "2026-12-22",
-    "conditionJson": null,
-    "lines": [
-      {
-        "accountId": "a04ee151-03d4-4840-8697-600360d6977d",
-        "nature": "Debit",
-        "amountSource": "SUBTOTAL",
-        "costCenterId": null,
-        "condition": null
-      },
-      {
-        "accountId": "4ff5a2a9-f21e-41f9-87f3-22d0ac0199b2",
-        "nature": "Debit",
-        "amountSource": "TAX",
-        "costCenterId": null,
-        "condition": null
-      },
-      {
-        "accountId": "f4c0eb3c-eefa-49e2-b72b-01b55105d7b7",
-        "nature": "Credit",
-        "amountSource": "TOTAL",
-        "costCenterId": null,
-        "condition": null
-      }	  
-    ]
-  }
-}'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-}
-```
-
-------------------------------------------------------------------------
-
-#### Delete Accounting Policy Template
-
-```http
-DELETE /posting-templates/{id}
-```
-
-**Parameters:**
-
-| Parameter          | Type    | Required | Description                |
-| ------------------ | ------- | -------- | ---------------------------|
-| `id`               | UUID    | Yes      | Policy template ID         |
-------------------------------------------------------------------------
-
-**Sample Application:**
-
-```bash
- curl -X 'GET' 
-  'https://localhost:5050/posting-templates/c84f661c-d54e-4319-8c51-8a094573da55' 
-  -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "isSuccess": true
-}
-```
-
-------------------------------------------------------------------------
-
-#### Get Accounting Policy Template
-
-```http
-GET /posting-templates/{id}
-```
-
-**Parameters:**
-
-| Parameter          | Type    | Required | Description                |
-| ------------------ | ------- | -------- | ---------------------------|
-| `id`               | UUID    | Yes      | Policy template ID         |
-------------------------------------------------------------------------
-
-**Sample Application:**
-
-```bash
- curl -X 'GET' 
-  'https://localhost:5050/posting-templates/c84f661c-d54e-4319-8c51-8a094573da55' 
-  -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "policyTemplate": {
-    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "name": "string",
-    "module": "string",
-    "documentType": "string",
-    "trigger": "string",
-    "description": "string",
-    "version": 0,
-    "isActive": true,
-    "effectiveFrom": "2025-12-23",
-    "effectiveTo": "2025-12-23",
-    "conditionJson": "string",
-    "lines": [
-      {
-        "accountId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "nature": "string",
-        "amountSource": "string",
-        "costCenterId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "condition": "string"
-      }
-    ]
-  }
-}
-```
-
-------------------------------------------------------------------------
-
-### Periods
-
-Accounting periods define time windows for accounting transactions.
-
-------------------------------------------------------------------------
-
-#### List Accounting Periods
-
-```http
-GET /periods
-```
-
-**Parameters:**
-
-
-| Parameter   | Type    | Required | Description            |
-| ----------- | ------- | -------- | ---------------------- |
-| `PageIndex` | integer | 0        | Page number (base 0)   |
-| `PageSize`  | integer | 10       | Items per page (1-100) |
-
-**Sample application:**
-
-```bash
-curl -X 'GET' 
-  'https://localhost:5050/periods?PageIndex=0&PageSize=10' 
-  -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "periods": {
-    "pageIndex": 0,
-    "pageSize": 20,
-    "count": 12,
-    "data": [
-      {
-        "id": "123e4567-e89b-12d3-a456-426614174000",
-        "year": 2024,
-        "month": 1,
-        "startDate": "2024-01-01T00:00:00Z",
-        "endDate": "2024-01-31T23:59:59Z",
-        "isClosed": false
-      }
-    ]
-  }
-}
-```
-
-------------------------------------------------------------------------
-
-Create Period
-
-```http
-POST /periods
-```
-
-**Parameters:**
-
-
-| Parameter   | Type | Required | Description       |
-| ----------- | ---- | -------- | ----------------- |
-| `companyId` | UUID | Yes      | ID of the company |
-
-**Body of the Request:**
-
-```json
-{
-  "period": {
-    "companyId": "41607051-4bd8-4a54-a5e2-cb713aef6ca2"
-  }
-}
-```
-
-**Sample Application:**
-
-```bash
- curl -X 'POST' 
-  'https://localhost:5050/periods' 
-  -H 'accept: application/json' 
-  -H 'Content-Type: application/json' 
-  -d '{
-  "period": {
-    "companyId": "41607051-4bd8-4a54-a5e2-cb713aef6ca2"
-  }
-```
-
-**Sample Answer:**
-
-```json
-{
-   "periodId": "123e4567-e89b-12d3-a456-426614174001"
-}
-```
-
-------------------------------------------------------------------------
-
-#### Closing Period
-
-```http
-PUT /periods/close
-```
-
-**Parameters:**
-
-
-| Parameter   | Type | Required | Description               |
-| ----------- | ---- | -------- | ------------------------- |
-| `periodId`  | UUID | Yes      | ID of the period to close |
-| `companyId` | UUID | Yes      | ID of the company         |
-
-**Body of the Request:**
-
-```json
-{
-  "period": {
-    "periodId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-  }
-}
-```
-
-**Sample Application:**
-
-```bash
- curl -X 'PUT' 
-  'https://localhost:5050/periods/close' 
-  -H 'accept: application/json' 
-  -H 'Content-Type: application/json' 
-  -d '{
-  "period": {
-    "periodId": "e44ed594-272c-4978-a3b5-11fb47e9ca12",
-    "companyId": "41607051-4bd8-4a54-a5e2-cb713aef6ca2"
-  }
-}'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "isSuccess": true
-}
-```
-
-------------------------------------------------------------------------
-
-#### Check Existence of Period
-
-```http
-GET /periods/year={year}&month={month}
-```
-
-**Parameters:**
-
-
-| Parameter | Type    | Required | Description                |
-| --------- | ------- | -------- | -------------------------- |
-| `year`    | integer | Yes      | Year of the period         |
-| `month`   | integer | Yes      | Month of the period (1-12) |
-
-**Sample Application:**
-
-```bash
-curl -X 'GET' 
- 'https://localhost:5050/periods/year=2025&month=7' 
-  -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "isSuccess": true
-}
-```
-
-------------------------------------------------------------------------
-
-#### Get Period by ID
-
-```http
-GET /periods/{periodId}
-```
-
-**Parameters:**
-
-
-| Parameter  | Type | Required | Description             |
-| ---------- | ---- | -------- | ----------------------- |
-| `periodId` | UUID | Yes      | ID of the period to get |
-
-**Sample Application:**
-
-```bash
-curl -X 'GET' \
-  'https://localhost:5050/periods/e44ed594-272c-4978-a3b5-11fb47e9ca12' \
-  -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "periodDetail": {
-    "id": "e44ed594-272c-4978-a3b5-11fb47e9ca12",
-    "year": 2014,
-    "month": 10,
-    "startDate": "2025-08-01T00:00:00Z",
-    "endDate": "2025-08-31T00:00:00Z",
-    "isClosed": true
-  }
-}
-```
-
-------------------------------------------------------------------------
-
-#### Reopen Period
-
-```http
-PUT /periods/open
-```
-
-**Parameters:**
-
-
-| Parameter   | Type | Required | Description              |
-| ----------- | ---- | -------- | ------------------------ |
-| `periodId`  | UUID | Yes      | ID of the period to open |
-| `companyId` | UUID | Yes      | ID of the company        |
-
-**Body of the Request:**
-
-```json
-{
-  "period": {
-    "periodId": "e44ed594-272c-4978-a3b5-11fb47e9ca12",
-    "companyId": "41607051-4bd8-4a54-a5e2-cb713aef6ca2"
-  }
-}
-```
-
-**Sample Application:**
-
-```bash
- curl -X 'PUT' 
-  'https://localhost:5050/periods/open' 
-  -H 'accept: application/json' 
-  -H 'Content-Type: application/json' 
-  -d '{
-  "period": {
-    "periodId": "e44ed594-272c-4978-a3b5-11fb47e9ca12",
-    "companyId": "41607051-4bd8-4a54-a5e2-cb713aef6ca2"
-  }
-}'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "isSuccess": true
-}
-```
-
-------------------------------------------------------------------------
-
-### Journal Entries
-
-Accounting entries record financial transactions with automatic debit = credit validation.
-
-------------------------------------------------------------------------
-
-#### Create Accounting Entry
-
-```http
-POST /journal-entries
-```
-
-**Parameters:**
-
-
-| Parameter          | Type    | Required | Description              |
-| ------------------ | ------- | -------- | ------------------------ |
-| `Id`               | UUID    | Yes      | ID of the period to open |
-| `description`      | string  | Yes      | Journal description      |
-| `periodId`         | UUID    | Yes      | ID of the period         |
-| `companyId`        | UUID    | Yes      | ID of the company        |
-| `currencyCode`     | string  | Yes      | CUrrency code            |
-| `exchangeRate`     | Decimal | No       | Exchange rate            |
-| `exchangeRateDate` | UUID    | No       | Exchange rate date       |
-| `accountId`        | UUID    | Yes      | ID of the company        |
-| `debit`            | UUID    | Yes      | Balance debit            |
-| `credit`           | UUID    | Yes      | Balance credit           |
-| `lineNumber`       | UUID    | Yes      | Line number              |
-
-**Body of the Request:**
-
-```json
-{
-  "journalEntry": {
-    "date": "2025-08-01T02:26:27.053Z",
-    "description": "Registro de ventas demo.",
-    "periodId": "e44ed594-272c-4978-a3b5-11fb47e9ca12",
-    "companyId": "41607051-4bd8-4a54-a5e2-cb713aef6ca2",
-    "currencyCode": "CRC",
-    "exchangeRate": 0,
-    "exchangeRateDate": "2025-08-14",  
-    "lines": [
-      {
-        "accountId": "7573e77c-110b-4a3b-9bda-7be306bb14b4",
-        "debit": 4000,
-        "credit": 0,
-        "lineNumber": 1
-      },
-      {
-        "accountId": "cacfc56f-82ca-4cd5-b694-540b5e1b2e03",
-        "debit": 0,
-        "credit": 4000,
-        "lineNumber": 2
-      }
-    ]
-  }
-}
-```
-
-**Validation Rules:**
-
-- ✅ The total debits must equal the total credits
-- ✅ At least two lines are required
-- ✅ All amounts must be positive
-- ✅ Valid account IDs are required
-- ✅ The period must be open
-
-**Sample Application:**
-
-```bash
-curl -X 'POST' \
-  'https://localhost:5050/journal-entries' \
-  -H 'accept: application/json' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "journalEntry": {
-    "date": "2025-08-01T02:26:27.053Z",
-    "description": "Registro de ventas demo.",
-    "periodId": "e44ed594-272c-4978-a3b5-11fb47e9ca12",
-    "companyId": "41607051-4bd8-4a54-a5e2-cb713aef6ca2",
-    "currencyCode": "CRC",
-    "exchangeRate": 0,
-    "exchangeRateDate": "2025-08-14",  
-    "lines": [
-      {
-        "accountId": "7573e77c-110b-4a3b-9bda-7be306bb14b4",
-        "debit": 4000,
-        "credit": 0,
-        "lineNumber": 1
-      },
-      {
-        "accountId": "cacfc56f-82ca-4cd5-b694-540b5e1b2e03",
-        "debit": 0,
-        "credit": 4000,
-        "lineNumber": 2
-      }
-    ]
-  }
-}'
-```
-**Sample Answer:**
-
-```json
-{
-   "id": "123e4567-e89b-12d3-a456-426614174004"
-}
-```
-
-**Note:** Entries can only be modified if the period is open.
-
-------------------------------------------------------------------------
-
-#### List Accounting Entries
-
-```http
-GET /journal-entries
-```
-
-**Parameters:**
-
-
-| Parameter   | Type    | Required | Description       |
-| ----------- | ------- | -------- | ----------------- |
-| `PageIndex` | integer | 0        | Page number       |
-| `PageSize`  | integer | 10       | Elements per page |
-| `periodId`  | UUID    | Yes      | ID of the period  |
-| `companyId` | UUID    | Yes      | ID of the company |
-
-**Sample Application:**
-
-```bash
- curl -X 'GET' \
-   'https://localhost:5050/journal-entries?PageIndex=0&PageSize=10&PeriodId=e44ed594-272c-4978-a3b5-11fb47e9ca12&CompanyId=41607051-4bd8-4a54-a5e2-cb713aef6ca2' \
-   -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "journalEntries": {
-    "pageIndex": 0,
-    "pageSize": 0,
-    "count": 0,
-    "data": [
-      {
-        "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "date": "2025-08-14T21:21:36.052Z",
-        "description": "string",
-        "periodId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "currencyCode": "USD",
-        "exchangeRate": 525,
-        "exchangeRateDate": "2025-08-14",
-        "isPosted": true,
-        "isReversed": true,
-        "lines": [
-          {
-            "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            "journalEntryId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            "accountId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            "debit": 50000,
-            "credit": 0,
-            "lineNumber": 0
-          },
-          {
-            "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            "journalEntryId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            "accountId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            "debit": 0,
-            "credit": 50000,
-            "lineNumber": 0
-          }        
-        ]
-      }
-    ]
-  }
-}
-```
-
------------------------------------------------------------------------
-
-#### Update Accounting Entry
-
-```http
-PUT /journal-entries
-```
-
-**Parameters:**
-
-
-| Parameter          | Type    | Required | Description         |
-| ------------------ | ------- | -------- | ------------------- |
-| `id`               | UUID    | Yes      | ID of the seat      |
-| `description`      | string  | Yes      | Journal description |
-| `periodId`         | UUID    | Yes      | ID of the period    |
-| `companyId`        | UUID    | Yes      | ID of the company   |
-| `currencyCode`     | string  | Yes      | CUrrency code       |
-| `exchangeRate`     | Decimal | No       | Exchange rate       |
-| `exchangeRateDate` | UUID    | No       | Exchange rate date  |
-| `accountId`        | UUID    | Yes      | ID of the company   |
-| `debit`            | UUID    | Yes      | Balance debit       |
-| `credit`           | UUID    | Yes      | Balance credit      |
-| `lineNumber`       | UUID    | Yes      | Line number         |
-
-**Body of the Request:**
-
-```json
-{
-  "journalEntry": {
-    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "date": "2025-08-14T21:32:31.782Z",
-    "description": "string",
-    "currencyCode": "string",
-    "exchangeRate": 0,
-    "exchangeRateDate": "2025-08-14",
-    "isPosted": true,
-    "lines": [
-      {
-        "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "journalEntryId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "accountId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "debit": 0,
-        "credit": 0,
-        "lineNumber": 0
-      }
-    ]
-  }
-}
-```
-
-**Validation Rules:**
-
-- ✅ The total debits must equal the total credits
-- ✅ At least two lines are required
-- ✅ All amounts must be positive
-- ✅ Valid account IDs are required
-- ✅ The period must be open
-
-**Sample Application:**
-
-```bash
- curl -X 'PUT' 
-  'https://localhost:5050/journal-entries' 
-  -H 'accept: application/json' 
-  -H 'Content-Type: application/json' 
-  -d '{
-  "journalEntry": {
-    "id": "b2d06aa7-3ae6-4741-93ac-68e1d900a262",
-    "date": "2025-08-01T02:26:27.053Z",
-    "description": "Registro de ventas por contado.",
-    "currencyCode": "CRC",
-    "exchangeRate": 0,
-    "exchangeRateDate": "2025-08-14",
-    "isPosted": true,
-    "periodId": "e44ed594-272c-4978-a3b5-11fb47e9ca12",
-    "lines": [
-      {
-        "id": "98723cc8-2f31-40a1-a4b0-aeb6ff085f86",
-        "journalEntryId": "b2d06aa7-3ae6-4741-93ac-68e1d900a262",
-        "accountId": "7573e77c-110b-4a3b-9bda-7be306bb14b4",
-        "debit": 5000
-        "credit": 0,
-        "lineNumber": 1
-      },
-      {
-        "id": "f3d8e587-6492-490d-823d-d1bffdf390fe",
-        "journalEntryId": "b2d06aa7-3ae6-4741-93ac-68e1d900a262",
-        "accountId": "cacfc56f-82ca-4cd5-b694-540b5e1b2e03",
-        "debit": 0,
-        "credit": 5000
-        "lineNumber": 2
-      }	  
-    ]
-  }
-}'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-}
-```
-
-------------------------------------------------------------------------
-
-#### Delete Accounting Entry
-
-```http
-DELETE /journal-entries/{id}
-```
-
-**Parameters:**
-
-
-| Parameter | Type | Required | Description                  |
-| --------- | ---- | -------- | ---------------------------- |
-| `id`      | UUID | Yes      | ID of the seat to be deleted |
-
-**Validation Rules:**
-
-- ✅ Valid account IDs are required
-- ✅ The period must be open
-- ✅ The journal entry is not posted
-
-**Sample Application:**
-
-```bash
-curl -X 'DELETE' 
-  'https://localhost:5050/journal-entries/896dd1df-1413-4098-bbbd-d5586cb8f86e' 
-  -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "isSuccess": true
-}
-```
-
-------------------------------------------------------------------------
-
-#### Get Seat by ID
-
-```http
-GET /journal-entries/{journalEntryId}
-```
-
-**Parameters:**
-
-
-| Parameter | Type | Required | Description    |
-| --------- | ---- | -------- | -------------- |
-| `id`      | UUID | Yes      | ID of the seat |
-
-**Sample Application:**
-
-```bash
-curl -X 'GET' 
- 'https://localhost:5050/journal-entries/56cb166e-07b6-44f7-bd8b-cbc16c595946' 
- -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "journalEntryDetail": {
-    "id": "56cb166e-07b6-44f7-bd8b-cbc16c595946",
-    "date": "2014-10-20T00:00:00Z",
-    "description": "Compra de mercadería para la venta",
-    "periodId": "e44ed594-272c-4978-a3b5-11fb47e9ca12",
-    "companyId": "41607051-4bd8-4a54-a5e2-cb713aef6ca2",
-    "currencyCode": "CRC",
-    "exchangeRate": 515.00,
-    "exchangeRateDate": "2014-10-20",
-    "isPosted": true,
-    "isReversed": false,
-    "lines": [
-      {
-        "id": "3f9069b0-4700-4e46-a14c-289df3317419",
-        "journalEntryId": "56cb166e-07b6-44f7-bd8b-cbc16c595946",
-        "accountId": "057a93fb-c93b-4cf7-a79e-fab3583f2f13",
-        "debit": 2000000.00,
-        "credit": 0.00,
-        "lineNumber": 1
-      },
-      {
-        "id": "ca0caa52-08d6-4c4a-8b03-273a710d385c",
-        "journalEntryId": "56cb166e-07b6-44f7-bd8b-cbc16c595946",
-        "accountId": "a04ee151-03d4-4840-8697-600360d6977d",
-        "debit": 0.00,
-        "credit": 2000000.00,
-        "lineNumber": 2
-      }
-    ]
-  }
-}
-```
-
-------------------------------------------------------------------------
-
-#### Reverse an entry (only if the period is open)
-
-```http
-PUT /journal-entries/{id}/reverse
-```
-
-**Parameters:**
-
-
-| Parameter | Type | Required | Description                  |
-| --------- | ---- | -------- | ---------------------------- |
-| `id`      | UUID | Yes      | ID of the seat to be deleted |
-
-**Validation Rules:**
-
-- ✅ Valid account IDs are required
-- ✅ The period must be open
-
-**Sample Application:**
-
-```bash
-curl -X 'PUT' 
- 'https://localhost:5050/journal-entries3d5eeef9-d3a9-43e4-9b60-dd4a16e20ba7/reverse' 
- -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "isSuccess": true
-}
-```
-
-------------------------------------------------------------------------
-
-### Document References
-
-Management of references to external documents associated with accounting entries.
-
-------------------------------------------------------------------------
-
-#### Create Document Reference
-
-```http
-POST /journal-entries/{id}/documents
-```
-
-**Parameters:**
-
-
-| Parameter | Type | Required | Description      |
-| --------- | ---- | -------- | ---------------- |
-| `id`      | UUID | Yes      | Journal Entry ID |
-
-**Validation Rules:**
-
-- ✅ The journal entry must exist
-
-**Body of the Request:**
-
-```json
-{
-  "documentReference": {
-    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "journalEntryId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "sourceType": "string",
-    "sourceId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "referenceNumber": "string",
-    "description": "string"
-  }
-}
-```
-
-**Sample Application:**
-
-```bash
-curl -X 'POST' \
-  'https://localhost:5050/journal-entries/{id}/documents' \
-  -H 'accept: application/json' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "documentReference": {
-    "journalEntryId": "0b55189d-ce04-471f-abbb-f73208be063a",
-    "sourceType": "PAYMENT",
-    "sourceId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "referenceNumber": "ABC123",
-    "description": "Purchase of merchandise on credit"
-  }
-}'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "id": "b2c6d0ca-cd5d-4154-951c-82568c4f01fd"
-}
-```
-
-------------------------------------------------------------------------
-
-#### Get References by Seat
-
-```http
-GET /journal-entries/{id}/documents
-```
-
-**Parameters:**
-
-
-| Parameter | Type | Required | Description      |
-| --------- | ---- | -------- | ---------------- |
-| `id`      | UUID | Yes      | Journal Entry ID |
-
-**Validation Rules:**
-
-- ✅ The journal entry must exist
-
-**Sample Application:**
-
-```bash
- curl -X 'GET' 
-  'https://localhost:5050/journal-entries/3fa85f64-5717-4562-b3fc-2c963f66afa6/documents' 
-  -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "documentReferences": [
-    {
-      "id": "821d2b0b-112d-4f24-804e-4d95a8697d65",
-      "journalEntryId": "0b55189d-ce04-471f-abbb-f73208be063a",
-      "sourceType": "Loan",
-      "sourceId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      "referenceNumber": "123456789",
-      "description": "Registro de préstamo con la entidad financiera"
-    }
-  ]
-}
-```
-
-------------------------------------------------------------------------
-
-### Currency Exchange Rate
-
-Administration of exchange rates and currencies.
-
-------------------------------------------------------------------------
-
-#### Create a new exchange rate
-
-```http
-POST /currencies
-```
-
-**Parameters:**
-
-
-| Parameter      | Type    | Required | Description            |
-| -------------- | ------- | -------- | ---------------------- |
-| `id`           | UUID    | Yes      | Company ID             |
-| `currencyCode` | string  | Yes      | Currency code          |
-| `date`         | Date    | Yes      | Exchange rate date     |
-| `buyRate`      | Decimal | Yes      | Exchange rate purchase |
-| `sellRate`     | Decimal | Yes      | Exchange rate sale     |
-
-**Body of the Request:**
-
-```json
-{
-  "currencyExchangeRate": {
-    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "currencyCode": "string",
-    "date": "2025-08-14",
-    "buyRate": 0,
-    "sellRate": 0
-  }
-}
-```
-
-**Sample Application:**
-
-```bash
-curl -X 'POST' \
-  'https://localhost:5050/currencies' \
-  -H 'accept: application/json' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "currencyExchangeRate": {
-    "currencyCode": "USD",
-    "date": "2025-08-14",
-    "buyRate": 495,
-    "sellRate": 510
-  }
-}'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "id": "66f63e17-b4ec-4624-a6a8-121515b47927"
-}
-```
-
-------------------------------------------------------------------------
-
-#### List exchange rates
-
-```http
-GET /currencies
-```
-
-**Parameters:**
-
-
-| Parameter   | Type    | Required | Description       |
-| ----------- | ------- | -------- | ----------------- |
-| `PageIndex` | integer | 0        | Page number       |
-| `PageSize`  | integer | 10       | Elements per page |
-
-**Sample Application:**
-
-```bash
-curl -X 'GET' \
-  'https://localhost:5050/currencies?PageIndex=0&PageSize=10' \
-  -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "currencyExchangeRates": {
-    "pageIndex": 0,
-    "pageSize": 10,
-    "count": 3,
-    "data": [
-      {
-        "id": "c9726881-322c-4de3-bf52-fc03ea9cea67",
-        "currencyCode": "USD",
-        "date": "2014-10-01",
-        "buyRate": 310,
-        "sellRate": 315
-      }
-    ]
-  }
-}
-```
-
-------------------------------------------------------------------------
-
-#### Get the daily currency exchange rate
-
-```http
-GET /currencies/daily
-```
-
-**Sample Application:**
-
-```bash
-curl -X 'GET' \
-  'https://localhost:5050/currencies/daily' \
-  -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "currencyExchangeRate": {
-    "id": "57ba3603-9249-40d3-8f07-61d67ab42b0f",
-    "currencyCode": "USD",
-    "date": "2025-08-14",
-    "buyRate": 499,
-    "sellRate": 513
-  }
-}
-```
-
-------------------------------------------------------------------------
-
-### Cost Centers
-
-Administration of accounting costs
-
-------------------------------------------------------------------------
-
-#### Activate cost center.
-
-```http
-put /cost-centers/{id}/activate
-```
-
-**Parameters:**
-
-
-| Parameter | Type | Required | Description                |
-| --------- | ---- | -------- | -------------------------- |
-| `Id`      | UUID | Yes      | Cost center ID to activate |
-
-**Sample Application:**
-
-```bash
- curl -X 'PUT' \
-  'https://localhost:5050/cost-centers/cfc933f3-0ba7-41b1-bbcd-9a766e547b26/activate' \
-  -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "isSuccess": true
-}
-```
-
-------------------------------------------------------------------------
-
-#### Create a new cost center
-
-```http
-post /cost-centers
-```
-
-**Parameters:**
-
-
-| Parameter            | Type   | Required | Description                     |
-| -------------------- | ------ | -------- | ------------------------------- |
-| `name`               | string | No       | Cost center name                |
-| `description`        | string | Yes      | Description of the cost center  |
-| `isActive`           | bool   | Yes      | Active or inactive Cost Center  |
-| `companyId`          | UUID   | Yes      | Legal identifier of the company |
-| `parentCostCenterId` | UUID   | Yes      | Parent cost center ID           |
-
-**Body of the Request:**
-
-```json
-{
-  "costCenter": {
-    "name": "string",
-    "description": "string",
-    "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "parentCostCenterId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-  }
-}
-```
-
-**Sample Application:**
-
-```bash
-  curl -X 'POST' 
-   'https://localhost:5050/cost-centers' 
-   -H 'accept: application/json' 
-   -H 'Content-Type: application/json' 
-   -d '{
-   "costCenter": {
-     "name": "Administración",
-     "description": "Gastos administrativos generales",
-     "isActive": true,
-     "companyId": "41607051-4bd8-4a54-a5e2-cb713aef6ca2",
-     "parentCostCenterId": null
-   }
-```
-
-**Sample Answer:**
-
-```json
-{
-  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-}
-```
-
-------------------------------------------------------------------------
-
-#### Get list of accounting accounts
-
-```http
-GET /cost-centers
-```
-
-**Parameters:**
-
-
-| Parameter      | Type    | Required | Description           |
-| -------------- | ------- | -------- | --------------------- |
-| `PageIndex`    | integer | 0        | Page number           |
-| `PageSize`     | integer | 10       | Elements per page     |
-| `costCenterId` | UUID    | Yes      | Cost center ID to get |
-
-**Sample Application:**
-
-```bash
-curl -X 'GET' \
-  'https://localhost:5050/cost-centers?PageIndex=0&PageSize=10&CompanyId=41607051-4bd8-4a54-a5e2-cb713aef6ca2' \
-  -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "costCenters": {
-    "pageIndex": 0,
-    "pageSize": 0,
-    "count": 0,
-    "data": [
-      {
-        "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "code": "string",
-        "name": "string",
-        "description": "string",
-        "isActive": true,
-        "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "parentCostCenterId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-      }
-    ]
-  }
-}
-```
-
-------------------------------------------------------------------------
-
-#### Modify an existing cost center
-
-```http
-PUT /cost-centers
-```
-
-**Parameters:**
-
-
-| Parameter            | Type   | Required | Description                    |
-| -------------------- | ------ | -------- | ------------------------------ |
-| `name`               | string | No       | Cost center name               |
-| `description`        | string | Yes      | Description of the cost center |
-| `isActive`           | bool   | Yes      | Active or inactive Cost Center |
-| `parentCostCenterId` | UUID   | Yes      | Parent cost center ID          |
-
-**Body of the Request:**
-
-```json
-{
-  "costCenter": {
-    "name": "string",
-    "description": "string",
-    "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "parentCostCenterId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-  }
-}
-```
-
-**Sample Application:**
-
-```bash
-curl -X 'PUT' \
-  'https://localhost:5050/cost-centers' \
-  -H 'accept: application/json' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "costCenter": {
-    "id": "fa19b15d-6fdc-465d-8c01-817625211286",
-    "name": "Gastos operativos",
-    "description": "Gastos operativos",
-    "isActive": true,
-    "parentCostCenterId": null
-  }
-}'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "isSuccess": true
-}
-```
-
-------------------------------------------------------------------------
-
-#### Deactivate cost center.
-
-```http
-put /cost-centers/{id}/deactivate
-```
-
-**Parameters:**
-
-
-| Parameter | Type | Required | Description               |
-| --------- | ---- | -------- | ------------------------- |
-| `Id`      | UUID | Yes      | Cost center to deactivate |
-
-**Sample Application:**
-
-```bash
-curl -X 'PUT' \
-  'https://localhost:5050/cost-centers/cfc933f3-0ba7-41b1-bbcd-9a766e547b26/deactivate' \
-  -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "isSuccess": true
-}
-```
-
-------------------------------------------------------------------------
-
-#### Get Cost Center by ID
-
-```http
-GET /cost-centers/{costCenterId}/{CompanyId}
-```
-
-**Parameters:**
-
-
-| Parameter      | Type | Required | Description           |
-| -------------- | ---- | -------- | --------------------- |
-| `costCenterId` | UUID | Yes      | Cost center ID to get |
-| `companyId`    | UUID | Yes      | Company ID            |
-
-**Sample Application:**
-
-```bash
- curl -X 'GET' \
-  'https://localhost:5050/cost-centers/0d6af96b-c0ad-4eff-a4d8-56c3fdcfa9b7/41607051-4bd8-4a54-a5e2-cb713aef6ca2' \
-  -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "costCenterDetail": {
-    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "code": "string",
-    "name": "string",
-    "description": "string",
-    "isActive": true,
-    "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "parentCostCenterId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-  }
-}
-```
-
-------------------------------------------------------------------------
-
-#### Return hierarchical tree of cost centers by company
-
-```http
-GET /cost-centers/{companyId}/tree
-```
-
-**Parameters:**
-
-
-| Parameter   | Type | Required | Description |
-| ----------- | ---- | -------- | ----------- |
-| `companyId` | UUID | Yes      | Company ID  |
-
-**Sample Application:**
-
-```bash
- curl -X 'GET' \
-  'https://localhost:5050/cost-centers/41607051-4bd8-4a54-a5e2-cb713aef6ca2/tree' \
-  -H 'accept: application/json'
-```
-
-**Sample Response:**
-
-```json
-{
-  "costCenterTree": [
-    {
-      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      "code": "string",
-      "name": "string",
-      "parentCostCenterId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      "children": [
-        "string"
-      ]
-    }
-  ]
-}
-```
-
-------------------------------------------------------------------------
-
-### Companies
-
-Company administration
-
-------------------------------------------------------------------------
-
-#### Create a new company
-
-```http
-POST /companies
-```
-
-**Parameters:**
-
-
-| Parameter      | Type    | Required | Description                     |
-| -------------- | ------- | -------- | ------------------------------- |
-| `id`           | UUID    | No       | Company ID                      |
-| `name`         | string  | Yes      | Company name                    |
-| `taxId`        | string  | Yes      | Legal identifier of the company |
-| `country`      | string  | Yes      | Name of the country             |
-| `currencyCode` | string  | Yes      | Currency code                   |
-| `isActive`     | boolean | No       | Company active                  |
-
-**Body of the Request:**
-
-```json
-{
-  "company": {
-    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "name": "string",
-    "taxId": "string",
-    "country": "string",
-    "currencyCode": "string",
-    "isActive": true
-  }
-}
-```
-
-**Sample Application:**
-
-```bash
- curl -X 'POST' 
-  'https://localhost:5050/companies' 
-  -H 'accept: application/json' 
-  -H 'Content-Type: application/json' 
-  -d '{
-  "account": {
-    "name": "Demo",
-    "taxId": "3101268467",
-    "country": "CR",
-    "currencyCode": "USD",
-    "isActive": true
-  }
-}'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "currencyExchangeRate": {
-    "id": "57ba3603-9249-40d3-8f07-61d67ab42b0f",
-    "currencyCode": "USD",
-    "date": "2025-08-14",
-    "buyRate": 499,
-    "sellRate": 513
-  }
-}
-```
-
-------------------------------------------------------------------------
-
-#### Get list of companies
-
-```http
-GET /companies
-```
-
-**Parameters:**
-
-
-| Parameter   | Type    | Required | Description       |
-| ----------- | ------- | -------- | ----------------- |
-| `PageIndex` | integer | 0        | Page number       |
-| `PageSize`  | integer | 10       | Elements per page |
-
-**Sample Application:**
-
-```bash
- curl -X 'GET' 
-  'https://localhost:5050/companies?PageIndex=0&PageSize=10' 
-  -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "companies": {
-    "pageIndex": 0,
-    "pageSize": 10,
-    "count": 34,
-    "data": [
-      {
-        "id": "41607051-4bd8-4a54-a5e2-cb713aef6ca2",
-        "name": "ABC S.A",
-        "taxId": "3101009240",
-        "country": "CR",
-        "currencyCode": "CRC",
-        "isActive": true
-      },
-      {
-        "id": "d30bbc16-c7f6-458c-84fa-ffb1c7727950",
-        "name": "XYZ S.A",
-        "taxId": "3101168458",
-        "country": "CR",
-        "currencyCode": "CRC",
-        "isActive": true
-      }
-    ]
-  }
-}
-```
-
-------------------------------------------------------------------------
-
-#### Update an existing company
-
-```http
-PUT /companies
-```
-
-**Parameters:**
-
-
-| Parameter      | Type    | Required | Description                     |
-| -------------- | ------- | -------- | ------------------------------- |
-| `id`           | UUID    | Yes      | Company ID                      |
-| `name`         | string  | Yes      | Company name                    |
-| `taxId`        | string  | Yes      | Legal identifier of the company |
-| `country`      | string  | Yes      | Name of the country             |
-| `currencyCode` | string  | Yes      | Currency code                   |
-| `isActive`     | boolean | Yes      | Company active                  |
-
-**Body of the Request:**
-
-```json
-{
-  "company": {
-    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "name": "string",
-    "taxId": "string",
-    "country": "string",
-    "currencyCode": "string",
-    "isActive": true
-  }
-}
-```
-
-**Sample Application:**
-
-```bash
- curl -X 'PUT' 
-  'https://localhost:5050/companies' 
-  -H 'accept: application/json' 
-  -H 'Content-Type: application/json' 
-  -d '{
-  "company": {
-        "id": "9429a754-221f-45ca-aeeb-f8b443157831",
-        "name": "Demo",
-        "taxId": "3101268467",
-        "country": "CR",
-        "currencyCode": "USD",
-        "isActive": false
-  }
-}'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "isSuccess": true
-}
-```
-
-------------------------------------------------------------------------
-
-
-#### Get a specific company
-
-```http
-GET /companies/{companyId}
-```
-
-**Parameters:**
-
-
-| Parameter   | Type | Required | Description |
-| ----------- | ---- | -------- | ----------- |
-| `companyId` | UUID | Yes      | Company ID  |
-
-**Sample Application:**
-
-```bash
- curl -X 'GET' 
-  'https://localhost:5050/companies/41607051-4bd8-4a54-a5e2-cb713aef6ca2' 
-  -H 'accept: application/json'
-```
-
-**Body of the Request:**
-
-```json
-{
-  "companyDetail": {
-    "id": "41607051-4bd8-4a54-a5e2-cb713aef6ca2",
-    "name": "ABC S.A",
-    "taxId": "3101009240",
-    "country": "CR",
-    "currencyCode": "CRC",
-    "isActive": true
-  }
-}
-```
-
-------------------------------------------------------------------------
-
-### Audit Logs
-
-View the history of changes and operations performed in the system.
-
-#### Get Audit Log by ID
-
-```http
-GET /audit-logs/{id}
-```
-
-**Parameters:**
-
-
-| Parameter | Type | Required | Description |
-| --------- | ---- | -------- | ----------- |
-| `id`      | UUID | Yes      | Company ID  |
-
-**Sample Application:**
-
-```bash
- curl -X 'GET' 
-  'https://localhost:5050/audit-logs/e44ed594-272c-4978-a3b5-11fb47e9ca12' 
-  -H 'accept: application/json'
-```
-
-**Body of the Request:**
-
-```json
-{
-  "auditDetail": {
-    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "entity": "string",
-    "action": "string",
-    "performedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "performedAt": "2025-08-15T16:22:28.446Z",
-    "details": "string"
-  }
-}
-```
-
-**Sample Answer:**
-
-```json
-{
-  "isSuccess": true
-}
-```
-
-------------------------------------------------------------------------
-
-#### List Audit Logs
-
-```http
-GET /audit-logs
-```
-
-**Parameters:**
-
-
-| Parameter   | Type    | Required | Description       |
-| ----------- | ------- | -------- | ----------------- |
-| `PageIndex` | integer | 0        | Page number       |
-| `PageSize`  | integer | 10       | Elements per page |
-
-**Sample Answer:**
-
-```json
-{
-   "auditlogs": {
-      "pageIndex": 0,
-      "pageSize": 10,
-      "count": 150,
-      "data": [
+   "invoice":{
+      "id":"b45e75af-fe29-4c2e-9653-aad9bf5b42ef",
+      "number":"INV-639147467845222848-UPDATED",
+      "issueDate":"2026-05-20T09:30:00.000Z",
+      "customerId":"e44ed594-272c-4978-a3b5-11fb47e9ca12",
+      "lines":[
          {
-            "id": "123e4567-e89b-12d3-a456-426614174012",
-            "entity": "JournalEntry",
-            "action": "Create",
-            "performedBy": "123e4567-e89b-12d3-a456-426614174013",
-            "performedAt": "2024-01-15T10:30:00Z",
-            "details": "Creado asiento contable por $1,500.00"
+            "id":"c7b8ea78-9994-4b13-b5a6-cd4d1f55dc01",
+            "description":"IPhone XR 10 (ajustado)",
+            "quantity":1,
+            "price":87000.00,
+            "lineNumber":1
+         },
+         {
+            "id":"7fa2d198-a132-4126-b2fb-d39fd1d1ef9b",
+            "description":"Funda protectora IPhone XR 10",
+            "quantity":2,
+            "price":7500.00,
+            "lineNumber":2
+         },
+         {
+            "description":"Cable USB-C original",
+            "quantity":1,
+            "price":2500.00,
+            "lineNumber":3
+         },
+         {
+            "description":"Protector de pantalla vidrio templado",
+            "quantity":1,
+            "price":3000.00,
+            "lineNumber":4
          }
       ]
    }
+}'
+```
+
+**Sample Answer:**
+
+```json
+{
+  "isSuccess": true
 }
 ```
 
 ------------------------------------------------------------------------
 
-### Accounts
-
-Chart of accounts management with support for hierarchical structure.
-
-#### Activate Account
+#### GET <a id="get"></a>
 
 ```http
-PUT /accounts/{id}/activate
+Get /billings/{id}
 ```
 
 **Parameters:**
 
-
-| Parameter | Type | Required | Description |
-| --------- | ---- | -------- | ----------- |
-| `id`      | UUID | Yes      | Account ID  |
+| Parameter          | Type    | Required | Description   |
+| ------------------ | ------- | -------- | --------------|
+| `id`               | UUID    | Yes      | Invoice ID    |
+-----------------------------------------------------------
 
 **Sample Application:**
 
 ```bash
- curl -X 'PUT' 
-  'https://localhost:5050/accounts/cacfc56f-82ca-4cd5-b694-540b5e1b2e03/activate' 
+ curl -X 'GET' 
+  'http://localhost:5000/billings?PageIndex=10&PageSize=1' 
   -H 'accept: application/json'
 ```
 
@@ -2390,895 +748,166 @@ PUT /accounts/{id}/activate
 
 ```json
 {
-  "isSuccess": true
-}
-```
-
-------------------------------------------------------------------------
-
-#### Create Account
-
-```http
-POST /accounts
-```
-
-**Parameters:**
-
-
-| Parameter         | Type    | Required | Description                                      |
-|-------------------|---------| -------- |--------------------------------------------------|
-| `code`            | string  | No       | Multi-level account code                         |
-| `name`            | string  | Yes      | Account name                                     |
-| `accountTypeId`   | UUID    | Yes      | Account type Id (Liability, asset, equity, etc.) |
-| `accountTypeDesc` | string  | Yes      | Account type (Liability, asset, equity, etc.)    |
-| `parentAccountId` | string  | Yes      | Parent account ID                                |
-| `isActive`        | boolean | No       | Account is active                                |
-| `isMovable`       | boolean | Yes      | Accepts daily seat movements                     |
-
-**Body of the Application:**
-
-```json
-{
-   "account": {
-      "code": "1100",
-      "name": "Efectivo y Equivalentes",
-      "accountTypeId": "123e4567-e89b-12d3-a456-426614174004",
-     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ "accountTypeDesc": "Income",
-      "parentAccountId": null,
-      "isActive": true,
-      "isMovable": true
-   }
-}
-```
-
-**Sample Application:**
-
-```bash
-curl -X POST "https://api.accounting.com/v1/accounts" \
-     -H "Authorization: Bearer YOUR_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-       "account": {
-         "code": "1100",
-         "name": "Efectivo y Equivalentes",
-         "accountTypeId": "123e4567-e89b-12d3-a456-426614174004",
-         "isActive": true,
-         "isMovable": true
-       }
-     }
-```
-
-**Sample Answer:**
-
-```json
-{
-   "id": "123e4567-e89b-12d3-a456-426614174005"
-}
-```
-
-------------------------------------------------------------------------
-
-#### List Accounts
-
-```http
-GET /accounts
-```
-
-**Parameters:**
-
-
-| Parameter   | Type    | Required | Description       |
-| ----------- | ------- | -------- | ----------------- |
-| `PageIndex` | integer | 0        | Page number       |
-| `PageSize`  | integer | 10       | Elements per page |
-
-#### Update Account
-
-```http
-PUT /accounts
-```
-
-**Parameters:**
-
-
-| Parameter         | Type    | Required | Description                                   |
-| ----------------- | ------- | -------- | --------------------------------------------- |
-| `id`              | UUID    | Yes      | Account ID                                    |
-| `code`            | string  | No       | Multi-level account code                      |
-| `name`            | string  | Yes      | Account name                                  |
-| `accountTypeId`   | string  | Yes      | Account type (Liability, asset, equity, etc.) |
-| `parentAccountId` | string  | No       | Parent account ID                             |
-| `isActive`        | boolean | No       | Account is active                             |
-| `isMovable`       | boolean | No       | Accepts daily seat movements                  |
-
-**Sample Application:**
-
-```bash
-curl -X 'PUT' 
- 'https://localhost:5050/accounts' 
- -H 'accept: application/json' 
- -H 'Content-Type: application/json' 
- -d '{
- "account": {
-   "id": "00445bc5-6287-4b1c-8af9-76df7fb37ac2",
-   "code": "7006",
-   "name": "Gastos varios",
-   "accountTypeId": "71bbd6e0-abf4-4f2a-afec-9199bb404b08",
-   "isActive": true
- }
-'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "isSuccess": true
-}
-```
-
-------------------------------------------------------------------------
-
-#### Delete Account
-
-```http
-DELETE /accounts/{id}
-```
-
-**Parameters:**
-
-| Parameter | Type | Required | Description                   |
-| --------- | ---- | -------- | ----------------------------- |
-| `Id`      | UUID | Yes      | Account ID to physical delete |
-
-Delete a phisical record account.
-
-**Sample Application:**
-
-```bash
-curl -X 'DELETE' 
- 'https://localhost:5050/accounts/0065ecee-ee6b-4d42-bb8b-0e24b20c213f' 
- -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "isSuccess": true
-}
-```
-
-------------------------------------------------------------------------
-
-#### Deactivate Account
-
-```http
-PUT /accounts/{id}/desactivate
-```
-
-**Parameters:**
-
-
-| Parameter | Type | Required | Description              |
-| --------- | ---- | -------- | ------------------------ |
-| `Id`      | UUID | Yes      | Account ID to deactivate |
-
-**Sample Application:**
-
-```bash
- curl -X 'PUT' 
-  'https://localhost:5050/accounts/cacfc56f-82ca-4cd5-b694-540b5e1b2e03/desactivate' 
-  -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "isSuccess": true
-}
-```
-
-------------------------------------------------------------------------
-
-#### Get Account by ID
-
-```http
-GET /accounts/{accountId}
-```
-
-**Parameters:**
-
-
-| Parameter   | Type | Required | Description       |
-| ----------- | ---- | -------- | ----------------- |
-| `accountId` | UUID | Yes      | Account ID to get |
-
-**Sample Application:**
-
-```bash
-curl -X 'GET' \
-  'https://localhost:5050/accounts/7573e77c-110b-4a3b-9bda-7be306bb14b4' \
-  -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-  {
-     "accountDetail": {
-       "id": "7573e77c-110b-4a3b-9bda-7be306bb14b4",
-       "code": "1",
-       "name": "Activo",
-       "accountTypeId": "9546c264-0869-44d9-8031-371159b76d3f",
-       "parentAccountId": null,
-       "isActive": true,
-       "level": 1,
-       "isMovable": false
-     }
+  "invoice": {
+    "id": "b45e75af-fe29-4c2e-9653-aad9bf5b42ef",
+    "number": "INV-639162751332422969",
+    "issueDate": "2026-06-05T16:52:13.241709Z",
+    "customerId": "e44ed594-272c-4978-a3b5-11fb47e9ca12",
+    "total": 97500.00,
+    "lines": [
+      {
+        "id": "71f1eeb1-198b-406d-8fb7-d08e04a595e6",
+        "invoiceId": "b45e75af-fe29-4c2e-9653-aad9bf5b42ef",
+        "description": "Cubo cargador 10 Watts",
+        "quantity": 1,
+        "price": 4500.00,
+        "lineNumber": 3,
+        "total": 4500.00
+      },
+      {
+        "id": "8fa3d4dc-fe22-401d-bd85-eeb2d972dd2f",
+        "invoiceId": "b45e75af-fe29-4c2e-9653-aad9bf5b42ef",
+        "description": "Funda protectora IPhone XR 10",
+        "quantity": 1,
+        "price": 8000.00,
+        "lineNumber": 2,
+        "total": 8000.00
+      },
+      {
+        "id": "fa6485c1-d362-4e47-92f9-2fe6c5bddf96",
+        "invoiceId": "b45e75af-fe29-4c2e-9653-aad9bf5b42ef",
+        "description": "IPhone XR 10",
+        "quantity": 1,
+        "price": 85000.00,
+        "lineNumber": 1,
+        "total": 85000.00
+      }
+    ]
   }
-```
-
-------------------------------------------------------------------------
-
-#### Get Account Tree
-
-```http
-GET /accounts/tree
-```
-
-Returns accounts in a hierarchical structure.
-
-**Sample Application:**
-
-```bash
- curl -X 'GET' 
-  'https://localhost:5050/accounts/tree' 
-  -H 'accept: application/json'
-```
-
-**Sample Response:**
-
-```json
-{
-   "accountTree": 
-   [
-      {
-         "id": "123e4567-e89b-12d3-a456-426614174005",
-         "code": "1000",
-         "name": "Activos",
-         "accountTypeId": "123e4567-e89b-12d3-a456-426614174006",
-         "parentAccountId": null,
-         "children": [
-            {
-               "id": "123e4567-e89b-12d3-a456-426614174007",
-               "code": "1100",
-               "name": "Activos Corrientes",
-               "accountTypeId": "123e4567-e89b-12d3-a456-426614174006",
-               "parentAccountId": "123e4567-e89b-12d3-a456-426614174005",
-               "children": []
-            }
-         ]
-      }
-   ]
 }
 ```
-
-------------------------------------------------------------------------
-
-### Account Types
-
-Manage account types (Assets, Liabilities, Equity, etc.).
-
-------------------------------------------------------------------------
-
-#### List Account Types
-
-```http
-GET /accounts/types
-```
-
-**Sample Application:**
-
-```bash
- curl -X 'GET' 
-  'https://localhost:5050/accounts/tree' 
-  -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-   "accountTypes": [
-      {
-         "id": "123e4567-e89b-12d3-a456-426614174008",
-         "name": "Activos",
-         "description": "Recursos controlados por la entidad"
-      },
-      {
-         "id": "123e4567-e89b-12d3-a456-426614174009",
-         "name": "Pasivos",
-         "description": "Obligaciones presentes de la entidad"
-      },
-      {
-         "id": "123e4567-e89b-12d3-a456-426614174010",
-         "name": "Patrimonio",
-         "description": "Participación residual en los activos"
-      }
-   ]
-}
-```
-
-------------------------------------------------------------------------
-
-### 📑 Reports <a id="reports"></a>
-
-
-Generation of accounting reports.
-
-------------------------------------------------------------------------
-
-#### Income statament report
-
-```http
-GET /reports/income-statement?periodId={periodId}&companyId={companyId}
-```
-
-**Parameters:**
-
-
-| Parameter   | Type | Required | Description       |
-| ----------- | ---- | -------- | ----------------- |
-| `periodId`  | UUID | Yes      | ID of the period  |
-| `companyId` | UUID | Yes      | ID of the company |
-
-**Sample Application:**
-
-```bash
- curl -X 'GET' 
-  'https://localhost:6060/reports/income-statement?periodId=e44ed594-272c-4978-a3b5-11fb47e9ca12&companyId=41607051-4bd8-4a54-a5e2-cb713aef6ca2' 
-  -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "incomeStatementDto": [
-    {
-      "code": "5.02.01",
-      "name": "Sueldos y Salarios",
-      "accountType": "Gasto",
-      "balance": -800000.00
-    },
-    {
-      "code": "5.02.02",
-      "name": "Servicios Públicos",
-      "accountType": "Gasto",
-      "balance": -500000.00
-    }
-  ]
-}
-```
-
-------------------------------------------------------------------------
-
-#### Trial balance report
-
-```http
-GET /reports/trial-balance?periodId={periodId}&companyId={companyId}
-```
-
-**Parameters:**
-
-
-| Parameter   | Type | Required | Description       |
-| ----------- | ---- | -------- | ----------------- |
-| `periodId`  | UUID | Yes      | ID of the period  |
-| `companyId` | UUID | Yes      | ID of the company |
-
-**Sample Application:**
-
-```bash
- curl -X 'GET' 
-  'https://localhost:6060/reports/trial-balance?periodId=e44ed594-272c-4978-a3b5-11fb47e9ca12&companyId=41607051-4bd8-4a54-a5e2-cb713aef6ca2' 
-  -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "trialBalanceDto": [
-    {
-      "code": "1",
-      "name": "Activo",
-      "totalDebit": 4000.00,
-      "totalCredit": 0.00,
-      "balance": 4000.00
-    },
-    {
-      "code": "1.01",
-      "name": "Activo Corriente",
-      "totalDebit": 0.00,
-      "totalCredit": 4000.00,
-      "balance": -4000.00
-    }
-  ]
-}
-```
-
-------------------------------------------------------------------------
-
-#### Account balance
-
-```http
-GET /reports/account-balance/{accountId}
-```
-
-**Parameters:**
-
-
-| Parameter   | Type | Required | Description |
-| ----------- | ---- | -------- | ----------- |
-| `accountId` | UUID | Yes      | ID account  |
-
-**Sample Application:**
-
-```bash
- curl -X 'GET' 
-  'https://localhost:6060/reports/account-balance/a04ee151-03d4-4840-8697-600360d6977d' 
-  -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "balance": -1000000.00
-}
-```
-
-------------------------------------------------------------------------
-
-#### Account balance by period
-
-```http
-GET /reports/account-balance/period?periodId={periodId}&accountId={accountId}
-```
-
-**Parameters:**
-
-
-| Parameter   | Type | Required | Description      |
-| ----------- | ---- | -------- | ---------------- |
-| `periodId`  | UUID | Yes      | ID of the period |
-| `accountId` | UUID | Yes      | ID account       |
-
-**Sample Application:**
-
-```bash
- curl -X 'GET' 
-  'https://localhost:6060/reports/account-balance?periodId=e44ed594-272c-4978-a3b5-11fb47e9ca12&accountId=a04ee151-03d4-4840-8697-600360d6977d' 
-  -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "balance": -1000000.00
-}
-```
-
-------------------------------------------------------------------------
-
-#### General ledger report
-
-```http
-GET /reports/general-ledger?periodId={periodId}&companyId={companyId}
-```
-
-**Parameters:**
-
-
-| Parameter   | Type | Required | Description       |
-| ----------- | ---- | -------- | ----------------- |
-| `periodId`  | UUID | Yes      | ID of the period  |
-| `companyId` | UUID | Yes      | ID of the company |
-
-**Sample Application:**
-
-```bash
- curl -X 'GET' 
-  'https://localhost:6060/reports/account-balance?periodId=e44ed594-272c-4978-a3b5-11fb47e9ca12&accountId=23b79d9f-96d3-4c20-ac8e-4387a70152b3' 
-  -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "balance": -1000000.00
-}
-```
-
-------------------------------------------------------------------------
-
-#### Balance sheet report
-
-```http
-GET /reports/balance-sheet?periodId={periodId}&companyId={companyId}
-```
-
-**Parameters:**
-
-
-| Parameter   | Type | Required | Description       |
-| ----------- | ---- | -------- | ----------------- |
-| `periodId`  | UUID | Yes      | ID of the period  |
-| `companyId` | UUID | Yes      | ID of the company |
-
-**Sample Application:**
-
-```bash
- curl -X 'GET' 
-  'https://localhost:6060/reports/balance-sheet?periodId=e44ed594-272c-4978-a3b5-11fb47e9ca12&companyId=41607051-4bd8-4a54-a5e2-cb713aef6ca2' 
-  -H 'accept: application/json'
-```
-
-**Sample Answer:**
-
-```json
-{
-  "balanceSheet": [
-    {
-      "code": "1",
-      "name": "Activo",
-      "accountType": "Activo",
-      "balance": 4000.00
-    },
-    {
-      "code": "1.01",
-      "name": "Activo Corriente",
-      "accountType": "Activo",
-      "balance": -4000.00
-    }
-  ]
-}
-```
-------------------------------------------------------------------------
-
-### 💸 Accounts payable
-
-------------------------------------------------------------------------
-
-### 💰 Accounts receivable
-
-------------------------------------------------------------------------
-
-### 🏦 Banking conciliation
-
-------------------------------------------------------------------------
-
-### 🏷️ Cost Center
 
 ------------------------------------------------------------------------
 
 ## 📊 Data Models <a id="data-models"></a>
 
-### CompanyDto
+### CreateInvoiceRequest
 
-```json
+```C#
+public class CreateInvoiceRequest
 {
-  "id": "string (UUID)",
-  "name": "string",
-  "taxId": "string",
-  "country": "string",
-  "currencyCode": "string",
-  "isActive": "boolean"
-  }
+    public InvoiceDto Invoice { get; set; }
+}
+
 ```
 ------------------------------------------------------------------------
 
-### PeriodDto
+### CreateInvoiceResponse
 
-```json
+```C#
+public class CreateInvoiceResponse
 {
-  "id": "string (UUID)",
-  "companyId": "string (UUID)",
-  "year": "integer",
-  "month": "integer",
-  "startDate": "string (datetime)",
-  "endDate": "string (datetime)",
-  "isClosed": "boolean"
+    public Guid Id { get; set; }
 }
 ```
 ------------------------------------------------------------------------
 
-### CreatePeriodDto
+### GetInvoiceByIdResponse
 
-```json
+```C#
+public class GetInvoiceByIdResponse
 {
-  "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+    public InvoiceDto Invoice { get; set; }
 }
 ```
 ------------------------------------------------------------------------
 
-### JournalEntryDto
+### GetInvoicesResponse
 
-```json
+```C#
+public class GetInvoicesResponse
 {
-  "id": "string (UUID)",
-  "date": "string (datetime)",
-  "description": "string",
-  "periodId": "string (UUID)",
-  "companyId": "string (UUID)",
-  "currencyCode": "string",
-  "exchangeRate": "number (double, nullable)",
-  "exchangeRateDate": "string (date, nullable)",
-  "isPosted": "boolean",
-  "isReversed": "boolean",
-  "lines": [
-    {
-      "id": "string (UUID)",
-      "journalEntryId": "string (UUID)",
-      "accountId": "string (UUID)",
-      "debit": "number (double)",
-      "credit": "number (double)",
-      "lineNumber": "integer"
-    }
-  ]
+    public InvoiceDtoPaginatedResult Invoices { get; set; }
 }
 ```
 ------------------------------------------------------------------------
 
-### AccountDto
+### UpdateInvoiceRequest
 
-```json
+```C#
+public class UpdateInvoiceRequest
 {
-  "id": "string (UUID)",
-  "code": "string",
-  "name": "string",
-  "accountTypeId": "string (UUID)",
-  "parentAccountId": "string (UUID, nullable)",
-  "isActive": "boolean",
-  "level": "integer",
-  "isMovable": "boolean"
+    public InvoiceDto Invoice { get; set; }
 }
 ```
 ------------------------------------------------------------------------
 
-### CurrencyExchangeRateDto
+### UpdateInvoiceResponse
 
-```json
+```C#
+public class UpdateInvoiceResponse
 {
-  "id": "string (UUID)",
-  "currencyCode": "string",
-  "date": "string (date)",
-  "buyRate": "number (double)",
-  "sellRate": "number (double)"
+    public bool IsSuccess { get; set; }
 }
 ```
 ------------------------------------------------------------------------
 
-### DocumentReferenceDto
+### InvoiceDto
 
-```json
+```C#
+public class InvoiceDto
 {
-  "id": "string (UUID)",
-  "journalEntryId": "string (UUID)",
-  "sourceType": "string",
-  "sourceId": "string (UUID)",
-  "referenceNumber": "string",
-  "description": "string"
+    public Guid Id { get; set; }
+    public string? Number { get; set; }
+    public DateTime IssueDate { get; set; }
+    public Guid? CustomerId { get; set; }
+    public double Total { get; set; }
+    public List<InvoiceLineDto>? Lines { get; set; }
+}
+
+```
+------------------------------------------------------------------------
+
+### InvoiceDtoPaginatedResult
+
+```C#
+public class InvoiceDtoPaginatedResult
+{
+    public int PageIndex { get; set; }
+    public int PageSize { get; set; }
+    public long Count { get; set; }
+    public List<InvoiceDto>? Data { get; set; }
 }
 ```
 ------------------------------------------------------------------------
 
-### AccountTypeDto
+### InvoiceLineDto
 
-```json
+```C#
+public class InvoiceLineDto
 {
-  "id": "string (UUID)",
-  "name": "string",
-  "description": "string"
+    public Guid Id { get; set; }
+    public Guid InvoiceId { get; set; }
+    public string? Description { get; set; }
+    public int Quantity { get; set; }
+    public double Price { get; set; }
+    public int LineNumber { get; set; }
+    public double Total { get; set; }
 }
 ```
 ------------------------------------------------------------------------
 
-### AuditLogDto
+### ProblemDetails
 
-```json
+```C#
+public class ProblemDetails
 {
-  "id": "string (UUID)",
-  "entity": "string",
-  "action": "string",
-  "performedBy": "string (UUID)",
-  "performedAt": "string (datetime)",
-  "details": "string"
+    public string? Type { get; set; }
+    public string? Title { get; set; }
+    public int? Status { get; set; }
+    public string? Detail { get; set; }
+    public string? Instance { get; set; }
 }
-```
-------------------------------------------------------------------------
-
-### BalanceSheetDto
-
-```json
-{
-  "code": "string",
-  "name": "string",
-  "accountType": "string",
-  "balance": 0
-}
-```
-------------------------------------------------------------------------
-
-### IncomeStatementDto
-
-```json
-{
-  "code": "string",
-  "name": "string",
-  "accountType": "string",
-  "balance": 0
-}
-```
-------------------------------------------------------------------------
-
-### GeneralLedgerDto
-
-```json
-{
-  "date": "2025-08-21T03:54:09.061Z",
-  "description": "string",
-  "debit": 0,
-  "credit": 0,
-  "movement": 0
-}
-```
-------------------------------------------------------------------------
-
-### TrialBalanceDto
-
-```json
-{
-  "code": "string",
-  "name": "string",
-  "totalDebit": 0,
-  "totalCredit": 0,
-  "balance": 0
-}
-```
-------------------------------------------------------------------------
-
-## Usage Examples
-
-### Full Multi-Company Flow
-
-```bash
-# 1. Create a company
-curl -X POST "https://api.accounting.com/v1/companies" \
-     -H "Authorization: Bearer YOUR_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-       "company": {
-         "name": "Mi Empresa S.A.",
-         "taxId": "20123456789",
-         "country": "PE",
-         "currencyCode": "PEN",
-         "isActive": true
-       }
-     }'
-
-# 2. Create accounting period
-curl -X POST "https://api.accounting.com/v1/periods" \
-     -H "Authorization: Bearer YOUR_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-       "period": {
-         "companyId": "company-id-from-step-1"
-       }
-     }'
-
-# 3. Create exchange rate
-curl -X POST "https://api.accounting.com/v1/currencies" \
-     -H "Authorization: Bearer YOUR_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-       "currencyExchangeRate": {
-         "currencyCode": "USD",
-         "date": "2024-01-15",
-         "buyRate": 3.74,
-         "sellRate": 3.76
-       }
-     }'
-
-# 4. Create cash account
-curl -X POST "https://api.accounting.com/v1/accounts" \
-     -H "Authorization: Bearer YOUR_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-       "account": {
-         "code": "1100",
-         "name": "Cash",
-         "accountTypeId": "asset-type-id",
-         "isActive": true,
-         "isMovable": true
-       }
-     }'
-
-# 5. Create sales account
-curl -X POST "https://api.accounting.com/v1/accounts" \
-     -H "Authorization: Bearer YOUR_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-       "account": {
-         "code": "1200",
-         "name": "Sales",
-         "accountTypeId": "asset-type-id",
-         "isActive": true,
-         "isMovable": true
-       }
-     }'
-
-# 6. Create multi-currency accounting entry
-curl -X POST "https://api.accounting.com/v1/journal-entries" \
-     -H "Authorization: Bearer YOUR_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-       "journalEntry": {
-         "date": "2024-01-15T10:30:00Z",
-         "description": "Venta en dólares",
-         "periodId": "period-id",
-         "companyId": "company-id",
-         "currencyCode": "USD",
-         "exchangeRate": 3.75,
-         "exchangeRateDate": "2024-01-15",
-         "isPosted": true,
-         "lines": [
-           {
-             "accountId": "cash-account-id",
-             "debit": 1000.00,
-             "credit": 0.00,
-             "lineNumber": 1
-           },
-           {
-             "accountId": "sales-account-id",
-             "debit": 0.00,
-             "credit": 1000.00,
-             "lineNumber": 2
-           }
-         ]
-       }
-     }'
-
-# 7. Associate supporting document
-curl -X POST "https://api.accounting.com/v1/journal-entries/journal-entry-id/documents" \
-     -H "Authorization: Bearer YOUR_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-       "documentReference": {
-         "journalEntryId": "journal-entry-id",
-         "sourceType": "Invoice",
-         "sourceId": "invoice-id",
-         "referenceNumber": "INV-2024-001",
-         "description": "Factura de venta"
-       }
-     }'
-```
-------------------------------------------------------------------------
-
-### Example of Entry Reversal
-
-```bash
-Reverse an accounting entry
-
-curl -X PUT "https://api.accounting.com/v1/journal-entries/{journal-entry-id}/reverse"
--H "Authorization: Bearer YOUR_API_KEY"
-
-This will automatically create a reversing entry with the debits and credits reversed.
 ```
 ------------------------------------------------------------------------
 
@@ -3286,46 +915,60 @@ This will automatically create a reversing entry with the debits and credits rev
 
 ### Official SDKs
 
-- **JavaScript/Node.js**: `npm install @accounting-api/client`
-- **Python**: `pip install accounting-api-client`
-- **C#/.NET**: `dotnet add package AccountingApi.Client`
+- **Python**: `pip install billing-api-client`
+- **C#/.NET**: `dotnet add package billing.Client`
 ------------------------------------------------------------------------
 
 ### Example with JavaScript SDK
 
 ```javascript
-import { AccountingApiClient } from '@accounting-api/client';
+const apiUrl = "http://localhost:5000/billings";
 
-const client = new AccountingApiClient({
-  apiKey: 'YOUR_API_KEY',
-  baseUrl: 'https://api.accounting.com/v1'
-});
+const invoicePayload = {
+  Invoice: {
+    number: "INV-20260519-001",
+    issueDate: "2026-05-19T00:29:43.018Z",
+    customerId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    lines: [
+      {
+        description: "Servicio de consultoría",
+        quantity: 1,
+        price: 15000,
+        lineNumber: 1
+      },
+      {
+        description: "Licencia de software",
+        quantity: 2,
+        price: 500.00,
+        lineNumber: 2
+      }
+    ]
+  }
+};
 
-// Create a company
-const company = await client.companies.create({
-  name: 'ABC S.A.',
-  taxId: '20123456789',
-  country: 'PE',
-  currencyCode: 'PEN',
-  isActive: true
-});
+async function createInvoice() {
+  try {
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(invoicePayload)
+    });
 
-// Create multi-currency accounting entry
-const journalEntry = await client.journalEntries.create({
-  date: '2024-01-15T10:30:00Z',
-  description: 'Sale in dollars',
-  periodId: 'period-id',
-  companyId: company.id,
-  currencyCode: 'USD',
-  exchangeRate: 3.75,
-  lines: [
-    { accountId: 'account-1', debit: 1000, credit: 0, lineNumber: 1 },
-    { accountId: 'account-2', debit: 0, credit: 1000, lineNumber: 2 }
-  ]
-});
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    }
 
-// Reverse seat
-await client.journalEntries.reverse(journalEntry.id);
+    const result = await response.json();
+    console.log("Invoice created successfully:", result);
+  } catch (error) {
+    console.error("Failed to create invoice:", error);
+  }
+}
+
+createInvoice();
 ```
 ------------------------------------------------------------------------
 
@@ -3333,93 +976,114 @@ await client.journalEntries.reverse(journalEntry.id);
 
 ```bash
 # Attempt to create unbalanced settlement (must ≠ have)
-curl -X POST "https://api.accounting.com/v1/journal-entries" \
-     -H "Authorization: Bearer YOUR_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-       "journalEntry": {
-         "date": "2024-01-15T10:30:00Z",
-         "description": "Asiento desbalanceado",
-         "periodId": "period-id",
-         "lines": [
-           {
-             "accountId": "account-1",
-             "debit": 1000.00,
-             "credit": 0.00,
-             "lineNumber": 1
-           },
-           {
-             "accountId": "account-2",
-             "debit": 0.00,
-             "credit": 500.00,
-             "lineNumber": 2
-           }
-         ]
-       }
-     }'
+curl -X 'POST' \
+  'http://localhost:5000/billings' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "Invoice": {
+    "Number": "INV-001",
+    "issueDate": "2026-05-19T00:29:43.018Z",
+    "customerId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "lines": [
+      {
+        "description": "Servicio de consultoría",
+        "quantity": 0,
+        "price": 0,
+        "lineNumber": 1
+      },
+      {
+        "description": "Licencia de software",
+        "quantity": 2,
+        "price": 500.00,
+        "lineNumber": 2
+      }
+    ]
+  }
+}'
 
 # Error response:
-# {
-#   "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
-#   "title": "Bad Request",
-#   "status": 400,
-#   "detail": "El total de débitos (1000.00) no coincide con el total de créditos (500.00)",
-#   "instance": "/journal-entries"
-# }
+{
+  "title": "ValidationException",
+  "status": 500,
+  "detail": "Validation failed: \r\n -- Invoice.Number: Invoice number must be longer than 10 characters Severity: Error\r\n -- Invoice.Lines[0]: El precio de la línea debe ser mayor a cero. Severity: Error\r\n -- Invoice.Lines[0]: Cantidad del Item debe de ser al menos 1. Severity: Error",
+  "instance": "/billings",
+  "traceId": "0HNM35J7FD0N2:00000005"
+}
 ```
 ------------------------------------------------------------------------
 
-## Changelog
+# 🚀 v1.0.0 — Initial Production-Ready Runtime <a id="initial-production-ready-runtime"></a>
 
-### Version 1.3.0 (Current)
+This release marks the first stable version of the declarative deployment runtime.
 
-- ✅ Multi-company management with complete tax information
-- ✅ Multi-currency support with automatic exchange rates
-- ✅ Accounting periods with opening/closing control by company
-- ✅ Accounting journal entries with automatic validation and currency support
-- ✅ Accounting policy templates
-- ✅ Journal entry reversals for accounting corrections
-- ✅ Hierarchical chart of accounts with account types
-- ✅ Document references for complete traceability
-- ✅ Audit system with detailed history
-- ✅ Pagination on all listing endpoints
-- ✅ Robust validations for accounting integrity
-- ✅ Financial Reports (Balance Sheet, Income Statement)
-- ✅ Cost Centers for Detailed Analysis
-- ✅ Sending email notifications
-- ✅ Secrets with Vault
-- ✅ Discovery with Consul
-- ✅ Opentelemetry-collector
-- ✅ Integration with RabbitMQ
-- ✅ Logging with Loki
-------------------------------------------------------------------------
+## ✨ Highlights
 
-### Upcoming Features
+- ✅ Declarative service model via `services.yml`
+- ✅ Full infrastructure orchestration (Postgres, RabbitMQ, HTTP, Workers)
+- ✅ Integrated Vault bootstrap (database + RabbitMQ engines)
+- ✅ Dynamic secrets with real-time credential injection
+- ✅ Consul service registration with health checks
+- ✅ Multi-type health checking system (DB, MQ, HTTP, Worker-aware)
+- ✅ Clean orchestrator flow (wait → bootstrap → register → verify)
+- ✅ Cross-environment support (Windows / Linux-ready)
+- ✅ Designed for On-Premise deployments
 
-- 🔄 **Automatic Bank Reconciliation**
-- 🔄 **Budgets** and Budget Control
-- 🔄 **Mass Import** of Accounting Entries
-- 🔄 **Webhook Notifications** for Important Events
-- 🔄 **Reporting API** with Customizable Formats
-- 🔄 **Accounts Payable API**
+## 🔐 Security
+
+- Dynamic database credentials via Vault
+- Lease-based secret lifecycle
+- Ready for TTL + renewal strategies
+
+## 🧠 Architecture
+
+- Strong separation of concerns (config / runtime / infra)
+- Extensible service model (Pydantic-based)
+- Pluggable health check system
+- Idempotent Vault provisioning
+
+## ⚙️ Supported Service Types
+
+- postgres
+- rabbitmq
+- http
+- worker
+
+## 🚧 Known Constraints (Accepted for v1)
+
+- Docker host resolution differs between Windows and Linux (`host.docker.internal`)
+- No centralized logging/metrics yet
+- No automated lease renewal (handled at app layer)
+
+## 🎯 Purpose
+
+This runtime is intended as a reusable foundation for:
+
+- Microservices platforms
+- On-premise deployments
+- Internal developer platforms (IDP)
+- Future projects like Axenta
+
 ---
+
+## 🏁 Final Notes
+
+This is not a demo — it is a production-grade foundation.
+
+The system is stable, extensible, and ready to be reused across projects.
+
+Further improvements (observability, scaling, advanced orchestration) can be layered on top without breaking the core design.
+
+---
+
+🔥 Ready for real-world usage.
+
+------------------------------------------------------------------------
 
 ## Support
-
-- **Documentation**: [https://docs.accounting-api.com](https://docs.accounting-api.com)
-- **Support Email**: support@accounting-api.com
-- **Status Page**: [https://status.accounting-api.com](https://status.accounting-api.com)
-- **Community Forum**: [https://community.accounting-api.com](https://community.accounting-api.com)
-- **GitHub**: [https://github.com/accounting-api](https://github.com/accounting-api)
+- **GitHub**: [https://github.com/sgoni/Billing.git](https://github.com/sgoni/Billing.git)
 
 ------------------------------------------------------------------------
 
-### Support Hours
-
-- **Technical Support**: Monday to Friday, 9:00 AM - 6:00 PM (UTC-5)
-- **Emergency Support**: 24/7 for Enterprise customers
-
----
-
-*Last updated: January 15, 2024*
-*Document version: 1.0*
+*Last updated: June 04, 2026*
+*Document version: 1.0.0*

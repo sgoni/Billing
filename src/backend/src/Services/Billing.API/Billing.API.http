@@ -42,8 +42,8 @@ Content-Type: application/json
     "lines": [
       {
         "description": "Servicio de consultoría",
-        "quantity": 10,
-        "price": 150.00,
+        "quantity": 1,
+        "price": 15000,
         "lineNumber": 1
       },
       {

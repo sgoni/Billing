@@ -5,6 +5,7 @@ global using Billing.Application.Data;
 global using Billing.Application.Dtos;
 global using Billing.Application.Exceptions;
 global using Billing.Application.Extensions;
+global using Billing.Application.Features.Invoices.Commands.CreateInvoice;
 global using Billing.Application.Validators;
 global using Billing.Domain.Events;
 global using Billing.Domain.Models;

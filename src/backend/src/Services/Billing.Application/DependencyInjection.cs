@@ -1,4 +1,6 @@
-﻿namespace Billing.Application;
+﻿
+
+namespace Billing.Application;
 
 public static class DependencyInjection
 {
@@ -11,6 +13,11 @@ public static class DependencyInjection
             config.AddOpenBehavior(typeof(ValidationBehavior<,>));
             config.AddOpenBehavior(typeof(LogginBehavior<,>));
         });
+
+        //services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+        //services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+        services.AddValidatorsFromAssemblyContaining<CreateInvoiceCommandValidator>();
+
 
         services.AddScoped<IEventLogRepository, EventLogRepository>();
         services.AddFeatureManagement();

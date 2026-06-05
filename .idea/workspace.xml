@@ -4,14 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f62b9c27-5c66-4e98-a1f8-b7d35b7bc70c" name="Changes" comment="fix(config): enforce worker command definition in services model">
-      <change afterPath="$PROJECT_DIR$/deploy/framework/health/build_health_summary.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/framework/health/print_health.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/framework/vault/VaultBootstrap.py" afterDir="false" />
+    <list default="true" id="f62b9c27-5c66-4e98-a1f8-b7d35b7bc70c" name="Changes" comment="feat(orchestrator): integrate Vault bootstrap lifecycle after infra readiness">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Billing.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/Billing.sln.DotSettings.user" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/framework/health/http.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/health/http.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/framework/runtime/orchestrator.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/runtime/orchestrator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Billing.API.http" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Billing.API.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/DependencyInjection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/DependencyInjection.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Features/Invoices/Commands/CreateInvoice/CreateInvoiceCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Features/Invoices/Commands/CreateInvoice/CreateInvoiceCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/GlobalUsing.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/GlobalUsing.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Validators/InvoiceLineValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Validators/InvoiceLineValidator.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,7 +20,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="1313" />
+    <option name="cachedIndexableFilesCount" value="1314" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -59,61 +60,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0" />
-      <entry key="MS500" value="1.0002002700452242" />
-      <entry key="S2" value="1.2000613858785918" />
-      <entry key="S5" value="1.7963101450198296" />
-      <entry key="S10" value="2.2619900945969897" />
-      <entry key="S30" value="2.719700477541184" />
-      <entry key="S60" value="3.0739940218861204" />
-      <entry key="M2" value="4.6341013471364345" />
-      <entry key="M5" value="9.480880513831808" />
-      <entry key="M10" value="14.011096400552315" />
-      <entry key="M15" value="16.57273564258524" />
-      <entry key="M30" value="20.609085028949558" />
-      <entry key="H1" value="24.41740967157278" />
-      <entry key="H2" value="28.823029738008678" />
-      <entry key="H4" value="38.65558646657375" />
-      <entry key="D1" value="129.30277868274894" />
-      <entry key="W1" value="198.60746016806573" />
+      <entry key="MS100" value="1.000000000106384" />
+      <entry key="MS500" value="1.010124538792448" />
+      <entry key="S2" value="1.317207766617788" />
+      <entry key="S5" value="1.6317410114870257" />
+      <entry key="S10" value="1.7963522952259672" />
+      <entry key="S30" value="2.0914752187139563" />
+      <entry key="S60" value="2.6196441054139132" />
+      <entry key="M2" value="3.4314617223348263" />
+      <entry key="M5" value="5.887804230977983" />
+      <entry key="M10" value="10.83009979908728" />
+      <entry key="M15" value="15.228493830625094" />
+      <entry key="M30" value="23.93210045491077" />
+      <entry key="H1" value="32.243483738187635" />
+      <entry key="H2" value="39.838015624502326" />
+      <entry key="H4" value="51.35863341793341" />
+      <entry key="D1" value="143.59835356461812" />
+      <entry key="W1" value="214.23764429015998" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="2.584061622200093E-5" />
-      <entry key="MS500" value="0.1209095412017415" />
-      <entry key="S2" value="0.5896782961306081" />
-      <entry key="S5" value="0.8095544368437921" />
-      <entry key="S10" value="0.8997524309222227" />
-      <entry key="S30" value="0.9657907418097553" />
-      <entry key="S60" value="1.002298816912423" />
-      <entry key="M2" value="1.1339827744255053" />
-      <entry key="M5" value="1.5395453311961567" />
-      <entry key="M10" value="1.9684484668708437" />
-      <entry key="M15" value="2.2115796908785317" />
-      <entry key="M30" value="2.5423561518438547" />
-      <entry key="H1" value="2.7569392012752623" />
-      <entry key="H2" value="3.01267567049757" />
-      <entry key="H4" value="4.170458873484996" />
-      <entry key="D1" value="18.35255655061333" />
-      <entry key="W1" value="28.649617778939906" />
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="4.163759045865199E-238" />
+      <entry key="S5" value="1.1163342146542721E-95" />
+      <entry key="S10" value="3.3411588031719584E-48" />
+      <entry key="S30" value="1.495573406922612E-16" />
+      <entry key="S60" value="1.2472673846290128E-8" />
+      <entry key="M2" value="1.2649915708104516E-4" />
+      <entry key="M5" value="0.040400333545642146" />
+      <entry key="M10" value="0.3188748625768179" />
+      <entry key="M15" value="0.657203825891665" />
+      <entry key="M30" value="1.385910338734638" />
+      <entry key="H1" value="2.0355255648207518" />
+      <entry key="H2" value="2.5886722397139437" />
+      <entry key="H4" value="3.865860566865154" />
+      <entry key="D1" value="18.12203485950733" />
+      <entry key="W1" value="28.597930237417973" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.08077214101480171" />
-      <entry key="MS500" value="0.6436056352571088" />
-      <entry key="S2" value="1.4971373788877018" />
-      <entry key="S5" value="2.4194390610515755" />
-      <entry key="S10" value="3.0458888737851653" />
-      <entry key="S30" value="3.6397882336031313" />
-      <entry key="S60" value="4.050296083076878" />
-      <entry key="M2" value="5.748410559452407" />
-      <entry key="M5" value="11.005227529985154" />
-      <entry key="M10" value="15.968670911283713" />
-      <entry key="M15" value="18.775876229048496" />
-      <entry key="M30" value="23.146366198825785" />
-      <entry key="H1" value="27.17147356378187" />
-      <entry key="H2" value="31.83407755526108" />
-      <entry key="H4" value="42.82494989144954" />
-      <entry key="D1" value="147.65459569839925" />
-      <entry key="W1" value="227.25691111522897" />
+      <entry key="MS100" value="0.901250462704087" />
+      <entry key="MS500" value="0.9892816415878027" />
+      <entry key="S2" value="1.3099407333971755" />
+      <entry key="S5" value="1.6280019405093262" />
+      <entry key="S10" value="1.7942652233168157" />
+      <entry key="S30" value="2.0906497667405284" />
+      <entry key="S60" value="2.619106828623962" />
+      <entry key="M2" value="3.431222104806836" />
+      <entry key="M5" value="5.927584677697837" />
+      <entry key="M10" value="11.147061392892757" />
+      <entry key="M15" value="15.883072945807276" />
+      <entry key="M30" value="25.315175196580487" />
+      <entry key="H1" value="34.27684850342204" />
+      <entry key="H2" value="42.42526923818214" />
+      <entry key="H4" value="55.22346835778422" />
+      <entry key="D1" value="161.71965644467826" />
+      <entry key="W1" value="242.83540774823766" />
     </decayedShown>
   </component>
   <component name="ProblemsViewState">
@@ -247,7 +248,15 @@
       <option name="project" value="LOCAL" />
       <updated>1780194801993</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="feat(orchestrator): integrate Vault bootstrap lifecycle after infra readiness">
+      <option name="closed" value="true" />
+      <created>1780624261683</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1780624261683</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -282,6 +291,7 @@
     <MESSAGE value="Expanding the functions of the Mini Deploy Framework" />
     <MESSAGE value="refactor(infra): unify service connection model + fix healthchecks + docker/host consistency&#10;&#10;* Introduced unified connection contract across all services:&#10;&#10;  * internal_host (docker network)&#10;  * external_host (host machine)&#10;  * connection.* as single source of truth&#10;&#10;* Implemented resolve_host() to correctly route traffic depending on runtime context&#10;&#10;* Fixed Vault integration:&#10;&#10;  * Vault now consistently uses internal_host&#10;  * Avoids localhost misrouting inside containers&#10;&#10;* Refactored orchestrator and waiters:&#10;&#10;  * Removed ambiguity between host/docker_host&#10;  * Standardized access to connection config&#10;&#10;* Fixed healthcheck system:&#10;&#10;  * Updated Postgres and RabbitMQ checkers to use connection.*&#10;  * Added authentication support for RabbitMQ management API&#10;  * Improved logging and error visibility&#10;&#10;* Eliminated multiple KeyError issues caused by inconsistent schema&#10;&#10;Result:&#10;✔ Full infra bootstrap stable&#10;✔ Vault + Postgres + RabbitMQ working end-to-end&#10;✔ Healthchecks deterministic and consistent&#10;✔ Docker vs localhost conflict fully resolved" />
     <MESSAGE value="fix(config): enforce worker command definition in services model" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix(config): enforce worker command definition in services model" />
+    <MESSAGE value="feat(orchestrator): integrate Vault bootstrap lifecycle after infra readiness" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(orchestrator): integrate Vault bootstrap lifecycle after infra readiness" />
   </component>
 </project>
