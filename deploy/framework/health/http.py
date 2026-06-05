@@ -2,9 +2,10 @@ import requests
 
 class HttpHealth:
 
-    def check(self, config):
+    def check(self, svc):
         try:
-            r = requests.get(config["url"], timeout=3)
-            return r.status_code == 200
-        except:
-            return False
+            response = requests.get(svc.url, timeout=2)
+            return 200 <= response.status_code < 300
+
+        except Exception:
+            return False  # 🔥 CLAVE

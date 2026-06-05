@@ -5,35 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f62b9c27-5c66-4e98-a1f8-b7d35b7bc70c" name="Changes" comment="fix(config): enforce worker command definition in services model">
-      <change afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Messaging/license.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_05_2026_23_08_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_05_2026_23_08__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_23_05_2026_23_10_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_23_05_2026_23_10__Changes_.xml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/deploy/framework/health/build_health_summary.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/deploy/framework/health/print_health.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/deploy/framework/vault/VaultBootstrap.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Billing.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/Billing.sln.DotSettings.user" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/dockers/docker_compose_dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/dockers/docker_compose_dev.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/services.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/services.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/ApiGateways/YarpApiGateway/YarpApiGateway.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/ApiGateways/YarpApiGateway/YarpApiGateway.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Billing.API.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Billing.API.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Billing.API.http" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Billing.API.http" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/appsettings.Development.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Billing.Application.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Billing.Application.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Extensions/InvoiceExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Extensions/InvoiceExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Features/Invoices/EventHandlers/Domain/InvoiceCreatedDomainEventHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Application/Features/Invoices/EventHandlers/Domain/InvoiceCreatedDomainEventHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Billing.Infrastructure.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/Billing.Infrastructure.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/DependencyInjection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/DependencyInjection.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Application/Consumers/InvoicePostedConsumer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Application/Consumers/InvoicePostedConsumer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/BackgroundTasks/EventRelayWorker.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/BackgroundTasks/EventRelayWorker.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Integration.Services.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Integration.Services.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Worker.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/appsettings.Development.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Discovery/BuildingBlocks.Discovery.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Discovery/BuildingBlocks.Discovery.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Logging/BuildingBlocks.Logging.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Logging/BuildingBlocks.Logging.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Messaging/BuildingBlocks.Messaging.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Messaging/BuildingBlocks.Messaging.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Messaging/Events/Invoices/InvoiceCreatedIntegrationEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Messaging/Events/Invoices/InvoiceCreatedIntegrationEvent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Messaging/MassTransit/Extensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Messaging/MassTransit/Extensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Secrets/BuildingBlocks.Secrets.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Secrets/BuildingBlocks.Secrets.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/framework/health/http.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/health/http.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/framework/runtime/orchestrator.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/framework/runtime/orchestrator.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +19,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="1309" />
+    <option name="cachedIndexableFilesCount" value="1313" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -81,61 +59,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0009111650356324" />
-      <entry key="MS500" value="1.2559033257477847" />
-      <entry key="S2" value="2.291008350491434" />
-      <entry key="S5" value="3.6517159642378454" />
-      <entry key="S10" value="4.8044748763807075" />
-      <entry key="S30" value="6.12714824942661" />
-      <entry key="S60" value="6.879246019428913" />
-      <entry key="M2" value="8.013802451127784" />
-      <entry key="M5" value="10.227053386227167" />
-      <entry key="M10" value="12.307288297969807" />
-      <entry key="M15" value="13.63471957802668" />
-      <entry key="M30" value="16.07269946608124" />
-      <entry key="H1" value="18.867283404299332" />
-      <entry key="H2" value="22.68326631008044" />
-      <entry key="H4" value="32.245181399924576" />
-      <entry key="D1" value="122.64916342902168" />
-      <entry key="W1" value="191.68402741245723" />
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0002002700452242" />
+      <entry key="S2" value="1.2000613858785918" />
+      <entry key="S5" value="1.7963101450198296" />
+      <entry key="S10" value="2.2619900945969897" />
+      <entry key="S30" value="2.719700477541184" />
+      <entry key="S60" value="3.0739940218861204" />
+      <entry key="M2" value="4.6341013471364345" />
+      <entry key="M5" value="9.480880513831808" />
+      <entry key="M10" value="14.011096400552315" />
+      <entry key="M15" value="16.57273564258524" />
+      <entry key="M30" value="20.609085028949558" />
+      <entry key="H1" value="24.41740967157278" />
+      <entry key="H2" value="28.823029738008678" />
+      <entry key="H4" value="38.65558646657375" />
+      <entry key="D1" value="129.30277868274894" />
+      <entry key="W1" value="198.60746016806573" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="0.0" />
-      <entry key="MS500" value="0.0" />
-      <entry key="S2" value="1.968687670443848E-108" />
-      <entry key="S5" value="8.273146761348508E-44" />
-      <entry key="S10" value="2.876307834941961E-22" />
-      <entry key="S30" value="6.601031239950067E-8" />
-      <entry key="S60" value="2.5692472126967583E-4" />
-      <entry key="M2" value="0.016028871490834144" />
-      <entry key="M5" value="0.191408481906378" />
-      <entry key="M10" value="0.43750255074271094" />
-      <entry key="M15" value="0.5763067765667722" />
-      <entry key="M30" value="0.7591592533147732" />
-      <entry key="H1" value="0.8763445184060374" />
-      <entry key="H2" value="1.0799422846670184" />
-      <entry key="H4" value="2.2230117862118575" />
-      <entry key="D1" value="16.40018007359299" />
-      <entry key="W1" value="26.660445798993752" />
+      <entry key="MS100" value="2.584061622200093E-5" />
+      <entry key="MS500" value="0.1209095412017415" />
+      <entry key="S2" value="0.5896782961306081" />
+      <entry key="S5" value="0.8095544368437921" />
+      <entry key="S10" value="0.8997524309222227" />
+      <entry key="S30" value="0.9657907418097553" />
+      <entry key="S60" value="1.002298816912423" />
+      <entry key="M2" value="1.1339827744255053" />
+      <entry key="M5" value="1.5395453311961567" />
+      <entry key="M10" value="1.9684484668708437" />
+      <entry key="M15" value="2.2115796908785317" />
+      <entry key="M30" value="2.5423561518438547" />
+      <entry key="H1" value="2.7569392012752623" />
+      <entry key="H2" value="3.01267567049757" />
+      <entry key="H4" value="4.170458873484996" />
+      <entry key="D1" value="18.35255655061333" />
+      <entry key="W1" value="28.649617778939906" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.973535074819843" />
-      <entry key="MS500" value="1.247758156301767" />
-      <entry key="S2" value="2.2744480302203574" />
-      <entry key="S5" value="3.6352368526100496" />
-      <entry key="S10" value="4.792423095684311" />
-      <entry key="S30" value="6.121799010796326" />
-      <entry key="S60" value="6.876501237440675" />
-      <entry key="M2" value="8.027839590982133" />
-      <entry key="M5" value="10.416057425263864" />
-      <entry key="M10" value="12.74233711546865" />
-      <entry key="M15" value="14.20884923531397" />
-      <entry key="M30" value="16.830329741632998" />
-      <entry key="H1" value="19.74265462921221" />
-      <entry key="H2" value="23.76256735519658" />
-      <entry key="H4" value="34.467598210711394" />
-      <entry key="D1" value="139.04868811912016" />
-      <entry key="W1" value="218.34431861966232" />
+      <entry key="MS100" value="0.08077214101480171" />
+      <entry key="MS500" value="0.6436056352571088" />
+      <entry key="S2" value="1.4971373788877018" />
+      <entry key="S5" value="2.4194390610515755" />
+      <entry key="S10" value="3.0458888737851653" />
+      <entry key="S30" value="3.6397882336031313" />
+      <entry key="S60" value="4.050296083076878" />
+      <entry key="M2" value="5.748410559452407" />
+      <entry key="M5" value="11.005227529985154" />
+      <entry key="M10" value="15.968670911283713" />
+      <entry key="M15" value="18.775876229048496" />
+      <entry key="M30" value="23.146366198825785" />
+      <entry key="H1" value="27.17147356378187" />
+      <entry key="H2" value="31.83407755526108" />
+      <entry key="H4" value="42.82494989144954" />
+      <entry key="D1" value="147.65459569839925" />
+      <entry key="W1" value="227.25691111522897" />
     </decayedShown>
   </component>
   <component name="ProblemsViewState">

@@ -2,6 +2,8 @@ from framework.runtime.waiters import wait_for_service
 from framework.runtime.vault_runner import VaultRunner
 from framework.runtime.health_factory import get_health_checker
 from framework.runtime.ConsulRunner import ConsulRunner
+from framework.health.build_health_summary import build_health_summary
+from framework.health.print_health import print_health
 
 
 class Orchestrator:
@@ -12,41 +14,30 @@ class Orchestrator:
         self.consul_runner = ConsulRunner(consul_manager)
 
     def run(self):
+
         # -------------------------
         # 1. WAIT INFRA
-        # -------------------------
-        for svc in self.services:
-            if svc.type in ["postgres", "rabbitmq", "http"]:
-                wait_for_service(svc)
-            elif svc.type == "worker":
-                print(f"⚙️ Worker {svc.name} does not require health check")
-
-        # -------------------------
-        # 2. VAULT
-        # -------------------------
-        if self.vault_runner.vault:
-            self.vault_runner.bootstrap(self.services)
-
-        # -------------------------
-        # 3. CONSUL
-        # -------------------------
-        self.consul_runner.register(self.services)
-
-        # -------------------------
-        # 4. WAIT INFRA
         # -------------------------
         for svc in self.services:
             wait_for_service(svc)
 
         # -------------------------
-        # 5. FINAL HEALTHCHECK
+        # 2. VAULT
         # -------------------------
-        for svc in self.services:
-            checker = get_health_checker(svc)
+        if self.vault_runner.vault:
+            print("🔐 Vault bootstrap starting...")
+            self.vault_runner.bootstrap(self.services)
 
-            print(f"🔎 Healthcheck {svc.name}")
+        # -------------------------
+        # 3. CONSUL
+        # -------------------------
+        print("🧭 Consul registration starting...")
+        self.consul_runner.register(self.services)
 
-            if not checker.check(svc):
-                raise RuntimeError(f"{svc.name} failed healthcheck")
+        # -------------------------
+        # 4. FINAL HEALTHCHECK
+        # -------------------------
+        summary = build_health_summary(self.services)
+        print_health(summary)
 
         print("\n✅ Deployment successful")
