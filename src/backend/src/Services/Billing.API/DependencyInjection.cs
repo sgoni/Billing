@@ -56,7 +56,7 @@ public static class DependencyInjection
             });
 
         // To..Do 
-        // app.UseOpenTelemetryPrometheusScrapingEndpoint(); // Map the /metrics endpoint
+        app.UseOpenTelemetryPrometheusScrapingEndpoint(); // Map the /metrics endpoint
         return app;
     }
 }

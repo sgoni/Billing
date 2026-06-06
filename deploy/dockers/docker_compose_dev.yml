@@ -262,8 +262,9 @@
       command: ["dotnet", "Integration.Services.dll"]
       depends_on:
         - rabbitmq
+        - eventrelay-postgres
       environment:
-        ConnectionStrings__Database: "Server=localhost;Port=5433;Database=eventrelaylogdb;User Id=postgres;Password=postgres;Include Error Detail=true"
+        ConnectionStrings__Database: "Server=eventrelay-postgres;Port=5432;Database=eventrelaylogdb;User Id=postgres;Password=postgres;Include Error Detail=true"
         MessageBroker__Host: billing-mq
         MessageBroker__Username: guest
         MessageBroker__Password: guest

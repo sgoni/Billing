@@ -33,7 +33,7 @@ public class InvoicePostedConsumer(
         await relayService.RelayEventAsync(relayLog, new CancellationToken());
 
         // Resend to AP.API
-        var invoicePostedIntegrationEvent = evt.Adapt<InvoiceCreatedIntegrationEvent>();
+        //var invoicePostedIntegrationEvent = evt.Adapt<InvoiceCreatedIntegrationEvent>();
 
         // To..Do
         // Relaunch the event to another consumer

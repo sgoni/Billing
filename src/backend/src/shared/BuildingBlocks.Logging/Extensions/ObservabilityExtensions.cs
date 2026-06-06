@@ -30,14 +30,16 @@ public static class ObservabilityExtensions
 
         // El resto de la configuración de OpenTelemetry (Traces y Metrics) sigue igual, 
         // pero apunta al servicio 'alloy:4317' para trazas y métricas si Alloy lo soporta
-        services.AddOpenTelemetry()
+        services
+            .AddOpenTelemetry()
             .WithTracing(tracerProvider => tracerProvider
+                .SetSampler(new AlwaysOnSampler())
                 .SetResourceBuilder(resourceBuilder)
                 .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
                 .AddOtlpExporter(o =>
                 {
-                    o.Endpoint = new Uri("http://tempo:4317");
+                    o.Endpoint = new Uri("http://alloy:4317");
                     o.Protocol = OtlpExportProtocol.Grpc;
                 }))
             .WithMetrics(metricsProvider => metricsProvider

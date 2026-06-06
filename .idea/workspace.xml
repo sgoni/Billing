@@ -4,14 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f62b9c27-5c66-4e98-a1f8-b7d35b7bc70c" name="Changes" comment="Readme.MD Update" />
+    <list default="true" id="f62b9c27-5c66-4e98-a1f8-b7d35b7bc70c" name="Changes" comment="Display architectural_project.png">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/dockers/docker_compose_dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/dockers/docker_compose_dev.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/DependencyInjection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/DependencyInjection.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/appsettings.Development.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/DependencyInjection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/DependencyInjection.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/GlobalUsing.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/GlobalUsing.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Application/Consumers/InvoicePostedConsumer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Application/Consumers/InvoicePostedConsumer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Integration.Services.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Workers/Integration.Services/Integration.Services.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Logging/BuildingBlocks.Logging.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Logging/BuildingBlocks.Logging.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Logging/Extensions/ObservabilityExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Logging/Extensions/ObservabilityExtensions.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="1314" />
+    <option name="cachedIndexableFilesCount" value="1315" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -23,7 +36,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="development" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -51,61 +64,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.612895632584772" />
-      <entry key="MS500" value="4.855445915303974" />
-      <entry key="S2" value="8.786231665428346" />
-      <entry key="S5" value="10.444104832406993" />
-      <entry key="S10" value="11.16300653009011" />
-      <entry key="S30" value="11.864615629534999" />
-      <entry key="S60" value="12.49627954803351" />
-      <entry key="M2" value="13.36248561933922" />
-      <entry key="M5" value="15.85156097341823" />
-      <entry key="M10" value="20.80331083316047" />
-      <entry key="M15" value="25.20549401931504" />
-      <entry key="M30" value="33.91551456048677" />
-      <entry key="H1" value="42.23276237369854" />
-      <entry key="H2" value="49.83154552563528" />
-      <entry key="H4" value="61.354557036679054" />
-      <entry key="D1" value="153.59655157970596" />
-      <entry key="W1" value="224.23726404916889" />
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0" />
+      <entry key="S2" value="1.0" />
+      <entry key="S5" value="1.000000000019066" />
+      <entry key="S10" value="1.000004366473454" />
+      <entry key="S30" value="1.0163446995404786" />
+      <entry key="S60" value="1.1278532567264352" />
+      <entry key="M2" value="1.3678004704162472" />
+      <entry key="M5" value="2.5915711679406774" />
+      <entry key="M10" value="6.932928661550285" />
+      <entry key="M15" value="11.844842240045208" />
+      <entry key="M30" value="23.473186143489144" />
+      <entry key="H1" value="35.92265227864954" />
+      <entry key="H2" value="47.032230513525256" />
+      <entry key="H4" value="60.69242523571163" />
+      <entry key="D1" value="155.04715052991594" />
+      <entry key="W1" value="226.91348325396945" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
       <entry key="MS500" value="0.0" />
-      <entry key="S2" value="2.461242113246866E-238" />
-      <entry key="S5" value="9.046107304093478E-96" />
-      <entry key="S10" value="3.0076747339573285E-48" />
-      <entry key="S30" value="1.444061371573156E-16" />
-      <entry key="S60" value="1.2255993563274806E-8" />
-      <entry key="M2" value="1.253955459899842E-4" />
-      <entry key="M5" value="0.04025897767302938" />
-      <entry key="M10" value="0.3183165215005377" />
-      <entry key="M15" value="0.656436438006426" />
-      <entry key="M30" value="1.385100969249148" />
-      <entry key="H1" value="2.0349311061330075" />
-      <entry key="H2" value="2.5882942117740293" />
-      <entry key="H4" value="3.865578287664194" />
-      <entry key="D1" value="18.121814312271965" />
-      <entry key="W1" value="28.597880517147317" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="2.7171688605490032E-171" />
+      <entry key="S10" value="5.212646986807167E-86" />
+      <entry key="S30" value="3.7370433276608033E-29" />
+      <entry key="S60" value="6.2347603573118645E-15" />
+      <entry key="M2" value="8.943710465005423E-8" />
+      <entry key="M5" value="0.0022189984074887765" />
+      <entry key="M10" value="0.07473194825071389" />
+      <entry key="M15" value="0.24981821234443854" />
+      <entry key="M30" value="0.8544706330301861" />
+      <entry key="H1" value="1.5982972952653" />
+      <entry key="H2" value="2.2938634850985573" />
+      <entry key="H4" value="3.6390786066583374" />
+      <entry key="D1" value="17.940360677029737" />
+      <entry key="W1" value="28.556796672020134" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.563411324366698" />
-      <entry key="MS500" value="4.815245386968209" />
-      <entry key="S2" value="8.758471863755299" />
-      <entry key="S5" value="10.429331764310813" />
-      <entry key="S10" value="11.154784137393746" />
-      <entry key="S30" value="11.861590652874938" />
-      <entry key="S60" value="12.494622886304926" />
-      <entry key="M2" value="13.36168000410084" />
-      <entry key="M5" value="15.890974097338608" />
-      <entry key="M10" value="21.11960321748746" />
-      <entry key="M15" value="25.85923263222149" />
-      <entry key="M30" value="35.29774348232487" />
-      <entry key="H1" value="44.265514253933354" />
-      <entry key="H2" value="52.41841178881366" />
-      <entry key="H4" value="65.21910500709376" />
-      <entry key="D1" value="171.71763312721518" />
-      <entry key="W1" value="252.8349776738044" />
+      <entry key="MS100" value="0.9592641193252643" />
+      <entry key="MS500" value="0.9917167307382933" />
+      <entry key="S2" value="0.9979227189990506" />
+      <entry key="S5" value="0.9991685692326492" />
+      <entry key="S10" value="0.9995885619115744" />
+      <entry key="S30" value="1.0162026812816154" />
+      <entry key="S60" value="1.1277706511807386" />
+      <entry key="M2" value="1.367746214780698" />
+      <entry key="M5" value="2.5937023999366646" />
+      <entry key="M10" value="7.007141251514032" />
+      <entry key="M15" value="12.093592014525663" />
+      <entry key="M30" value="24.325854278485316" />
+      <entry key="H1" value="37.519219083073196" />
+      <entry key="H2" value="49.324818012729885" />
+      <entry key="H4" value="64.33052837381516" />
+      <entry key="D1" value="172.9867848172435" />
+      <entry key="W1" value="255.47011313473766" />
     </decayedShown>
   </component>
   <component name="ProblemsViewState">
@@ -120,28 +133,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "development",
-    "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "D:/Repositorio/Billing",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
-    "to.speed.mode.migration.done": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Repositorio/Billing&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Repositorio\Billing\deploy\framework\consul" />
