@@ -1,0 +1,9 @@
+route:
+  receiver: "default"
+
+receivers:
+  - name: "default"
+    email_configs:
+      - to: "tu@email.com"
+        from: "alerts@tuapp.com"
+        smarthost: "smtp:587"

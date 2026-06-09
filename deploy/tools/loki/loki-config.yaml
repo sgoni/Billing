@@ -3,36 +3,42 @@
 server:
   http_listen_port: 3100
 
-ingester:
-  wal:
-    enabled: true
-    dir: /loki/wal
-  lifecycler:
-    ring:
-      kvstore:
-        store: inmemory
-      replication_factor: 1
-  chunk_idle_period: 3m
-  chunk_retain_period: 1m
-  max_transfer_retries: 0
+common:
+  path_prefix: /loki
+  replication_factor: 1
+  ring:
+    kvstore:
+      store: inmemory
 
 storage_config:
-  boltdb:
-    directory: /loki/index
+  tsdb_shipper:
+    active_index_directory: /loki/tsdb-index
+    cache_location: /loki/tsdb-cache
   filesystem:
     directory: /loki/chunks
 
-limits_config:
-  enforce_metric_name: false
-  reject_old_samples: true
-  reject_old_samples_max_age: 168h
-
 schema_config:
   configs:
-    - from: 2020-10-24
-      store: boltdb
+    - from: 2024-01-01
+      store: tsdb            # ← antes boltdb-shipper (no soporta v13/structured metadata)
       object_store: filesystem
-      schema: v11
+      schema: v13
       index:
         prefix: index_
         period: 24h
+
+limits_config:
+  allow_structured_metadata: true
+  otlp_config:
+    resource_attributes:
+      attributes_config:
+        - action: index_label
+          attributes:
+            - service.name
+            - service.namespace
+
+compactor:
+  working_directory: /loki/compactor
+
+query_scheduler:
+  max_outstanding_requests_per_tenant: 0

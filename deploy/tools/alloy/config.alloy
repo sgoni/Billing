@@ -1,15 +1,9 @@
 ﻿otelcol.receiver.otlp "default" {
-  grpc {
-    endpoint = "0.0.0.0:4317"
-  }
-  http {
-    endpoint = "0.0.0.0:4318"
-  }
-
-  output {
-    traces = [otelcol.exporter.otlp.tempo.input]
-  }
+  grpc {}
+  http {}
 }
+
+otelcol.processor.batch "default" {}
 
 otelcol.exporter.otlp "tempo" {
   client {
@@ -18,4 +12,38 @@ otelcol.exporter.otlp "tempo" {
       insecure = true
     }
   }
+}
+
+otelcol.exporter.prometheus "metrics" {}
+
+loki.write "default" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+}
+
+otelcol.exporter.loki "logs" {
+  forward_to = [loki.write.default]
+}
+
+# =========================
+# PIPELINES (FORMA CORRECTA)
+# =========================
+
+otelcol.pipeline.traces "default" {
+  receivers  = [otelcol.receiver.otlp.default]
+  processors = [otelcol.processor.batch.default]
+  exporters  = [otelcol.exporter.otlp.tempo]
+}
+
+otelcol.pipeline.metrics "default" {
+  receivers  = [otelcol.receiver.otlp.default]
+  processors = [otelcol.processor.batch.default]
+  exporters  = [otelcol.exporter.prometheus.metrics]
+}
+
+otelcol.pipeline.logs "default" {
+  receivers  = [otelcol.receiver.otlp.default]
+  processors = [otelcol.processor.batch.default]
+  exporters  = [otelcol.exporter.loki.logs]
 }

@@ -2,51 +2,62 @@
 
 public static class ObservabilityExtensions
 {
-    // Define el template de salida una vez (asumiendo que está definido en tu archivo)
     private const string outputTemplate =
-        "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
+        "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} (trace={TraceId}){NewLine}{Exception}";
 
     public static IServiceCollection AddObservability(this IServiceCollection services, IConfiguration configuration)
     {
-        var service = configuration["logging:Service"]!;
-        var serviceName = configuration["logging:ServiceName"]!;
-        var lokiUrl = configuration["logging:LokiUrl"]!;
+        var service = configuration["logging:Service"]!; // service.namespace
+        var serviceName = configuration["logging:ServiceName"]!; // service.name
 
+        // 1) SERILOG
         Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
-            .Enrich.WithThreadId()
-            .WriteTo.Console(outputTemplate: outputTemplate)
             .Enrich.FromLogContext()
-            .WriteTo.GrafanaLoki(
-                lokiUrl,
-                new List<LokiLabel> { new() { Key = service, Value = serviceName } },
-                ["app"])
+            .Enrich.WithThreadId()
+            .Enrich.WithEnvironmentName()
+            .WriteTo.Console(outputTemplate: outputTemplate)
+            .WriteTo.OpenTelemetry(opts =>
+            {
+                opts.Endpoint = "http://otel-collector:4318/v1/logs";
+                opts.Protocol = OtlpProtocol.HttpProtobuf;
+                opts.ResourceAttributes = new Dictionary<string, object>
+                {
+                    ["service.name"] = serviceName,
+                    ["service.namespace"] = service
+                };
+            })
             .CreateLogger();
 
-        // 🚀 OpenTelemetry Resource (identidad del servicio)
-        var resourceBuilder = ResourceBuilder.CreateDefault()
-            .AddService(serviceName) // Usar el nombre de servicio proporcionado
-            .AddTelemetrySdk(); // Buena práctica para traces y metrics
+        // *** CLAVE: conecta ILogger<T> de ASP.NET Core con Serilog ***
+        services.AddSerilog(); // <- sin esto, Loki queda vacío
 
-        // El resto de la configuración de OpenTelemetry (Traces y Metrics) sigue igual, 
-        // pero apunta al servicio 'alloy:4317' para trazas y métricas si Alloy lo soporta
-        services
-            .AddOpenTelemetry()
-            .WithTracing(tracerProvider => tracerProvider
-                .SetSampler(new AlwaysOnSampler())
-                .SetResourceBuilder(resourceBuilder)
+        // 2) OPENTELEMETRY (trazas + métricas)
+        services.AddOpenTelemetry()
+            .ConfigureResource(r => r
+                .AddService(serviceName, serviceNamespace: service)
+                .AddTelemetrySdk())
+            .WithTracing(t => t
+                .AddAspNetCoreInstrumentation(o =>
+                {
+                    // *** filtra ruido para que se vean POST/PUT en Tempo ***
+                    o.Filter = ctx =>
+                    {
+                        var path = ctx.Request.Path.Value ?? string.Empty;
+                        return !path.StartsWith("/metrics", StringComparison.OrdinalIgnoreCase)
+                               && !path.StartsWith("/health", StringComparison.OrdinalIgnoreCase)
+                               && !path.StartsWith("/swagger", StringComparison.OrdinalIgnoreCase);
+                    };
+                })
+                .AddHttpClientInstrumentation()
+                .AddEntityFrameworkCoreInstrumentation()
+                .AddOtlpExporter()) // usa OTEL_EXPORTER_OTLP_ENDPOINT
+            .WithMetrics(m => m
                 .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
-                .AddOtlpExporter(o =>
-                {
-                    o.Endpoint = new Uri("http://alloy:4317");
-                    o.Protocol = OtlpExportProtocol.Grpc;
-                }))
-            .WithMetrics(metricsProvider => metricsProvider
-                .SetResourceBuilder(resourceBuilder)
-                .AddAspNetCoreInstrumentation()
                 .AddRuntimeInstrumentation()
-                .AddPrometheusExporter());
+                .AddProcessInstrumentation()
+                .AddOtlpExporter());
+
         return services;
     }
 }

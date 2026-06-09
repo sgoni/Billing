@@ -14,6 +14,19 @@ internal class Program
         builder.Services.AddOpenApi();
         builder.Host.UseSerilog();
 
+        // Logs vía OpenTelemetry además de Serilog
+        builder.Logging.AddOpenTelemetry(o =>
+            {
+                o.IncludeScopes = true;
+                o.ParseStateValues = true;
+                o.AddOtlpExporter(opt =>
+                {
+                    opt.Endpoint = new Uri("http://otel-collector:4317");
+                    opt.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.HttpProtobuf;
+                });
+            })
+            .AddConsole();
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.

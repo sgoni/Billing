@@ -1,0 +1,39 @@
+otelcol.receiver.otlp "default" {
+  grpc {
+    endpoint = "0.0.0.0:4317"
+  }
+
+  http {
+    endpoint = "0.0.0.0:4318"
+  }
+}
+
+otelcol.processor.batch "default" {}
+
+otelcol.exporter.otlp "tempo" {
+  client {
+    endpoint = "tempo:4317"
+
+    tls {
+      insecure = true
+    }
+  }
+}
+
+otelcol.exporter.prometheus "metrics" {}
+
+otelcol.service "default" {
+  pipelines {
+    traces = {
+      receivers  = ["otelcol.receiver.otlp.default"],
+      processors = ["otelcol.processor.batch.default"],
+      exporters  = ["otelcol.exporter.otlp.tempo"]
+    },
+
+    metrics = {
+      receivers  = ["otelcol.receiver.otlp.default"],
+      processors = ["otelcol.processor.batch.default"],
+      exporters  = ["otelcol.exporter.prometheus.metrics"]
+    }
+  }
+}

@@ -55,8 +55,8 @@ public static class DependencyInjection
                 ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
             });
 
-        // To..Do 
-        app.UseOpenTelemetryPrometheusScrapingEndpoint(); // Map the /metrics endpoint
+        //app.UseOpenTelemetryPrometheusScrapingEndpoint(); // Map the /metrics endpoint
+        
         return app;
     }
 }

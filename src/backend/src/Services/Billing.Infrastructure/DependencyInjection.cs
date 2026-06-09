@@ -9,11 +9,11 @@ public static class DependencyInjection
 
         services.AddVault(configuration); // Add Vault  
         services.AddDiscovery(configuration); // Add Discovery
+        services.AddObservability(configuration);
         services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
         services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
         services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
         services.AddScoped<VaultDbConnectionInterceptor>();
-        services.AddObservability(configuration);
 
         services.AddDbContext<ApplicationDbContext>((sp, options) =>
         {

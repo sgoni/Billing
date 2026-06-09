@@ -17,5 +17,5 @@ global using Mapster;
 global using MediatR;
 global using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 global using Microsoft.Extensions.Diagnostics.HealthChecks;
+global using OpenTelemetry.Logs;
 global using Serilog;
-global using VaultSharp;

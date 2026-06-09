@@ -13,40 +13,43 @@ datasources:
     editable: true
     jsonData:
       httpMethod: GET
-  - name: Tempo
+
+  - uid: tempo
+    orgId: 1
+    name: Tempo
     type: tempo
     access: proxy
-    orgId: 1
     url: http://tempo:3200
-    basicAuth: false
-    isDefault: true
-    version: 1
-    editable: false
-    apiVersion: 1
-    uid: tempo
     jsonData:
-      httpMethod: GET
+      tracesToLogsV2:
+        datasourceUid: loki
+        spanStartTimeShift: '-5m'
+        spanEndTimeShift: '5m'
+        filterByTraceID: true
+        tags:
+          - key: service.name
+            value: service_name
       serviceMap:
+        datasourceUid: prometheus     # ✅ de dónde lee el grafo
+      nodeGraph:
+        enabled: true
+      tracesToMetrics:
         datasourceUid: prometheus
-      streamingEnabled:
-        search: true
+    editable: true
+
   - uid: loki
     orgId: 1
     name: Loki
     type: loki
-    typeName: Loki
     access: proxy
     url: http://loki:3100
-    password: ''
-    user: ''
-    database: ''
     basicAuth: false
     isDefault: false
     jsonData:
       derivedFields:
         - datasourceUid: tempo
-          matcherRegex: (?:trace_id)=(\w+)
-          name: TraceID
-          url: $${__value.raw}
-    readOnly: false
+          matcherType: label          # ← usa structured metadata, no regex
+          name: trace_id
+          url: '$${__value.raw}'
+          urlDisplayLabel: 'Ver traza'
     editable: true
