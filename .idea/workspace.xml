@@ -4,340 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f62b9c27-5c66-4e98-a1f8-b7d35b7bc70c" name="Changes" comment="Display architectural_project.pngDisplay architectural_project.png">
-      <change afterPath="$PROJECT_DIR$/deploy/tools/alloy/config.river" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/tools/otlp/otel-collector-config.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/tools/prometheus/Alertmanager config" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/tools/prometheus/alerts.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/tools/promtail/promtail-config.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/tools/promtail/promtail.yaml" afterDir="false" />
+    <list default="true" id="f62b9c27-5c66-4e98-a1f8-b7d35b7bc70c" name="Changes" comment="feat(observability): enable full OTLP pipeline for logs, traces and metrics&#10;&#10;Fix the broken observability stack so the three signals reach Grafana&#10;through the OTel Collector.&#10;&#10;Infra:&#10;- otel-collector: route logs pipeline to Loki via otlphttp exporter&#10;  (previously logs only went to the debug exporter and were dropped)&#10;- loki: upgrade to 3.x and switch schema to tsdb/v13 with native OTLP&#10;  ingestion and structured metadata support&#10;- tempo: configure metrics_generator (service-graphs + span-metrics)&#10;  with remote_write to Prometheus; remove unsupported ingester and&#10;  traces_storage fields&#10;- prometheus: enable --web.enable-remote-write-receiver and exemplar&#10;  storage for Tempo metrics and trace/metric correlation&#10;- grafana: fix Loki derived field (trace_id via structured metadata)&#10;  and wire Tempo serviceMap/tracesToMetrics to Prometheus&#10;&#10;App (BuildingBlocks.Logging):&#10;- bridge ILogger&lt;T&gt; to Serilog via AddSerilog() so application logs are&#10;  exported through OTLP to Loki&#10;- filter /metrics, /health and /swagger from AspNetCore tracing to&#10;  surface real POST/PUT spans in Tempo&#10;- set service.namespace on the OTel resource for consistent metadata&#10;- remove dead code (unused Loki HTTP sink, manual ActivityEnricher)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Billing.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/Billing.sln.DotSettings.user" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/deploy/dockers/docker_compose_dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/dockers/docker_compose_dev.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/alloy/config.alloy" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/tools/alloy/config.alloy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/grafana/provisioning/datasources/grafana_datasource.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/tools/grafana/provisioning/datasources/grafana_datasource.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5OWRiN2VkNTVhOjE5OWRiN2VlNGJhOjVjM2VmODVk" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5OWRmZjdjNzQ4OjE5OWRmZjdjYTczOmVlOTVlYTYw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5OWRmZmFjY2Y3OjE5OWRmZmFkMDJmOjU4OGE4NWFl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5OWU1MGY5ZTM4OjE5OWU1MTA4YTVkOmU2NjQ3ZDA5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5OWUwMGViMTgyOjE5OWUwMGViNTEwOmQzNDA0NzVl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5OWVhOTAxYmI0OjE5OWVhOTFkN2Q5OjY1OWQxNDcw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5OWVhOWJiNzk0OjE5OWVhOWMzNjQxOjk1OTEwMTky" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5OWVhYjU0Njc5OjE5OWVhYjcxNTBlOjIzZmI0Mjc5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5OWVhYzA1OTE0OjE5OWVhYzkxNzFhOmQ4NmQzMjE2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5OWVhZDEyNjllOjE5OWVhZDJmMzNhOmE3ZDY2MTli" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5OWVhZDhhYTUxOjE5OWVhZGRjMWQ3OjJiZmY1YjI2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5OWVhZTU2NGYzOjE5OWViMDdhZGZkOjVlZmY2NzMz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTM3MjAzOTM0OjE5YTM3MjAzYjgxOjIyYjFlZTQ5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTM3MjU2ZGE5OjE5YTM3MjU3MTIzOmE4YjgwYzlm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTM4Mjc0MmU5OjE5YTM4Mjc1Zjk1Ojk1NjY0ZDA3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTM4MmE2NTFkOjE5YTM4MmNmODEwOjIzYmM1NGM0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTNiNjAzODBkOjE5YTNiNjAzOTYyOmFiYTNjOTZl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTNiNjU3ZjdlOjE5YTNiNjZiNjM2OmYxZTFmYjAz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTNiNmVhZTkwOjE5YTNiNzk3MDkxOmVlZTE0M2I3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTNiODcxZTRiOjE5YTNiODk3YmQ3OmMwZmVhY2Qy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTNiZGVhYjhhOjE5YTNiZTA3OGU5OjY4MDJjZjg1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTNiZTk3NWNmOjE5YTNiZTk3ZGI5Ojg2YTBjNThi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTNiZTk3ZGQ3OjE5YTNiZjFmNjAwOmE5MmQ0NTBj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTNjMDQyY2VjOjE5YTNjMTA0ZDNjOmE4ZDYzY2Ex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTNjMjA1YTllOjE5YTNjMjYyZTgyOjJkNzhjYTNk" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTNjMjlhYWM2OjE5YTNjMjlhYWNhOjVmNTBkMjdl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTNjMmNkNDY4OjE5YTNjNDIxMmFhOmMyZWQ0NWZl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTNjN2VjMDgxOjE5YTNjODY3YjA1OmQ3NzQ1Nzcw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTNjNDVmYjdmOjE5YTNjNDYzNzM5OjVhYTgzMzJk" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTNjNGRkZmM5OjE5YTNjNGZhZTc4OjViODc5YzI5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTNjNTNjY2Q5OjE5YTNjNTgxZTQ2OjNkYzMxNjIw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTNjOGU4Mzc1OjE5YTNjYTVhZjY2OmZjMDE2ZWY2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTNjYTk3NTVjOjE5YTNjYWEwNWI1OjU2MzRjNjNj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTNjZGY1NmQzOjE5YTNjZGY3ZTY4Ojg1YjVlYTZj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTNjZTZhOTdkOjE5YTNjZjcxNTcwOjk5MWM2NTFi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTQ3MTZmZGM2OjE5YTQ3MThkOTY2OmM3ZDg1OTlk" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTQ3MWU2NmRlOjE5YTQ3MWY5M2Y0OmQzOWM5OWVm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTQ3ZDQ0NTNmOjE5YTQ3ZDVjY2Y5Ojk1NTIyNDFm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTRjNjg3ZGM0OjE5YTRjNmJlZDg3OmQ5YTkwMDI4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTRjYWIwODRlOjE5YTRjYWYzMDhjOjVhZjczMjQ3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTRjYjM4NDJjOjE5YTRjYjU1NjMxOjMxNDMwYmIy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTRjYzk4ZjE4OjE5YTRjY2E2YzIzOmRlM2QwNDg5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTRjZDljNGFhOjE5YTRjZGI5YmRiOmNiYWZlZDY0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTRjZjRkMDU3OjE5YTRjZjZhNmIyOjliYWEyNTIw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTRjZjk2YzVmOjE5YTRjZjk2YzYwOjM2Mjg1YjQ1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTRkMDBiYTAxOjE5YTRkMDcwZjk5OmZkMzNlNGFh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTRkNDcxODhiOjE5YTRkNGEzYzkxOmNiZTMxYzA1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTRkNGY4NTBlOjE5YTRkNGZiNTgyOmUyZmVmM2Jl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTUxNGRlNjQzOjE5YTUxNGZkODkyOjYzM2U5NTIz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTUxNTk5NjdkOjE5YTUxNTk5ODFmOmY5NjQyYmVh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTUxNjUxYWM2OjE5YTUxNjcwYjVjOjU0OGNiNjdh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTUxODRjNWE0OjE5YTUxODg3NzkxOjk5Mzk2ZmNj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTUxYTY0MDA0OjE5YTUxYTY2OTAxOmM2NDUwYmEw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTUxYmQxZGQwOjE5YTUxYmZiZTZiOjRjOWFmOWFm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YThmODFmY2NlOjE5YThmODIxMGZkOjViZDIyMjA3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YThmOGM0MjAwOjE5YThmOGNmZGRmOjkzOTY0N2Mw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YThmOTQyMDE3OjE5YThmOTYyYjU1OmQ2ZWUwNTdm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YThmYTU0ZDQ3OjE5YThmYTcyMTE3OjVjOGVhMGJh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YThmYjAzMWE2OjE5YThmYjJmOTJiOjJmYmE1YjI4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YThmYzk2NThjOjE5YThmYzk2NjE2OmYzN2IxNDRi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YThmZDJlNzNkOjE5YThmZDUwMDk5OjU0NzE5YTQ=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YThmZGYyN2RmOjE5YThmZGY0MjYxOjgwZmE0NDNk" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YThmZTY1NGRhOjE5YThmZTY1N2FiOjI2N2U4NmMx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YThmZWZkOTZmOjE5YThmZjMxOGQ0OjU5YTgwYjlj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YThmZmMyMGFjOjE5YThmZmRmNGQ4OmU0Y2NjNzQ5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTk4ZGVjY2YyOjE5YTk4ZTBjZjNjOmQ5NThmMWUx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTk5NWUyYjNiOjE5YTk5NWY5M2ZkOjdjZWY3ZGRl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTlhM2I2YmYzOjE5YTlhM2Q0MjAyOjc1MTU4NGEx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTlhMDdiNDRkOjE5YTlhMDllNzk1Ojc1MGY4Mjhl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTlhMTA2ZmFjOjE5YTlhMTI1MWEzOmQyMjczN2E3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTlhOGE0NmJlOjE5YTlhOGMxOTgwOjg5NGY3YzEz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTlhOTEyNTdhOjE5YTlhOTJmODc4OmRiNDczYjU2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTlhYTRlMmNkOjE5YTlhYTZlNWYzOjZmZWU3MzFj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTlhYWNhYjIzOjE5YTlhYWVhZGQ0OmU4YzMyMzJj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTllZThjNTU5OjE5YTllZWFjNDQ5OjdjYTAxYWU=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTllZjYyNTI5OjE5YTllZjgwYzRhOjc2NGUxZTJl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YTllZmJmM2MzOjE5YTllZmMwYmI5OmEyZDNkMmVj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWE0MTg1NTUxOjE5YWE0MWI4NGJkOjU0NmZjNjVk" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWE0MWU5NzhlOjE5YWE0MjViZWM3OmQ2MGVkN2Ni" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWE0MjhlM2Q3OjE5YWE0MmIxN2MwOjJlMWEzMGIx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWE3MzA3ODYyOjE5YWE3MzI2MDlmOmMzNDQyYjkx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWE3NTQwOWJiOjE5YWE3NTVkYzRmOjY3Yzk1NjFl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWE3NTkwNGNmOjE5YWE3OWUwOWZlOjg2NTkxMzFj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWE3YTkwNDllOjE5YWE3YWIxMDgwOmFlNzRkMjE2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWE3ZWQ3NzBlOjE5YWE3ZjYxZDBmOmM5ZmQyMWYx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWE4NDhhMzg5OjE5YWE4NGFlZDIyOjgyZjgwNzEy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWE5NmNiYzIwOjE5YWE5NmU5MTVjOjFjMWM1NTQx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWE5OWU5ZWE1OjE5YWE5OWZhMDBhOjUxNjMxMzgz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWEyNzQ4OGIwOjE5YWEyNzg0MGE4OjM2M2Y0NDJh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWEzODg1OTI2OjE5YWEzOGI2NTM2OjNkZTk4MmE0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWEzOTczZTZhOjE5YWEzOTc1N2EwOmM0ZDJiYWFk" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWEzYzFlNWQwOjE5YWEzYzIyMmU4OjZkZTc4OTE0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWEzZDkyY2IxOjE5YWEzZDk5YjFkOjVmMDAwMWU4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWEzZGUyYTA1OjE5YWEzZTAxZDhkOjJkYzkyOWY2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWEzZjFlNTljOjE5YWEzZjFmYjY4OmI3YjI4ZjRm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWI4Yzk4YjZmOjE5YWI4ZDAzZmE3OjUyN2I1ZmY0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWI4ZGUyYjk3OjE5YWI4ZGZmZDRiOjcxYjJlNzY3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWI5NGJlZjJkOjE5YWI5NGRjMzFiOmNlMTllYmNk" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWIyYjE1YzQ1OjE5YWIyYjNiYTgwOjdhOWM2ZDUy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWIyYzIyZDg1OjE5YWIyYzY0MzJjOmY2MmFmY2Q3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWIzM2EyYTlhOjE5YWIzM2MwZmNmOjY2Y2JhNTA4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWIzMjZkYzVmOjE5YWIzMjk2MDliOjYwYTEyZWU1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWIzMmQwNGQ3OjE5YWIzMmQwNjcyOjE4NTdmNWQx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWIzNGEwM2ZiOjE5YWIzNGJlN2MwOjMxMjk1N2U5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWIzNzI3MmI0OjE5YWIzNzYyZGUxOmM3MzQyMWUw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWIzYjAzNjhkOjE5YWIzYjZjNzNiOjFmYTRkZjhj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWIzYmM4MjJkOjE5YWIzYmU2MWE0OjdiYWQwZDhj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWIzZDJkZjE3OjE5YWIzZDUzM2YyOjUyY2IwNWM4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWIzZGVmYzlhOjE5YWIzZTFlNTI0OjU0ZTA2Yzk=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWIzZWJhOTMwOjE5YWIzZWM2YzEwOmY4MTViYTNl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS8xMmQ4NDNiODQyNjRhZGQzOjE5YWUyNzM2Mzc3OjE5YWUyNzNmYzYyOjk0NjIwMWRl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTk5ZGI2ZjUyOTU6MTk5ZGI3ZTdlYWY6N2NiZDg0N2M=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTk5ZGZmM2E2YTY6MTk5ZTA2MWM2ZjM6YjA5ZTYwNTM=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTk5ZTQzODdjNTA6MTk5ZTRiYmU1ZGQ6OWViOTIzYmU=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTk5ZTRlNDY1NjI6MTk5ZTU1MjQ4MTI6ZGY0NTFlNzQ=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTk5ZTU1MmJlMDQ6MTk5ZTVjMTUzNmQ6YjA4NjU1MDQ=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTk5ZWE3YTZiNzQ6MTk5ZWE5MWEyOWQ6NzVmZjRjZTE=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTk5ZWFmMDAzNjk6MTk5ZWFmMjJjZGY6NDg4ZjMwZjQ=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhM2I2MDJhNDA6MTlhM2I3NDNhNmM6NDhkZjRhNmU=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhMzc3MGYyMTE6MTlhMzgyMGU4NTg6MWIyMzBmODM=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhMzcwMjM3ZWQ6MTlhMzc3MDc4NDc6OTNlNGFmOTE=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNDZkODBiNzk6MTlhNDZlOTI0NzI6YTY4M2Q2ODI=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNDZlOTY4YjU6MTlhNDZlY2U4MjY6MWNmOTIyYg==" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNDcwMzhiNjc6MTlhNDcxMjllNjI6MTcxYzE1ZTQ=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNDcxOTM1OTE6MTlhNDcxYzE1YzM6ODZkMGU0NWQ=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNGM2NzZhNDM6MTlhNGM2YmVkNDI6OGU5OTEzMGI=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNGNhZjFiYjI6MTlhNGNhZjM3NTc6OTdkNGM5YjA=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNGNiMzEzM2Y6MTlhNGNiOGZmMTg6NzU5YmEwMjQ=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNGNjOWJlNDg6MTlhNGNjYTMyOWQ6OWEyNjNlNGU=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNGNkOTYyMmI6MTlhNGNkZGRiMTA6MjQ4OGY4ZjU=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNGNmNTJlZTY6MTlhNGNmNzdhZTE6ZWJjNTQ1MWE=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNGQ0NjNiOTQ6MTlhNGQ0ZmI0NGY6OWQ4MTMyNDM=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNGQwMzA1NDA6MTlhNGQwNjljMzI6NDQwMGYzMWI=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNGQwNmQ1MWM6MTlhNGQxYWUwMDI6NDBmNDIyMjQ=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNTE0ZDUxMmQ6MTlhNTE0ZGQ0ZjQ6NTRjOGZiZTA=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNTE1MWVmMmM6MTlhNTE1Njc1ZmY6YzJkOWRmOTA=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNTE1OTgzMmY6MTlhNTE1YWE5MDQ6ZDliODU0NGI=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNTE2MmM3NWQ6MTlhNTE2N2Y1MjM6YTI5ZjcyMDc=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNTE4NGIwYWU6MTlhNTE4ODNiOTM6NDg1OTA5NzM=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNTE4ODNiOWE6MTlhNTE5NTcyMjE6ZTRjOWMzYjU=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNTE5NTk1ZjQ6MTlhNTE5OGJkODU6ZDIwYmQyMmM=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNTFiYzk3NDU6MTlhNTFjMTMwNzY6Y2Y1NzY0MGQ=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNTY5NjMyY2M6MTlhNTY5ZDE4NWY6ODVkZTQ1OGE=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNTZhMTE1Mzg6MTlhNTZhMTU2YWU6MjI0ZjZmMjM=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNTZhNmU0NDA6MTlhNTZhOTY4NjE6ZGE0MmJhNzg=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNTZhZGU2MDM6MTlhNTZiMmRjNzc6MzdkNWQxMTk=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhNTZmODcyMWE6MTlhNTZmY2Q4NWY6ZDhkYjM4YTY=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOGY3ZWJhNjE6MTlhOGY4MzJmZGY6ZTAyOTZhMA==" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOGY5NjI1NjM6MTlhOGY5OGNlYWU6MzBmM2ZjN2Q=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOGY5YjkwZWI6MTlhOGY5YzM3YjY6ZmJhNWYyMmU=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOGZhM2VhYmM6MTlhOGZhOGIwZGE6ZDdmYzE2YWI=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOGZiMGRiNTc6MTlhOGZiMzlhMDQ6NTFhNmM3MTg=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOGZjOTJkMjI6MTlhOGZjYjFlZDU6ZDg0MTJjMzM=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOGZkYmEyN2E6MTlhOGZlMDBmZjg6ZWVkYzU2ZWQ=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOGZlNjVlYzg6MTlhOGZlNzVmZmE6MTIyOGNiODY=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOGZlZTg1MDM6MTlhOGZmMzMxMWY6ZGYzOGJjZTA=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOGZmYTgwYTg6MTlhOGZmZWU2MjY6NDFiMGQ4MzA=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOTJjZGJjZGI6MTlhOTJkMzQyMzM6OTRkNzUwYWQ=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOTJkNzYzYmE6MTlhOTJkYTEzZTM6YmJlZjBmODg=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOTM2OGFlNmQ6MTlhOTQyMmEzZjg6NmQ5YmFhZA==" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOTMwNDEzMzQ6MTlhOTMxMTY0Yjk6ZTA0MmUxYWE=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOTMxZDlkMjY6MTlhOTMyM2MzZGE6OGIzOTkwZjA=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOTMyM2MzZGQ6MTlhOTMyODI0YjY6Y2VkMGQ1Njg=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOTQ2MjJhYzY6MTlhOTQ2OGU5ZTE6MTNmMjg5MmU=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOTQ2YzUwMjg6MTlhOTQ3MWI4MjI6NjQ3YWQ0NTY=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOTQ3NGIxZjc6MTlhOTQ3OTZhZjg6ZTEyNzBjN2E=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOTQ3ZWU4Mzk6MTlhOTQ3ZmM2OWY6MjkzY2ViOTY=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOTQzODkzZWU6MTlhOTQzZDMyNGY6OTE0YWEwOTE=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOTRkYmI1MjA6MTlhOTRlM2M5MzA6NGVkOWE2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOTU0OGUyMGY6MTlhOTc2MmRiZjQ6ZWNiYTY2NjM=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOTUwZTNjNWI6MTlhOTUxMmQ4NWU6ODA0ZGU0Njk=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOTUxY2M0YWM6MTlhOTUyNGVmNWM6MWQ5YzFlYTA=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOTc2MzUxMmE6MTlhOTc2ODExNGQ6OGMyYjFhNTE=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOTc4ZDVhN2I6MTlhOTc4ZTFkYzY6OGIwYzU5ZjE=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOTg0ZDEzOTQ6MTlhOTg0ZDE2ZDE6NTUyMjNmNTk=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOTg1M2NhNmE6MTlhOTg1M2NkZTQ6NTAxNjkxNDk=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOTg2ZWQwZmI6MTlhOTg2ZWQyYTY6NzUxYTA4NzI=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOTg3NmUwMmE6MTlhOTg3NmUzNWQ6NjZiODcwOGE=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOThkYTRiZGU6MTlhOTk0ODg4OGY6ZTkyOTM3MWY=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOTk1YzczMzk6MTlhOTk2MTExOWU6OTJhYmU2N2I=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOWE5MDhkMTY6MTlhOWE5NTQ1OTc6ODRkNTYyMWQ=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOWEzNzczOWY6MTlhOWEzZGE1YzA6YTQ0MGRiZWY=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOWFhM2IyYjU6MTlhOWFhNzBkMTA6ODY2MDU3NmU=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOWFhZGNiOGE6MTlhOWFiMDkxMDM6N2I4ZjYxMzA=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOWVkYmU2MWE6MTlhOWVlOGVhNDI6ZGZjOWNkNjM=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOWVmMzFhMmU6MTlhOWVmODZiMjY6Yzc2MmZhMDM=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhOWVmYzExNTI6MTlhOWVmZTI2ZGM6ODBmMDg2ZTA=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYTI3Mjg2OTY6MTlhYTI3OWZkYWY6N2IwMDQ0ZDk=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYTJkYTdkNzE6MTlhYTM3ZTUzOTg6YWVlMTU2Yzg=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYTM4N2ViODc6MTlhYTM4ZGU1MWY6ZTg1NjBiMzI=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYTM5NzVhNTY6MTlhYTM5YTMwMDg6ZmZkNWUzYTU=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYTM5YWJhOGM6MTlhYTNhNTUxM2U6ZjY3NGExMzY=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYTNiNTE4MjE6MTlhYTNjMWRhMGU6YzAyMTllNjY=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYTNkN2U0Zjk6MTlhYTNlMjhmMDI6NGU2MzkwNDA=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYTNmMjM5Mjc6MTlhYTNmMzViNzk6YTFlN2EzNDM=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYTQxNzE4YjM6MTlhYTQyYzUwY2E6N2ViOWE1YzM=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYTQxNzE4YjM6MTlhYTcwMzE2NjQ6NTg5YzE5YjI=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYTc1MjhmODA6MTlhYTc1YTY5OTM6NWNjZWQxOWU=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYTcwMzhiOTM6MTlhYTcwYmE0MjQ6NjI0MDhlM2E=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYTcyZGY2N2Y6MTlhYTczMzQ4ZDk6MzI0YWY0Y2U=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYTczZmI5Zjk6MTlhYTczZmMxNDI6YmExNjllNzE=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYTdhN2FjY2U6MTlhYTdhZWQ2NjI6YTY1NjhiYjM=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYTdiMjQ1MTA6MTlhYTdiMjcwNzQ6ZjdlZTZmYTY=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYTdlYWM0ZjI6MTlhYTdmNjFjMzI6YzcyODBkMjM=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYTg0ODUxNzY6MTlhYTg0ZDBiODk6YzgyNGJmNjY=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYTk1M2JiN2Q6MTlhYTk1ZjY1MWY6YzJlNDA=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYTk2NjIzZjc6MTlhYTk2NjM0MmQ6YmQyOTAyNDE=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYTk2YmM2N2U6MTlhYTk2ZjYyZjk6MzlkNWViYzI=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYTk3NDllYjg6MTlhYTk3ZmZhYTM6YzZkZDM4YmU=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYTk4MDA1OWM6MTlhYTk4OTU2YzM6OWFiOWU2YTU=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYTk5OGFjY2Y6MTlhYTk5ZTE1MDE6MzdkOTBjYmE=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYjI4MjIxYjY6MTlhYjI4YTM4NDE6NWEwYjM1Nw==" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYjJhODM4NTc6MTlhYjJhY2RjMDk6ODQzZGZjY2U=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYjJiMTI0YzE6MTlhYjJiNGIyOWI6ZGNlZGNmOGI=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYjJjMTA1MjM6MTlhYjJjNjM5ODI6ZWRhNzVlZmQ=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYjM0NzNiNjI6MTlhYjM0Y2I4NDQ6MzEwMmNmNTc=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYjM3NWYyZjY6MTlhYjM3NjI0ZTk6MmY2M2M5NmY=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYjM3OWViNmI6MTlhYjM3OWYwMjc6YjYzNmMwZTY=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYjMyNjg2Zjk6MTlhYjMyNmMwNWI6NTkwOWQzMmI=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYjMzM2NkZjQ6MTlhYjMzM2Q4MTA6N2U2OGIwMjY=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYjMzOTlmMDE6MTlhYjMzZTVmNDE6YzE0ZGQ2YmQ=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYjNiMTIzZTM6MTlhYjNiMTg0MDU6NGNjY2RkMGQ=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYjNiNGJjYTk6MTlhYjNiNGQ1Yzk6NWU4Njg2ZjA=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYjNiODEzMGI6MTlhYjNiY2U0ZTc6MmE1ZDAyMjc=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYjNkMzIwNmE6MTlhYjNkNWZkY2I6M2Q4MmNjMWU=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYjhjYWRmZmQ6MTlhYjhkMTA3MTU6ZjU0ZDEzMTk=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYjhkZTY1YzM6MTlhYjhlMmE1ZmM6NDkyNWNiOA==" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhYjk0YzM2YWU6MTlhYjk0Y2VlZDk6ZmU5OTA4MWI=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTlhZTIzZTE4MWQ6MTlhZTI0MTcyY2U6NzJlY2IzYzU=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTliM2RjMmE3MjY6MTliM2RjMzgxMzg6ODgwMmZmODc=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTliM2RjNzlkZGY6MTliM2RjN2IxNmM6ODYzNmNmNDY=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTliM2RjZTI5ZjQ6MTliM2RkMjE0YTc6MWMwZTUxMmE=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTliM2U3NTBkOTg6MTliM2U3NTVlNDY6YWM1MGU2YmY=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTliM2UxZjViMzU6MTliM2UxZmI3ZTg6MWJiM2NiYTI=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTliM2VkZDNkZjc6MTliM2VlMTczMmY6NzlmNDg3MTk=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTliMzk4NmYxZTU6MTliMzk4NzE3YjU6N2JhYmIwZjE=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTliMzk4ZTQ4ZTA6MTliMzk5MTJkMjM6M2NhNWUzZGY=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTliNDJhYTRjMjM6MTliNDJhZjM1NGE6ZjQwYzVlNzQ=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTliNDJiMzI0NzQ6MTliNDJiYTRiZjA6ODJiZDdmOTA=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTliNDgyZGFlYjQ6MTliNDgzMTc5Yjc6NGJlOGE1Nzc=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTliNDhmM2NkM2Q6MTliNDhmYjEwMWY6YTk2NjJhODY=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTliNDlhZTM0ODM6MTliNGJiNTg0YWI6NTQ0MzZkNzk=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTliNGJiNWY3NGQ6MTliNGJiYjM1MTE6OTFlYzVlOWM=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTliNGJiZTljZDM6MTliNGJiZjk0MDE6Njc3NjY2YmM=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTliNGJjNzc3M2Y6MTliNGJjZjI4NzI6YmE5YWUzN2Q=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTliNGJjZjQ2Yzc6MTliNGJlMGFmNGU6ZWRiODlkZTA=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTliNGJlNDVmYjQ6MTliNGJlNjlkNzM6NzM2ZTZjZDY=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTliNGJlZGY3NjI6MTliNGJmMzg4NGI6NjhjOThmODk=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTliNGM1YjZmZTY6MTliNGM1ZTI5NmU6MTUyOGNhNjU=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTliNGM3YWJlYjk6MTliNGM4NDM2MjY6NmY5Mzc1OTQ=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9hOGRiM2MxMjBiNWRjNjI6MTliNGM4ODM0NTg6MTliNGM4ZDMyNzI6MTU0MmRmZDU=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5OWRmZjM2YTBjOjE5OWUwNjE3MDcwOmIxNTE5YTM3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5OWU0MzgzZjY2OjE5OWU0YmMwN2U5OjJkNWI4NTVi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5OWU0ZTQyOTc3OjE5OWU1NTI1OGJlOjIyN2YwZTU4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5OWU1NTJjZWIxOjE5OWU1YzBlZGZkOmJhMzY0YTM5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5OWVhN2EyNWQ0OjE5OWVhZTgxZWQ3OjlhYjMxY2Nj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5OWVhZTg5ZDA4OjE5OWViNTZiN2FhOjZhN2I3OGMw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YTM3MDFmNWM5OjE5YTM3NzA0MTJhOmNhZGY5MDE2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YTM3NzBiYWYyOjE5YTM4MjBiMTA3OjE0NTk2YWYx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YTNiNWZkNGNiOjE5YTNiY2RlZjdiOmVjMzA1ODMy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YTNiY2U2YTA2OjE5YTNjM2M0YzNmOmYwNzc3MTEw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YTNjM2NjNjllOjE5YTNjYWFhZDgyOmE0NTc5NWYw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YTNjYWIyOTc5OjE5YTQ1ZDY4ZTU2OjFjMWE4OGQ4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YTQ2ZDdjODRmOjE5YTQ3NDVjOGQ0OmEwMTgwZDFm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YTQ3NDYzZDVkOjE5YTQ3YjQ2ZjE4OjFhMjUxYmQw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YTQ3ZDIwNGU3OjE5YTQ3ZDIwODE2OjQwYTUyYWZi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YTk1NDg5YTNiOjE5YTk3NjJhNWExOjc3ZjU0N2Ix" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YTk3NjMxYWNkOjE5YTk3ZDExYzNhOmQyZDczMDAx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YTk3ZDE5MWZhOjE5YTk4M2Y4YzZhOjc2OWI2MmU1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YTk4ZGEwYjg1OjE5YTk5NDgzNjczOmIwZGEwYzZm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YTkzNjg3NDBmOjE5YTk0MjJhY2M1OjlmM2UyN2My" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YTllZjJkMjI4OjE5YWEyMmQzOTgwOjk1YjhmZGU4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YWE0MTZhY2JkOjE5YWE3MDJmZDhhOmQ4NWU5N2Q0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YWE4NDgxMGZiOjE5YWE4YjVmNGZlOjlmMmMwYzAz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YWEyZGEzZWFjOjE5YWEzN2U3YTZiOjk1NWY1YWZj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YWI4ZGNhNzhkOjE5YWI5NGE5OWFjOjQxM2UyNmM2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YWI5NGIzZGU1OjE5YWUwOGQyZjI5OmJiNzJlODUx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YWU3OGI5YWFiOjE5YWU3YTAyMjJlOjI4MjIxMjgx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YWU3YjdhNTAxOjE5YWU3YzE1ZGI2OmRmNWVkNWY0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YWU3YzcyNTAzOjE5YWU3Y2E3MGYwOjY1MGU4MjE0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YWU3ZDI2Yjc1OjE5YWU3ZDUxNDI2OjJlNDcwNjMx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YWU4MTc0NTA1OjE5YWVjOTY3ZWE0Ojc1MzQ5Y2M=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YWUwOGRhM2RmOjE5YWUwZmI4MjQ4OmUyNGI1NWQ=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YWUwZmJmNmU5OjE5YWUxYThmNTMyOjE4ZTc4ODVj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YWUxYTk2YTIxOjE5YWUyMTdkOTFjOmFhMTk1YTM3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YWUyM2M1Zjk2OjE5YWUyNzk3YjY1OjlmZjM4OGNj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YWUyOGRmNmU3OjE5YWU3OGIxZTA3OmEyMWMwOGRm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YWVjOTZmNTY3OjE5YWVjOWNjOWI4OmJiNzEyM2M1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YWVjYTNmNTJkOjE5YWVjYTY5OTUwOjY1NzBkZThm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YWVjYjM4MmM3OjE5YWVjYjRhOTdiOjkxYWY3YmM3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YWVmN2IwNDYyOjE5YWYxZDg3ZGRlOmRhMjkyNmI2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YjM5NzRhOTg4OjE5YjNjYWFhOGExOjVmYWYxNGRl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YjNjYWIxZGRmOjE5YjNkMTk2NWM0OjIzNTVjYzg1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YjNlNjA2ZjBkOjE5YjNlY2ViNzNkOjUwOGU3ODU4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YjNlY2YzMDk1OjE5YjQyOWY1YzAzOmNiZDc0M2Jm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YjQ4MmU2NzEwOjE5YjQ4ZDRjMzBkOjQ1MDVhMDNl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YjQ4ZDUzZjM3OjE5YjQ5Nzk2OWM3OmFlNmU0MzVl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YjQ5NzllNzE5OjE5YjRiYWYyNzNlOjMwNWFjOWM4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YjQ5NzllNzE5OjE5YjRiYjVjMjEyOjU1Y2IzOTY3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YjQyOWZkMTQ4OjE5YjQzM2I2NzRkOjNkYWQxMDEz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YjQzM2JlMWE3OjE5YjQ4MmRlZmE4OjhlZGE0YzI3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YjRiYjYzZTAyOjE5YjRjMjQ0ZDcyOjhhOGFhOTdh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lMWUyOWM5OWI5YTE0ZTdjOjE5YjRjMjRjOTk1OjE5YjRjOTJkYjk4OjYzMWQxMjlm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9lN2JlMzk4MTQwNTc4MTdkOjE5OWM0ZGMwOWUyOjE5OWM1MWQ0ZTUyOmI2ODc3ODRi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9mYzlhMzc3ZGYzYjU3ZWY4OjE5OWM0ZGM0YmEzOjE5OWM1MWQ0YzZmOmZjYmU5OTYw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9mYzlhMzc3ZGYzYjU3ZWY4OjE5OWMxZjIwMTc5OjE5OWM0ZDhhYjZkOmU4Zjk1MTMz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/ZmFrZS9mYzlhMzc3ZGYzYjU3ZWY4OjE5OWMxZjIwMTc5OjE5OWMxZjIwOTMzOmE4ZjA1ZGE1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/loki/chunks/loki_cluster_seed.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/deploy/tools/loki/loki-config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/tools/loki/loki-config.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/otel/otel-collector-config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/tools/prometheus/prometheus.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/tools/prometheus/prometheus.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/tools/otlp/otel-collector-config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/tools/otlp/otel-collector-config.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/deploy/tools/tempo/tempo.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/tools/tempo/tempo.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/DependencyInjection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/DependencyInjection.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/GlobalUsing.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/GlobalUsing.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.API/appsettings.Development.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/DependencyInjection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/DependencyInjection.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/GlobalUsing.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/Services/Billing.Infrastructure/GlobalUsing.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Discovery/GlobalUsing.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Discovery/GlobalUsing.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Logging/BuildingBlocks.Logging.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Logging/BuildingBlocks.Logging.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Logging/Extensions/ObservabilityExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Logging/Extensions/ObservabilityExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Logging/GlobalUsing.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/src/shared/BuildingBlocks.Logging/GlobalUsing.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -345,7 +20,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="916" />
+    <option name="cachedIndexableFilesCount" value="912" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -385,23 +60,23 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.2462660651326019" />
-      <entry key="MS500" value="3.092303058748397" />
-      <entry key="S2" value="4.387471010588309" />
-      <entry key="S5" value="4.74148684865638" />
-      <entry key="S10" value="4.868691303365953" />
-      <entry key="S30" value="5.023700094154232" />
-      <entry key="S60" value="5.238709796596769" />
-      <entry key="M2" value="5.499711796659639" />
-      <entry key="M5" value="5.759937945068614" />
-      <entry key="M10" value="5.87206827497124" />
-      <entry key="M15" value="5.9128505844852235" />
-      <entry key="M30" value="5.955994650202307" />
-      <entry key="H1" value="6.055785005490813" />
-      <entry key="H2" value="7.45332077256221" />
-      <entry key="H4" value="15.854094265470712" />
-      <entry key="D1" value="130.02451769944702" />
-      <entry key="W1" value="255.73394459297495" />
+      <entry key="MS100" value="1.2811163439633628" />
+      <entry key="MS500" value="3.1029728905150953" />
+      <entry key="S2" value="4.387220911099751" />
+      <entry key="S5" value="4.740975038374833" />
+      <entry key="S10" value="4.868041871141727" />
+      <entry key="S30" value="4.955458157384911" />
+      <entry key="S60" value="4.977658821166283" />
+      <entry key="M2" value="4.9889331883362535" />
+      <entry key="M5" value="5.074583664222819" />
+      <entry key="M10" value="5.685729300272979" />
+      <entry key="M15" value="6.414242635521089" />
+      <entry key="M30" value="7.913638883912589" />
+      <entry key="H1" value="9.23573254641537" />
+      <entry key="H2" value="11.233543425717716" />
+      <entry key="H4" value="19.498989425454987" />
+      <entry key="D1" value="133.10272882059277" />
+      <entry key="W1" value="260.1905233837854" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
@@ -410,36 +85,36 @@
       <entry key="S5" value="0.0" />
       <entry key="S10" value="0.0" />
       <entry key="S30" value="0.0" />
-      <entry key="S60" value="9.575055138039584E-198" />
-      <entry key="M2" value="4.376082880784257E-99" />
-      <entry key="M5" value="6.871510092100031E-40" />
-      <entry key="M10" value="3.7071579314649684E-20" />
-      <entry key="M15" value="1.4007825573185268E-13" />
-      <entry key="M30" value="5.29343157318586E-7" />
-      <entry key="H1" value="0.001040483561848805" />
-      <entry key="H2" value="0.05154293225067227" />
-      <entry key="H4" value="0.490098681358678" />
-      <entry key="D1" value="12.416076241714464" />
-      <entry key="W1" value="28.526430660627877" />
+      <entry key="S60" value="4.665775792210367E-207" />
+      <entry key="M2" value="9.65999340023189E-104" />
+      <entry key="M5" value="9.432106700644023E-42" />
+      <entry key="M10" value="4.3432951834693714E-21" />
+      <entry key="M15" value="3.3539472719453536E-14" />
+      <entry key="M30" value="2.590180659103853E-7" />
+      <entry key="H1" value="7.278327605098353E-4" />
+      <entry key="H2" value="0.04310893659656774" />
+      <entry key="H4" value="0.44821112107801103" />
+      <entry key="D1" value="12.232565589857565" />
+      <entry key="W1" value="28.465813740794225" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.2118803141659706" />
-      <entry key="MS500" value="3.0335051939211612" />
-      <entry key="S2" value="4.3613040143598605" />
-      <entry key="S5" value="4.72970552246607" />
-      <entry key="S10" value="4.86256238407487" />
-      <entry key="S30" value="5.021588247632872" />
-      <entry key="S60" value="5.23762685341613" />
-      <entry key="M2" value="5.499155583708061" />
-      <entry key="M5" value="5.759709766199573" />
-      <entry key="M10" value="5.871952972534856" />
-      <entry key="M15" value="5.9127734230263025" />
-      <entry key="M30" value="5.955956444171087" />
-      <entry key="H1" value="6.056805918866056" />
-      <entry key="H2" value="7.504849055461122" />
-      <entry key="H4" value="16.344133573102336" />
-      <entry key="D1" value="142.44014669486873" />
-      <entry key="W1" value="284.2602191747304" />
+      <entry key="MS100" value="1.2390830822265666" />
+      <entry key="MS500" value="3.0353082442674864" />
+      <entry key="S2" value="4.356269120746353" />
+      <entry key="S5" value="4.7269502653324755" />
+      <entry key="S10" value="4.860730180883116" />
+      <entry key="S30" value="4.952951904931027" />
+      <entry key="S60" value="4.976396905876936" />
+      <entry key="M2" value="4.988300008886055" />
+      <entry key="M5" value="5.074326733417253" />
+      <entry key="M10" value="5.685588803332283" />
+      <entry key="M15" value="6.414139481959009" />
+      <entry key="M30" value="7.91357783982597" />
+      <entry key="H1" value="9.236425512528854" />
+      <entry key="H2" value="11.276629520911817" />
+      <entry key="H4" value="19.947140952616166" />
+      <entry key="D1" value="145.3348528920207" />
+      <entry key="W1" value="288.6561812512968" />
     </decayedShown>
   </component>
   <component name="ProblemsViewState">
@@ -589,7 +264,15 @@
       <option name="project" value="LOCAL" />
       <updated>1780684518705</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="feat(observability): enable full OTLP pipeline for logs, traces and metrics&#10;&#10;Fix the broken observability stack so the three signals reach Grafana&#10;through the OTel Collector.&#10;&#10;Infra:&#10;- otel-collector: route logs pipeline to Loki via otlphttp exporter&#10;  (previously logs only went to the debug exporter and were dropped)&#10;- loki: upgrade to 3.x and switch schema to tsdb/v13 with native OTLP&#10;  ingestion and structured metadata support&#10;- tempo: configure metrics_generator (service-graphs + span-metrics)&#10;  with remote_write to Prometheus; remove unsupported ingester and&#10;  traces_storage fields&#10;- prometheus: enable --web.enable-remote-write-receiver and exemplar&#10;  storage for Tempo metrics and trace/metric correlation&#10;- grafana: fix Loki derived field (trace_id via structured metadata)&#10;  and wire Tempo serviceMap/tracesToMetrics to Prometheus&#10;&#10;App (BuildingBlocks.Logging):&#10;- bridge ILogger&lt;T&gt; to Serilog via AddSerilog() so application logs are&#10;  exported through OTLP to Loki&#10;- filter /metrics, /health and /swagger from AspNetCore tracing to&#10;  surface real POST/PUT spans in Tempo&#10;- set service.namespace on the OTel resource for consistent metadata&#10;- remove dead code (unused Loki HTTP sink, manual ActivityEnricher)">
+      <option name="closed" value="true" />
+      <created>1781036002948</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1781036002948</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -626,6 +309,7 @@
     <MESSAGE value="fix(config): enforce worker command definition in services model" />
     <MESSAGE value="feat(orchestrator): integrate Vault bootstrap lifecycle after infra readiness" />
     <MESSAGE value="Readme.MD Update" />
-    <option name="LAST_COMMIT_MESSAGE" value="Readme.MD Update" />
+    <MESSAGE value="feat(observability): enable full OTLP pipeline for logs, traces and metrics&#10;&#10;Fix the broken observability stack so the three signals reach Grafana&#10;through the OTel Collector.&#10;&#10;Infra:&#10;- otel-collector: route logs pipeline to Loki via otlphttp exporter&#10;  (previously logs only went to the debug exporter and were dropped)&#10;- loki: upgrade to 3.x and switch schema to tsdb/v13 with native OTLP&#10;  ingestion and structured metadata support&#10;- tempo: configure metrics_generator (service-graphs + span-metrics)&#10;  with remote_write to Prometheus; remove unsupported ingester and&#10;  traces_storage fields&#10;- prometheus: enable --web.enable-remote-write-receiver and exemplar&#10;  storage for Tempo metrics and trace/metric correlation&#10;- grafana: fix Loki derived field (trace_id via structured metadata)&#10;  and wire Tempo serviceMap/tracesToMetrics to Prometheus&#10;&#10;App (BuildingBlocks.Logging):&#10;- bridge ILogger&lt;T&gt; to Serilog via AddSerilog() so application logs are&#10;  exported through OTLP to Loki&#10;- filter /metrics, /health and /swagger from AspNetCore tracing to&#10;  surface real POST/PUT spans in Tempo&#10;- set service.namespace on the OTel resource for consistent metadata&#10;- remove dead code (unused Loki HTTP sink, manual ActivityEnricher)" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(observability): enable full OTLP pipeline for logs, traces and metrics&#10;&#10;Fix the broken observability stack so the three signals reach Grafana&#10;through the OTel Collector.&#10;&#10;Infra:&#10;- otel-collector: route logs pipeline to Loki via otlphttp exporter&#10;  (previously logs only went to the debug exporter and were dropped)&#10;- loki: upgrade to 3.x and switch schema to tsdb/v13 with native OTLP&#10;  ingestion and structured metadata support&#10;- tempo: configure metrics_generator (service-graphs + span-metrics)&#10;  with remote_write to Prometheus; remove unsupported ingester and&#10;  traces_storage fields&#10;- prometheus: enable --web.enable-remote-write-receiver and exemplar&#10;  storage for Tempo metrics and trace/metric correlation&#10;- grafana: fix Loki derived field (trace_id via structured metadata)&#10;  and wire Tempo serviceMap/tracesToMetrics to Prometheus&#10;&#10;App (BuildingBlocks.Logging):&#10;- bridge ILogger&lt;T&gt; to Serilog via AddSerilog() so application logs are&#10;  exported through OTLP to Loki&#10;- filter /metrics, /health and /swagger from AspNetCore tracing to&#10;  surface real POST/PUT spans in Tempo&#10;- set service.namespace on the OTel resource for consistent metadata&#10;- remove dead code (unused Loki HTTP sink, manual ActivityEnricher)" />
   </component>
 </project>

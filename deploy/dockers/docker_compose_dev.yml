@@ -276,6 +276,7 @@
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
       OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
       OTEL_SERVICE_NAME: billing.api
+      OTEL_SEMCONV_STABILITY_OPT_IN: http   # emite http.request.method, http.response.status_code
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://billing.api:8080/health" ]
       interval: "30s"

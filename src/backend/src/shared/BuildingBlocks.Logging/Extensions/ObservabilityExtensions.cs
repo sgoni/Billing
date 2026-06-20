@@ -37,6 +37,8 @@ public static class ObservabilityExtensions
                 .AddService(serviceName, serviceNamespace: service)
                 .AddTelemetrySdk())
             .WithTracing(t => t
+                .AddSource("MassTransit")
+                .SetSampler(new AlwaysOnSampler())
                 .AddAspNetCoreInstrumentation(o =>
                 {
                     // *** filtra ruido para que se vean POST/PUT en Tempo ***
@@ -49,7 +51,10 @@ public static class ObservabilityExtensions
                     };
                 })
                 .AddHttpClientInstrumentation()
-                .AddEntityFrameworkCoreInstrumentation()
+                .AddEntityFrameworkCoreInstrumentation(o =>
+                {
+                    o.SetDbStatementForText = false;   // no adjuntar el SQL completo al span
+                })
                 .AddOtlpExporter()) // usa OTEL_EXPORTER_OTLP_ENDPOINT
             .WithMetrics(m => m
                 .AddAspNetCoreInstrumentation()

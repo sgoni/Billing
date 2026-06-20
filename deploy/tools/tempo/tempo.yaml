@@ -32,7 +32,7 @@ metrics_generator:
     service_graphs:
       dimensions: [service.namespace]
     span_metrics:
-      dimensions: [service.namespace, http.method, http.status_code]
+      dimensions: [service.namespace, http.request.method, http.response.status_code]
 
 overrides:
   defaults:
